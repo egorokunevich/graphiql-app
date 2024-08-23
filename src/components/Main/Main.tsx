@@ -1,16 +1,28 @@
+'use client';
+
+import { User } from 'firebase/auth';
 import Link from 'next/link';
+import { useState } from 'react';
+
+import { useAuthEffect } from '@/hooks/useAuthEffect';
 
 import './Main.css';
 
-interface MainInterface {
-  isAuthenticated: boolean;
-  username: string;
-}
-const MainContent = ({ isAuthenticated, username }: MainInterface) => {
+const MainContent = () => {
+  const [authUser, setAuthUser] = useState<User | null>(null);
+
+  useAuthEffect(setAuthUser);
+
   return (
     <main className="main">
-      <h1>{isAuthenticated ? `Welcome Back, ${username}!` : 'Welcome!'}</h1>
-      {isAuthenticated && (
+      {authUser ? (
+        <div>
+          <div>{`Welcome Back, ${authUser?.email}!`}</div>
+        </div>
+      ) : (
+        <div>{'Welcome!'}</div>
+      )}
+      {authUser && (
         <div>
           <Link className="main__link" href={'/rest-client'}>
             REST Client

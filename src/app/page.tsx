@@ -6,10 +6,8 @@ function MainPage() {
   return (
     <>
       <div className="container">
-        <Header isAuthenticated={true} />
-        <Header isAuthenticated={false} />
-        <MainContent isAuthenticated={false} username={''} />
-        <MainContent isAuthenticated={true} username={'Vasia'} />
+        <Header />
+        <MainContent />
         <Footer />
       </div>
     </>

@@ -1,13 +1,24 @@
+'use client';
+
+import { signOut, User } from 'firebase/auth';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+
+import { useAuthEffect } from '@/hooks/useAuthEffect';
+import { auth } from '@/utils/firebase';
 
 import './Header.css';
 
-interface HeaderInterface {
-  isAuthenticated: boolean;
-}
+const Header = () => {
+  const [authUser, setAuthUser] = useState<User | null>(null);
 
-const Header = ({ isAuthenticated }: HeaderInterface) => {
+  useAuthEffect(setAuthUser);
+
+  function userSignOut() {
+    signOut(auth);
+  }
+
   return (
     <header className="header">
       <Link href={'/'}>
@@ -21,19 +32,20 @@ const Header = ({ isAuthenticated }: HeaderInterface) => {
       </Link>
 
       <div>"Language Toggle"</div>
-      {isAuthenticated ? (
-        <button className="header__button">Sign Out</button>
+
+      {authUser ? (
+        <button className='header__button' onClick={userSignOut}>
+        Sign Out
+      </button>
       ) : (
-        <>
-          <div className="flex">
-            <Link className="header__button" href={'/authorization'}>
-              Sign In
-            </Link>
-            <Link className="header__button" href={'/registration'}>
-              Sign Up
-            </Link>
-          </div>
-        </>
+        <div className="flex">
+          <Link className="header__button" href={'/authorization'}>
+            Sign In
+          </Link>
+          <Link className="header__button" href={'/registration'}>
+            Sign Up
+          </Link>
+        </div>
       )}
     </header>
   );
