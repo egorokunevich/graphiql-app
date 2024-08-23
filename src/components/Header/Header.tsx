@@ -1,34 +1,20 @@
 'use client';
 
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Box,
-} from '@mui/material';
+import { Button, Box } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 
 import './Header.css';
 
-interface HeaderInterface {
+import LanguageToggle from '@/src/components/LanguageToggle/LanguageToggle';
+import { type getDictionary } from '@/src/utils/getDictionary';
+
+interface HeaderProps {
+  t: Awaited<ReturnType<typeof getDictionary>>['basic'];
   isAuthenticated: boolean;
 }
 
-const Header = ({ isAuthenticated }: HeaderInterface) => {
-  const [language, setLanguage] = useState('en');
-
-  const handleLanguageChange = () => {
-    if (language === 'en') {
-      setLanguage('ru');
-    } else {
-      setLanguage('en');
-    }
-  };
-
+const Header = ({ t, isAuthenticated }: HeaderProps) => {
   return (
     <header>
       <Box
@@ -49,22 +35,9 @@ const Header = ({ isAuthenticated }: HeaderInterface) => {
             height={40}
           />
         </Link>
-        <FormControl fullWidth sx={{ maxWidth: '200px' }}>
-          <InputLabel id="language-toggle-label">Language</InputLabel>
-          <Select
-            variant="standard"
-            labelId="language-toggle-label"
-            id="language-toggle"
-            value={language}
-            label="Language"
-            onChange={handleLanguageChange}
-          >
-            <MenuItem value="en">EN</MenuItem>
-            <MenuItem value="ru">RU</MenuItem>
-          </Select>
-        </FormControl>
+        <LanguageToggle t={t} />
         {isAuthenticated ? (
-          <Button variant="outlined">Sign Out</Button>
+          <Button variant="outlined">{t.signOut}</Button>
         ) : (
           <Box
             sx={{
@@ -73,10 +46,10 @@ const Header = ({ isAuthenticated }: HeaderInterface) => {
             }}
           >
             <Button variant="outlined" href="/authorization">
-              Sign In
+              {t.signIn}
             </Button>
             <Button variant="outlined" href="/registration">
-              Sign Up
+              {t.signUp}
             </Button>
           </Box>
         )}

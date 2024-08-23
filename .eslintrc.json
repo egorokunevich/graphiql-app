@@ -73,28 +73,28 @@
           "caseInsensitive": false,
           "order": "asc"
         },
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index",
-          "object",
-          "type"
-        ],
+        // "groups": [
+        //   "builtin",
+        //   "external",
+        //   "internal",
+        //   "parent",
+        //   "sibling",
+        //   "index",
+        //   "object",
+        //   "type"
+        // ],
         "newlines-between": "always",
-        "pathGroups": [
-          {
-            "pattern": "**/*.css",
-            "group": "type",
-            "position": "after"
-          }
-        ],
-        "pathGroupsExcludedImportTypes": [
-          "**/*.css",
-          "**/*.scss"
-        ],
+        // "pathGroups": [
+        //   {
+        //     "pattern": "**/*.css",
+        //     "group": "type",
+        //     "position": "after"
+        //   }
+        // ],
+        // "pathGroupsExcludedImportTypes": [
+        //   "**/*.css",
+        //   "**/*.scss"
+        // ],
         "warnOnUnassignedImports": true
       }
     ],
@@ -157,6 +157,16 @@
           "regex": "^[A-Z]",
           "match": true
         }
+      }
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
       }
     ]
   },

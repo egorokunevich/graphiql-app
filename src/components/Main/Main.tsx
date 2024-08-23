@@ -4,7 +4,10 @@ import { Box, Tabs, Tab } from '@mui/material';
 
 import './Main.css';
 
+import { getDictionary } from '@/src/utils/getDictionary';
+
 interface MainInterface {
+  t: Awaited<ReturnType<typeof getDictionary>>['basic'];
   isAuthenticated: boolean;
   username: string;
 }
@@ -17,27 +20,27 @@ enum TabsValues {
 
 // type TabsType = 'rest-tab' | 'graphiql-tab' | 'history-tab';
 
-const MainContent = ({ isAuthenticated, username }: MainInterface) => {
+const MainContent = ({ t, isAuthenticated, username }: MainInterface) => {
   return (
-    <main style={{ height: '100%' }}>
+    <main>
       <Box sx={{ height: '100%' }}>
-        <h1>{isAuthenticated ? `Welcome Back, ${username}!` : 'Welcome!'}</h1>
+        <h1>{isAuthenticated ? `${t.welcome}, ${username}!` : t.welcome}</h1>
         {isAuthenticated && (
           <>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={TabsValues.RestTab}>
                 <Tab
-                  label="REST Client"
+                  label={`REST ${t.client}`}
                   value={TabsValues.RestTab}
                   tabIndex={0}
                 />
                 <Tab
-                  label="GraphiQL Client"
+                  label={`GraphiQL ${t.client}`}
                   value={TabsValues.GraphiqlTab}
                   tabIndex={1}
                 />
                 <Tab
-                  label="History"
+                  label={t.history}
                   value={TabsValues.HistoryTab}
                   tabIndex={2}
                 />
