@@ -37,3 +37,19 @@ body {
   max-width: 960px;
   width: 100%;
 }
+
+.button {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 10px;
+  color: white;
+  background: #0b63f6;
+  transition: 0.2s linear;
+}
+
+.button:hover {
+  background: #003cc5;
+}
+input {
+  border: 1px solid #999;
+}
