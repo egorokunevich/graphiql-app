@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import './Header.css';
@@ -10,19 +11,25 @@ const Header = ({ isAuthenticated }: HeaderInterface) => {
   return (
     <header className="header">
       <Link href={'/'}>
-        <img src="path to logo" alt="Logo" />
+        <Image
+          className="footer__img"
+          src="/static/logo.png"
+          alt="RS School Logo"
+          width={40}
+          height={40}
+        />
       </Link>
 
-      <div>there will be a "Language Toggle"</div>
+      <div>"Language Toggle"</div>
       {isAuthenticated ? (
         <button className="header__button">Sign Out</button>
       ) : (
         <>
           <div className="flex">
-            <Link className="header__button" href={'/sighIn'}>
+            <Link className="header__button" href={'/authorization'}>
               Sign In
             </Link>
-            <Link className="header__button" href={'/sighUp'}>
+            <Link className="header__button" href={'/registration'}>
               Sign Up
             </Link>
           </div>
