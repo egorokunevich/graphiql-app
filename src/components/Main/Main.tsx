@@ -1,6 +1,8 @@
 'use client';
 
 import { Box, Tabs, Tab } from '@mui/material';
+// import { useParams } from 'next/navigation';
+// import { useState } from 'react';
 
 import './Main.css';
 
@@ -13,14 +15,22 @@ interface MainInterface {
 }
 
 enum TabsValues {
-  RestTab = 'rest-tab',
-  GraphiqlTab = 'graphiql-tab',
-  HistoryTab = 'history-tab',
+  RestTab = 'rest-client',
+  GraphiqlTab = 'graphiql-client',
+  HistoryTab = 'history',
 }
 
-// type TabsType = 'rest-tab' | 'graphiql-tab' | 'history-tab';
+// type TabsType = 'rest-client' | 'graphiql-client' | 'history';
 
 const MainContent = ({ t, isAuthenticated, username }: MainInterface) => {
+  // const params = useParams();
+  // const [tab, setTab] = useState<TabsType>('rest-client');
+
+  // const handleTabChange = (e: React.SyntheticEvent) => {
+  // console.log(1);
+  // setTab((e.target! as HTMLInputElement).value as TabsType);
+  // };
+
   return (
     <main>
       <Box sx={{ height: '100%' }}>
@@ -28,7 +38,12 @@ const MainContent = ({ t, isAuthenticated, username }: MainInterface) => {
         {isAuthenticated && (
           <>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <Tabs value={TabsValues.RestTab}>
+              <Tabs
+              // value={tab}
+              // onChange={(e) => {
+              //   handleTabChange(e);
+              // }}
+              >
                 <Tab
                   label={`REST ${t.client}`}
                   value={TabsValues.RestTab}
