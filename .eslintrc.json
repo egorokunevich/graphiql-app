@@ -1,9 +1,15 @@
 {
   "root": true,
-  "extends": ["airbnb-typescript", "next/core-web-vitals", "prettier"],
+  "extends": [
+    "airbnb-typescript",
+    "next/core-web-vitals",
+    "prettier"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": ["./tsconfig.json"],
+    "project": [
+      "./tsconfig.json"
+    ],
     "ecmaVersion": 2018,
     "sourceType": "module",
     "generators": true,
@@ -23,19 +29,31 @@
   ],
   "overrides": [
     {
-      "files": ["**/*.tsx"],
+      "files": [
+        "**/*.tsx"
+      ],
       "rules": {}
     }
   ],
   "settings": {
     "import/resolver": {
       "node": {
-        "paths": ["src"]
+        "paths": [
+          "src"
+        ]
       }
     }
   },
   "rules": {
-    "import/no-extraneous-dependencies": "warn",
+    "import/no-extraneous-dependencies": [
+      "warn",
+      {
+        "devDependencies": false,
+        "optionalDependencies": false,
+        "peerDependencies": false,
+        "packageDir": "./"
+      }
+    ],
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "error",
     "react/prop-types": "off",
@@ -73,7 +91,10 @@
             "position": "after"
           }
         ],
-        "pathGroupsExcludedImportTypes": ["**/*.css", "**/*.scss"],
+        "pathGroupsExcludedImportTypes": [
+          "**/*.css",
+          "**/*.scss"
+        ],
         "warnOnUnassignedImports": true
       }
     ],
@@ -81,14 +102,19 @@
     "no-restricted-imports": [
       "error",
       {
-        "patterns": ["../*"]
+        "patterns": [
+          "../*"
+        ]
       }
     ],
     "no-await-in-loop": "off",
     "no-plusplus": "off",
     "class-methods-use-this": "off",
     "no-param-reassign": "off",
-    "eol-last": ["error", "always"],
+    "eol-last": [
+      "error",
+      "always"
+    ],
     "react/require-default-props": "off",
     "react/destructuring-assignment": 0,
     "react-hooks/exhaustive-deps": "off",
@@ -107,15 +133,26 @@
         "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
       }
     ],
-    "eqeqeq": ["error", "always"],
+    "eqeqeq": [
+      "error",
+      "always"
+    ],
     "no-console": "warn",
-    "quotes": ["error", "single"],
-    "semi": ["warn", "always"],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "warn",
+      "always"
+    ],
     "@typescript-eslint/naming-convention": [
       "error",
       {
         "selector": "interface",
-        "format": ["PascalCase"],
+        "format": [
+          "PascalCase"
+        ],
         "custom": {
           "regex": "^[A-Z]",
           "match": true
@@ -123,5 +160,9 @@
       }
     ]
   },
-  "ignorePatterns": ["node_modules//*", "**/*.config.js"]
+  "ignorePatterns": [
+    "node_modules//*",
+    "**/*.config.js",
+    "**/*.config.mjs"
+  ]
 }

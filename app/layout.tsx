@@ -1,10 +1,8 @@
-import { Inter } from 'next/font/google';
+import { Container } from '@mui/material';
 
 import './globals.css';
 
 import type { Metadata } from 'next';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -18,7 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <Container sx={{ maxWidth: '1440px', height: '100%' }}>
+          {children}
+        </Container>
+      </body>
     </html>
   );
 }

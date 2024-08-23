@@ -1,5 +1,16 @@
+'use client';
+
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Box,
+} from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 
 import './Header.css';
 
@@ -8,33 +19,68 @@ interface HeaderInterface {
 }
 
 const Header = ({ isAuthenticated }: HeaderInterface) => {
-  return (
-    <header className="header">
-      <Link href={'/'}>
-        <Image
-          className="footer__img"
-          src="/static/logo.png"
-          alt="RS School Logo"
-          width={40}
-          height={40}
-        />
-      </Link>
+  const [language, setLanguage] = useState('en');
 
-      <div>"Language Toggle"</div>
-      {isAuthenticated ? (
-        <button className="header__button">Sign Out</button>
-      ) : (
-        <>
-          <div className="flex">
-            <Link className="header__button" href={'/authorization'}>
+  const handleLanguageChange = () => {
+    if (language === 'en') {
+      setLanguage('ru');
+    } else {
+      setLanguage('en');
+    }
+  };
+
+  return (
+    <header>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1rem 2rem',
+          width: '100%',
+          backgroundColor: '#F0F7F4',
+        }}
+      >
+        <Link href={'/'}>
+          <Image
+            src="/static/logo.png"
+            alt="RS School Logo"
+            width={40}
+            height={40}
+          />
+        </Link>
+        <FormControl fullWidth sx={{ maxWidth: '200px' }}>
+          <InputLabel id="language-toggle-label">Language</InputLabel>
+          <Select
+            variant="standard"
+            labelId="language-toggle-label"
+            id="language-toggle"
+            value={language}
+            label="Language"
+            onChange={handleLanguageChange}
+          >
+            <MenuItem value="en">EN</MenuItem>
+            <MenuItem value="ru">RU</MenuItem>
+          </Select>
+        </FormControl>
+        {isAuthenticated ? (
+          <Button variant="outlined">Sign Out</Button>
+        ) : (
+          <Box
+            sx={{
+              display: 'flex',
+              gap: '1rem',
+            }}
+          >
+            <Button variant="outlined" href="/authorization">
               Sign In
-            </Link>
-            <Link className="header__button" href={'/registration'}>
+            </Button>
+            <Button variant="outlined" href="/registration">
               Sign Up
-            </Link>
-          </div>
-        </>
-      )}
+            </Button>
+          </Box>
+        )}
+      </Box>
     </header>
   );
 };
