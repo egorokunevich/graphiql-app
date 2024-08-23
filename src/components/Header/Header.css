@@ -1,0 +1,22 @@
+.header {
+  height: 60px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: beige;
+  border: 1px solid #000;
+}
+
+.header__button {
+  display: block;
+  padding: 5px;
+  border-radius: 10px;
+  color: white;
+  background: #0b63f6;
+  transition: 0.2s linear;
+}
+
+.header__button:hover {
+  background: #003cc5;
+}
