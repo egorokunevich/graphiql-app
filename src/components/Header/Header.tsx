@@ -1,17 +1,28 @@
 'use client';
 
+import { Button, Box } from '@mui/material';
 import { signOut, User } from 'firebase/auth';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useState } from 'react';
-
-import { useAuthEffect } from '@/hooks/useAuthEffect';
-import { auth } from '@/utils/firebase';
 
 import './Header.css';
 
-const Header = () => {
+import { useAuthEffect } from '@/src//hooks/useAuthEffect';
+import LanguageToggle, {
+  LanguageType,
+} from '@/src/components/LanguageToggle/LanguageToggle';
+import { auth } from '@/src/utils/firebase';
+import { type getDictionary } from '@/src/utils/getDictionary';
+
+interface HeaderProps {
+  t: Awaited<ReturnType<typeof getDictionary>>['basic'];
+}
+
+const Header = ({ t }: HeaderProps) => {
   const [authUser, setAuthUser] = useState<User | null>(null);
+  const params = useParams<{ lang: LanguageType }>();
 
   useAuthEffect(setAuthUser);
 
@@ -20,33 +31,46 @@ const Header = () => {
   }
 
   return (
-    <header className="header">
-      <Link href={'/'}>
-        <Image
-          className="footer__img"
-          src="/static/logo.png"
-          alt="RS School Logo"
-          width={40}
-          height={40}
-        />
-      </Link>
-
-      <div>"Language Toggle"</div>
-
-      {authUser ? (
-        <button className='header__button' onClick={userSignOut}>
-        Sign Out
-      </button>
-      ) : (
-        <div className="flex">
-          <Link className="header__button" href={'/authorization'}>
-            Sign In
-          </Link>
-          <Link className="header__button" href={'/registration'}>
-            Sign Up
-          </Link>
-        </div>
-      )}
+    <header>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1rem 2rem',
+          width: '100%',
+          backgroundColor: '#F0F7F4',
+        }}
+      >
+        <Link href={`/${params.lang}`}>
+          <Image
+            src="/static/logo.png"
+            alt="RS School Logo"
+            width={40}
+            height={40}
+          />
+        </Link>
+        <LanguageToggle t={t} />
+        {authUser ? (
+          <Button variant="outlined" onClick={userSignOut}>
+            {t.signOut}
+          </Button>
+        ) : (
+          <Box
+            sx={{
+              display: 'flex',
+              gap: '1rem',
+            }}
+          >
+            <Button variant="outlined" href={`/${params.lang}/authorization`}>
+              {t.signIn}
+            </Button>
+            <Button variant="outlined" href={`/${params.lang}/registration`}>
+              {t.signUp}
+            </Button>
+          </Box>
+        )}
+      </Box>
     </header>
   );
 };

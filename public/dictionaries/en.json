@@ -1,0 +1,11 @@
+{
+  "basic": {
+    "welcome": "Welcome",
+    "language": "Language",
+    "client": "Client",
+    "history": "History",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "signUp": "Sign Up"
+  }
+}
