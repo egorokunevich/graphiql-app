@@ -1,20 +1,35 @@
 'use client';
 
 import { Button, Box } from '@mui/material';
+import { signOut, User } from 'firebase/auth';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useState } from 'react';
 
 import './Header.css';
 
-import LanguageToggle from '@/src/components/LanguageToggle/LanguageToggle';
+import { useAuthEffect } from '@/src//hooks/useAuthEffect';
+import LanguageToggle, {
+  LanguageType,
+} from '@/src/components/LanguageToggle/LanguageToggle';
+import { auth } from '@/src/utils/firebase';
 import { type getDictionary } from '@/src/utils/getDictionary';
 
 interface HeaderProps {
   t: Awaited<ReturnType<typeof getDictionary>>['basic'];
-  isAuthenticated: boolean;
 }
 
-const Header = ({ t, isAuthenticated }: HeaderProps) => {
+const Header = ({ t }: HeaderProps) => {
+  const [authUser, setAuthUser] = useState<User | null>(null);
+  const params = useParams<{ lang: LanguageType }>();
+
+  useAuthEffect(setAuthUser);
+
+  function userSignOut() {
+    signOut(auth);
+  }
+
   return (
     <header>
       <Box
@@ -27,7 +42,7 @@ const Header = ({ t, isAuthenticated }: HeaderProps) => {
           backgroundColor: '#F0F7F4',
         }}
       >
-        <Link href={'/'}>
+        <Link href={`/${params.lang}`}>
           <Image
             src="/static/logo.png"
             alt="RS School Logo"
@@ -36,8 +51,10 @@ const Header = ({ t, isAuthenticated }: HeaderProps) => {
           />
         </Link>
         <LanguageToggle t={t} />
-        {isAuthenticated ? (
-          <Button variant="outlined">{t.signOut}</Button>
+        {authUser ? (
+          <Button variant="outlined" onClick={userSignOut}>
+            {t.signOut}
+          </Button>
         ) : (
           <Box
             sx={{
@@ -45,10 +62,10 @@ const Header = ({ t, isAuthenticated }: HeaderProps) => {
               gap: '1rem',
             }}
           >
-            <Button variant="outlined" href="/authorization">
+            <Button variant="outlined" href={`/${params.lang}/authorization`}>
               {t.signIn}
             </Button>
-            <Button variant="outlined" href="/registration">
+            <Button variant="outlined" href={`/${params.lang}/registration`}>
               {t.signUp}
             </Button>
           </Box>

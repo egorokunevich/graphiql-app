@@ -45,15 +45,7 @@
     }
   },
   "rules": {
-    "import/no-extraneous-dependencies": [
-      "warn",
-      {
-        "devDependencies": false,
-        "optionalDependencies": false,
-        "peerDependencies": false,
-        "packageDir": "./"
-      }
-    ],
+    "import/no-extraneous-dependencies": "off",
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "error",
     "react/prop-types": "off",
@@ -73,28 +65,7 @@
           "caseInsensitive": false,
           "order": "asc"
         },
-        // "groups": [
-        //   "builtin",
-        //   "external",
-        //   "internal",
-        //   "parent",
-        //   "sibling",
-        //   "index",
-        //   "object",
-        //   "type"
-        // ],
         "newlines-between": "always",
-        // "pathGroups": [
-        //   {
-        //     "pattern": "**/*.css",
-        //     "group": "type",
-        //     "position": "after"
-        //   }
-        // ],
-        // "pathGroupsExcludedImportTypes": [
-        //   "**/*.css",
-        //   "**/*.scss"
-        // ],
         "warnOnUnassignedImports": true
       }
     ],
