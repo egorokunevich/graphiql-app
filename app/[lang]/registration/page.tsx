@@ -1,51 +1,108 @@
 'use client';
-
+import { TextField, Button } from '@mui/material';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
+import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
 import { auth } from '@/src/utils/firebase';
+import { validateEmail, validatePassword } from '@/src/utils/validation';
 
 function SignUp() {
+  const router = useRouter();
+  const params = useParams<{ lang: LanguageType }>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  function register(event: { preventDefault: () => void }) {
-    event.preventDefault();
-    if (password.length < 6) {
-      setError('Password must be more than 6 symbols');
+  useEffect(() => {
+    setEmailError('');
+    if (!validateEmail(email)) {
+      setEmailError('Invalid email address. Please enter a valid email.');
     }
+  }, [email]);
 
-    createUserWithEmailAndPassword(auth, email, password).then(() => {
-      setEmail('');
-      setPassword('');
-      setError('');
-    });
+  useEffect(() => {
+    setPasswordErrors([]);
+    const passwordValidationErrors = validatePassword(password);
+    if (passwordValidationErrors.length > 0) {
+      setPasswordErrors(passwordValidationErrors);
+    }
+  }, [password]);
+
+  async function register(event: { preventDefault: () => void }) {
+    event.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    if (!emailError && passwordErrors.length === 0) {
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        router.push(`/${params.lang}`);
+      } catch (err) {
+        setError('An error occurred. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setIsLoading(false);
+    }
   }
 
   return (
-    <>
-      <div className="container">
-        <h1>Sign Up Page</h1>
-        <form className="flex flex-col p-10" onSubmit={register}>
-          <input
+    <div className="max-w-md mx-auto p-6 m-6 bg-white rounded-lg shadow-md">
+      <h1 className="text-3xl font-semibold mb-4">Sign Up</h1>
+      <form onSubmit={register}>
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-gray-600">
+            Email
+          </label>
+          <TextField
             type="email"
+            id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="email"
+            className="w-full border rounded-md focus:outline-none focus:border-blue-500"
+            placeholder="Enter your email"
+            required
           />
-          <input
+          {emailError && <p>{emailError}</p>}
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="password" className="block text-gray-600">
+            Password
+          </label>
+          <TextField
             type="password"
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="password"
+            className="w-full border rounded-md focus:outline-none focus:border-blue-500"
+            placeholder="Enter your password"
+            required
           />
-          {error ? <p>{error}</p> : ''}
-          <button className="button">Create</button>
-        </form>
-      </div>
-    </>
+          {passwordErrors.length > 0 && <p>{passwordErrors.join(' ')}</p>}
+          {error && <p className="text-red-500">{error}</p>}
+        </div>
+
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <Button
+            type="submit"
+            className="w-full m-auto bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+          >
+            Create Account
+          </Button>
+        )}
+      </form>
+    </div>
   );
 }
 
 export default SignUp;
+
