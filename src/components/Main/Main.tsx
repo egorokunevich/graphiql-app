@@ -51,17 +51,17 @@ const MainContent = ({ t }: MainInterface) => {
                 {...a11yProps('')}
               />
               <Tab
-                value="rest-client"
+                value="client/rest-client"
                 label={`REST ${t.client}`}
                 {...a11yProps('rest-client')}
               />
               <Tab
-                value="graphiql-client"
+                value="client/graphiql-client"
                 label={`GraphiQL ${t.client}`}
                 {...a11yProps('graphiql-client')}
               />
               <Tab
-                value="history"
+                value="client/history"
                 label={t.history}
                 {...a11yProps('history')}
               />
