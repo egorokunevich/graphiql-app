@@ -1,5 +1,11 @@
 import React from 'react';
 
-export const History = () => {
-  return <div>page</div>;
+interface PageProps {
+  name: string;
+}
+
+const History: PageProps = () => {
+  return <div>History page</div>;
 };
+
+export default History;

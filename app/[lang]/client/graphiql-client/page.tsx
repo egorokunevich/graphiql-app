@@ -1,5 +1,10 @@
 import React from 'react';
 
-export const GraphiQLClient = () => {
-  return <div>GraphiqlClient</div>;
+interface PageProps {
+  name: string;
+}
+const GraphiQLClient: PageProps = () => {
+  return <div>Graphiql Client page</div>;
 };
+
+export default GraphiQLClient;
