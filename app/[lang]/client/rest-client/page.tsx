@@ -13,6 +13,7 @@ import {
   Typography,
   Tabs,
   Tab,
+  Paper,
 } from '@mui/material';
 import axios from 'axios';
 import Image from 'next/image';
@@ -27,8 +28,7 @@ interface TabPanelProps {
 interface ResponseType<T = unknown> {
   status?: number;
   data?: T;
-    message?: string;
-    statusText?: string;
+  message?: string;
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -46,8 +46,6 @@ function CustomTabPanel(props: TabPanelProps) {
     </div>
   );
 }
-
-// event: React.SyntheticEvent
 
 export const RestClinet = () => {
   const [value, setValue] = useState(0);
@@ -214,44 +212,108 @@ export const RestClinet = () => {
           Variables Editor
         </CustomTabPanel>
       </Box>
-      <Box sx={{ borderTop: 1, borderColor: 'divider' }}>
-        <Typography variant="h6" fontWeight="400" color="#707070">
-          Response
-        </Typography>
+
+      <Paper
+        sx={{
+          boxShadow: 'none',
+          borderTop: 1,
+          borderColor: 'divider',
+          borderRadius: 'unset',
+          padding: 1,
+          maxHeight: '500px',
+          overflowY: 'auto',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '100%',
+          }}
+        >
+          {' '}
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Typography variant="h6" fontWeight="400" color="#707070">
+              Status:
+            </Typography>
+            {response && (
+              <Typography
+                variant="h6"
+                fontWeight="400"
+                color={response?.message ? 'error' : 'green'}
+              >
+                {response?.message
+                  ? `${response.status} Failed`
+                  : `${response?.status} OK`}
+              </Typography>
+            )}
+          </Box>
+          <Typography variant="h6" fontWeight="400" color="#707070">
+            Response
+          </Typography>
+        </Box>
         <Box
           sx={{
             width: '100%',
             height: '100%',
             display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
           {response ? (
-            <>
-              {response.message ? (
-                <>
-                  <Typography color="error">
-                    Status: {response.status}
-                    Error: Could not send request
-                    {response.message}
-                  </Typography>
-                </>
-              ) : (
-                <>
-                  <Typography variant="subtitle2">
-                    Status: {response.status}
-                  </Typography>
-                  <pre style={{ textAlign: 'left' }}>
-                    {JSON.stringify(response.data, null, 2)}
-                  </pre>
-                </>
-              )}
-            </>
+            response.message ? (
+              <Box
+                sx={{
+                  marginTop: 3,
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: 4,
+                }}
+              >
+                <Image
+                  src="/static/astronaut.svg"
+                  alt="astronaut"
+                  width={200}
+                  height={200}
+                />
+                <Typography color="#454545" variant="subtitle2">
+                  Could not send request
+                </Typography>
+              </Box>
+            ) : (
+              <Box
+                component="pre"
+                sx={{
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-all',
+                  maxHeight: '330px',
+                  overflowY: 'auto',
+                  padding: 1,
+                  backgroundColor: '#F0F7F4',
+                  borderRadius: 1,
+                }}
+              >
+                {typeof response?.data === 'string'
+                  ? response?.data
+                  : JSON.stringify(response?.data, null, 2)}
+              </Box>
+            )
           ) : (
-            <>
+            <Box
+              sx={{
+                marginTop: 3,
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 4,
+              }}
+            >
               <Image
                 src="/static/illustration.svg"
                 alt=""
@@ -261,10 +323,10 @@ export const RestClinet = () => {
               <Typography color="#454545" variant="subtitle2" gutterBottom>
                 Enter the URL and click Send to get a response
               </Typography>
-            </>
+            </Box>
           )}
         </Box>
-      </Box>
+      </Paper>
     </Container>
   );
 };
