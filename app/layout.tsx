@@ -1,6 +1,7 @@
 import { Container } from '@mui/material';
-import './globals.css';
 import type { Metadata } from 'next';
+
+import './globals.css';
 
 import { i18n, type Locale } from '@/i18n-config';
 import Footer from '@/src/components/Footer/Footer';

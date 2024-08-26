@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+
+import { AxiosError } from '@/node_modules/axios/index';
 import {
   Box,
   Button,
@@ -13,12 +14,21 @@ import {
   Tabs,
   Tab,
 } from '@mui/material';
+import axios from 'axios';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+}
+
+interface ResponseType<T = unknown> {
+  status?: number;
+  data?: T;
+    message?: string;
+    statusText?: string;
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -37,11 +47,79 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
+// event: React.SyntheticEvent
+
 export const RestClinet = () => {
   const [value, setValue] = useState(0);
+  const [method, setMethod] = useState('GET');
+  const [url, setUrl] = useState('');
+  const [response, setResponse] = useState<ResponseType | null>(null);
+  const [headers, setHeaders] = useState([{ key: '', value: '' }]);
+  const [body, setBody] = useState('');
+  const [urlError, setUrlError] = useState(false);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleValueChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleMethodChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setMethod(event.target.value as string);
+  };
+
+  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUrl(event.target.value);
+  };
+
+  function isAxiosError(error: unknown): error is AxiosError {
+    return axios.isAxiosError(error);
+  }
+
+  const handleSendRequest = async () => {
+    if (!url) {
+      setUrlError(true);
+      setResponse(null);
+      return;
+    }
+
+    try {
+      const config = {
+        method,
+        url,
+        headers: headers.reduce(
+          (acc, header) => {
+            if (header.key && header.value) {
+              acc[header.key] = header.value;
+            }
+            return acc;
+          },
+          {} as Record<string, string>,
+        ),
+        data: body,
+      };
+
+      const responseUrl = await axios(config);
+      setResponse(responseUrl);
+      setUrlError(false);
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        setResponse({
+          status: error.response?.status,
+          data: error.response?.data,
+          message: error.message,
+        });
+        setUrlError(false);
+      } else if (error instanceof Error) {
+        setResponse({
+          message: error.message,
+        });
+        setUrlError(false);
+      } else {
+        setResponse({
+          message: 'An unexpected error occurred',
+        });
+        setUrlError(false);
+      }
+    }
   };
 
   function a11yProps(index: number) {
@@ -50,9 +128,20 @@ export const RestClinet = () => {
       'aria-controls': `simple-tabpanel-${index}`,
     };
   }
+  console.log(
+    'method:',
+    method,
+    'url:',
+    url,
+    'value:',
+    value,
+    'response:',
+    response,
+  );
+
   return (
     <Container sx={{ paddingLeft: 0, paddingRight: 0 }}>
-      <Box sx={{ marginTop: 4, marginBottom: 2 }}>
+      <Box sx={{ marginTop: 2, marginBottom: 2 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           REST Client
         </Typography>
@@ -64,7 +153,12 @@ export const RestClinet = () => {
       >
         <FormControl sx={{ width: '10%', borderRadius: 'unset' }}>
           <InputLabel id="method-label">Method</InputLabel>
-          <Select labelId="method-label" value={'method'} label="Method">
+          <Select
+            labelId="method-label"
+            value={method}
+            label="Method"
+            onChange={handleMethodChange}
+          >
             <MenuItem value="GET">GET</MenuItem>
             <MenuItem value="POST">POST</MenuItem>
             <MenuItem value="PUT">PUT</MenuItem>
@@ -73,12 +167,19 @@ export const RestClinet = () => {
           </Select>
         </FormControl>
         <TextField
+          value={url}
+          onChange={handleUrlChange}
           label="Endpoint URL"
           variant="outlined"
-          fullWidth
-          sx={{ borderRadius: 'unset' }}
+          sx={{ borderRadius: 'unset', width: '100%' }}
+          error={urlError}
+          helperText={urlError ? 'URL cannot be empty' : ''}
         />
-        <Button variant="contained" sx={{ borderRadius: 'unset' }}>
+        <Button
+          variant="contained"
+          sx={{ borderRadius: 'unset' }}
+          onClick={handleSendRequest}
+        >
           Send
         </Button>
       </Box>
@@ -86,7 +187,7 @@ export const RestClinet = () => {
         <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 2 }}>
           <Tabs
             value={value}
-            onChange={handleChange}
+            onChange={handleValueChange}
             aria-label="basic tabs example"
           >
             <Tab label="Headers" {...a11yProps(0)} />
@@ -98,8 +199,12 @@ export const RestClinet = () => {
           <Box
             sx={{ display: 'flex', gap: 1, paddingLeft: 0, paddingRight: 0 }}
           >
-            <TextField label="Key" variant="outlined" fullWidth />
-            <TextField label="Value" variant="outlined" fullWidth />
+            <TextField label="Key" variant="outlined" sx={{ width: '100%' }} />
+            <TextField
+              label="Value"
+              variant="outlined"
+              sx={{ width: '100%' }}
+            />
           </Box>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
@@ -114,7 +219,6 @@ export const RestClinet = () => {
           Response
         </Typography>
         <Box
-          fullWidth
           sx={{
             width: '100%',
             height: '100%',
@@ -125,15 +229,40 @@ export const RestClinet = () => {
             alignItems: 'center',
           }}
         >
-          <Image
-            src="/static/illustration.svg"
-            alt=""
-            width={200}
-            height={200}
-          />
-          <Typography color="#454545" variant="subtitle2" gutterBottom>
-            Enter the URL and click Send to get a response
-          </Typography>
+          {response ? (
+            <>
+              {response.message ? (
+                <>
+                  <Typography color="error">
+                    Status: {response.status}
+                    Error: Could not send request
+                    {response.message}
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <Typography variant="subtitle2">
+                    Status: {response.status}
+                  </Typography>
+                  <pre style={{ textAlign: 'left' }}>
+                    {JSON.stringify(response.data, null, 2)}
+                  </pre>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              <Image
+                src="/static/illustration.svg"
+                alt=""
+                width={200}
+                height={200}
+              />
+              <Typography color="#454545" variant="subtitle2" gutterBottom>
+                Enter the URL and click Send to get a response
+              </Typography>
+            </>
+          )}
         </Box>
       </Box>
     </Container>
