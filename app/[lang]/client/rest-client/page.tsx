@@ -16,7 +16,8 @@ import {
   Tab,
   Paper,
   IconButton,
-  Tooltip,
+    Tooltip,
+    SelectChangeEvent
 } from '@mui/material';
 import axios from 'axios';
 import Image from 'next/image';
@@ -79,7 +80,7 @@ const RestClinet = () => {
     setValue(newValue);
   };
 
-  const handleMethodChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleMethodChange = (event: SelectChangeEvent<string>) => {
     setMethod(event.target.value as string);
   };
 

@@ -1,9 +1,7 @@
 import React from 'react';
 
-interface PageProps {
-  name: string;
-}
-const GraphiQLClient: PageProps = () => {
+
+const GraphiQLClient = () => {
   return <div>Graphiql Client page</div>;
 };
 

@@ -1,10 +1,8 @@
 import React from 'react';
 
-interface PageProps {
-  name: string;
-}
 
-const History: PageProps = () => {
+
+const History = () => {
   return <div>History page</div>;
 };
 
