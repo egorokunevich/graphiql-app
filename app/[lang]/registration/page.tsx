@@ -1,10 +1,12 @@
 'use client';
-import { TextField, Button } from '@mui/material';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { Button } from '@mui/material';
+import { createUserWithEmailAndPassword, User } from 'firebase/auth';
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import InputField from '@/src/components/InputField/InputField';
 import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
+import { useAuthEffect } from '@/src/hooks/useAuthEffect';
 import { auth } from '@/src/utils/firebase';
 import { validateEmail, validatePassword } from '@/src/utils/validation';
 
@@ -17,25 +19,30 @@ function SignUp() {
   const [emailError, setEmailError] = useState('');
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [authUser, setAuthUser] = useState<User | null>(null);
+
+  useAuthEffect(setAuthUser);
+  useEffect(() => {
+    if (!!authUser) router.push(`/${params.lang}`);
+  }, [authUser]);
 
   useEffect(() => {
+    setError('');
     setEmailError('');
+    setPasswordErrors([]);
+
     if (!validateEmail(email)) {
       setEmailError('Invalid email address. Please enter a valid email.');
     }
-  }, [email]);
 
-  useEffect(() => {
-    setPasswordErrors([]);
-    const passwordValidationErrors = validatePassword(password);
-    if (passwordValidationErrors.length > 0) {
-      setPasswordErrors(passwordValidationErrors);
+    const passwordErrorsList = validatePassword(password);
+    if (passwordErrorsList.length > 0) {
+      setPasswordErrors(passwordErrorsList);
     }
-  }, [password]);
+  }, [email, password]);
 
   async function register(event: { preventDefault: () => void }) {
     event.preventDefault();
-    setError('');
     setIsLoading(true);
 
     if (!emailError && passwordErrors.length === 0) {
@@ -43,7 +50,8 @@ function SignUp() {
         await createUserWithEmailAndPassword(auth, email, password);
         router.push(`/${params.lang}`);
       } catch (err) {
-        setError('An error occurred. Please try again.');
+        const errorCode = (err as { code: string }).code;
+        setError(`Error: ${errorCode.replace(/-/g, ' ')}`);
       } finally {
         setIsLoading(false);
       }
@@ -56,38 +64,29 @@ function SignUp() {
     <div className="max-w-md mx-auto p-6 m-6 bg-white rounded-lg shadow-md">
       <h1 className="text-3xl font-semibold mb-4">Sign Up</h1>
       <form onSubmit={register}>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-600">
-            Email
-          </label>
-          <TextField
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full border rounded-md focus:outline-none focus:border-blue-500"
-            placeholder="Enter your email"
-            required
-          />
-          {emailError && <p>{emailError}</p>}
-        </div>
+        <InputField
+          id="email"
+          label="Email"
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          required
+          error={emailError}
+        />
 
-        <div className="mb-4">
-          <label htmlFor="password" className="block text-gray-600">
-            Password
-          </label>
-          <TextField
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full border rounded-md focus:outline-none focus:border-blue-500"
-            placeholder="Enter your password"
-            required
-          />
-          {passwordErrors.length > 0 && <p>{passwordErrors.join(' ')}</p>}
-          {error && <p className="text-red-500">{error}</p>}
-        </div>
+        <InputField
+          id="password"
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password"
+          required
+          error={passwordErrors.length > 0 ? passwordErrors.join(' ') : ''}
+        />
+
+        {error && <p className="text-red-500 mb-4">{error}</p>}
 
         {isLoading ? (
           <p>Loading...</p>
