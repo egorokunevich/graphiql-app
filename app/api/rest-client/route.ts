@@ -36,7 +36,7 @@ const handleRequest = async (
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       console.log(error);
-      
+      return error
       // return NextResponse.json(
       //   { error: error.message, status: error.response.status },
       //   { status: error.response.status },
