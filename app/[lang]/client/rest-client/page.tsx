@@ -1,34 +1,19 @@
 'use client';
 
 import { AxiosError } from '@/node_modules/axios/index';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-  Tabs,
-  Tab,
-  Paper,
-  IconButton,
-    Tooltip,
-    SelectChangeEvent
+    Box,
+    Container,
+    TextField,
+    Typography,
+    Tabs,
+    Tab,
 } from '@mui/material';
 import axios from 'axios';
-import Image from 'next/image';
 import { useState } from 'react';
-import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
-import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json';
-import xml from 'react-syntax-highlighter/dist/esm/languages/hljs/xml';
-import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-SyntaxHighlighter.registerLanguage('json', json);
-SyntaxHighlighter.registerLanguage('html', xml);
+import { ResponseViewer } from '@/src/components/ResponseViewer';
+import { RestUrl } from '@/src/components/RestUrl';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -36,7 +21,7 @@ interface TabPanelProps {
   value: number;
 }
 
-interface ResponseType<T = unknown> {
+export interface ResponseType<T = unknown> {
   status?: number;
   data?: T;
   message?: string;
@@ -58,7 +43,7 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
-const RestClinet = () => {
+const RestClient = () => {
   const [value, setValue] = useState(0);
   const [method, setMethod] = useState('GET');
   const [url, setUrl] = useState('');
@@ -67,25 +52,8 @@ const RestClinet = () => {
   const [body, setBody] = useState('');
   const [urlError, setUrlError] = useState(false);
 
-  const isJson = (data: string): boolean => {
-    try {
-      JSON.parse(data);
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
   const handleValueChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
-  };
-
-  const handleMethodChange = (event: SelectChangeEvent<string>) => {
-    setMethod(event.target.value as string);
-  };
-
-  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUrl(event.target.value);
   };
 
   function isAxiosError(error: unknown): error is AxiosError {
@@ -154,60 +122,13 @@ const RestClinet = () => {
           REST Client
         </Typography>
       </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <FormControl sx={{ width: '10%', borderRadius: 'unset' }}>
-          <InputLabel id="method-label">Method</InputLabel>
-          <Select
-            labelId="method-label"
-            value={method}
-            label="Method"
-            onChange={handleMethodChange}
-          >
-            <MenuItem value="GET">GET</MenuItem>
-            <MenuItem value="POST">POST</MenuItem>
-            <MenuItem value="PUT">PUT</MenuItem>
-            <MenuItem value="DELETE">DELETE</MenuItem>
-            <MenuItem value="PATCH">PATCH</MenuItem>
-          </Select>
-        </FormControl>
-        <Box sx={{ position: 'relative', width: '100%' }}>
-          <TextField
-            value={url}
-            onChange={handleUrlChange}
-            label="Endpoint URL"
-            variant="outlined"
-            sx={{ borderRadius: 'unset', width: '100%' }}
-            error={urlError}
-          />
-          {urlError && (
-            <Tooltip
-              title="URL cannot be empty"
-              placement="right"
-              sx={{ position: 'absolute', right: 0, top: 8 }}
-            >
-              <IconButton>
-                <ErrorOutlineIcon color="error" />
-              </IconButton>
-            </Tooltip>
-          )}
-        </Box>
-        <Button
-          variant="contained"
-          sx={{
-            borderRadius: 'unset',
-            height: '56px',
-            boxSizing: 'border-box',
-          }}
-          onClick={handleSendRequest}
-        >
-          Send
-        </Button>
-      </Box>
+      <RestUrl
+        setUrl={setUrl}
+        url={url}
+        handleSendRequest={handleSendRequest}
+        urlError={urlError}
+      />
+
       <Box sx={{ paddingBottom: 10 }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 2 }}>
           <Tabs
@@ -239,152 +160,9 @@ const RestClinet = () => {
           Variables Editor
         </CustomTabPanel>
       </Box>
-
-      <Paper
-        sx={{
-          boxShadow: 'none',
-          borderTop: 1,
-          borderColor: 'divider',
-          borderRadius: 'unset',
-          padding: 1,
-          maxHeight: '500px',
-          overflowY: 'auto',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
-          {' '}
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Typography variant="h6" fontWeight="400" color="#707070">
-              Status:
-            </Typography>
-            {response && (
-              <Typography
-                variant="h6"
-                fontWeight="400"
-                color={response?.message ? 'error' : 'green'}
-              >
-                {response?.message
-                  ? `${response.status} Request Failed`
-                  : `${response?.status} OK`}
-              </Typography>
-            )}
-          </Box>
-          <Typography variant="h6" fontWeight="400" color="#707070">
-            Response
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          {response ? (
-            response.message ? (
-              <Box
-                sx={{
-                  marginTop: 3,
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: 4,
-                }}
-              >
-                <Image
-                  src="/static/astronaut.svg"
-                  alt="astronaut"
-                  width={200}
-                  height={200}
-                />
-                <Typography color="#454545" variant="subtitle2">
-                  Could not send request
-                </Typography>
-              </Box>
-            ) : (
-              <Box
-                component="pre"
-                sx={{
-                  whiteSpace: 'pre-wrap',
-                  wordBreak: 'break-all',
-                  maxHeight: '330px',
-                  overflowY: 'auto',
-                  padding: 1,
-                  borderRadius: 1,
-                }}
-              >
-                {typeof response.data === 'string' ? (
-                  isJson(response.data) ? (
-                    <SyntaxHighlighter
-                      language="json"
-                      style={docco}
-                      customStyle={{ backgroundColor: '#F0F7F4' }}
-                      showLineNumbers={true}
-                      lineNumberStyle={{ color: '#888888' }}
-                    >
-                      {response.data}
-                    </SyntaxHighlighter>
-                  ) : (
-                    <SyntaxHighlighter
-                      language="html"
-                      style={docco}
-                      customStyle={{ backgroundColor: '#F0F7F4' }}
-                      showLineNumbers={true}
-                      lineNumberStyle={{ color: '#888888' }}
-                    >
-                      {response.data}
-                    </SyntaxHighlighter>
-                  )
-                ) : (
-                  <SyntaxHighlighter
-                    language="json"
-                    style={docco}
-                    customStyle={{ backgroundColor: '#F0F7F4' }}
-                    showLineNumbers={true}
-                    lineNumberStyle={{ color: '#888888' }}
-                  >
-                    {JSON.stringify(response.data, null, 2)}
-                  </SyntaxHighlighter>
-                )}
-              </Box>
-            )
-          ) : (
-            <Box
-              sx={{
-                marginTop: 3,
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: 4,
-              }}
-            >
-              <Image
-                src="/static/illustration.svg"
-                alt=""
-                width={200}
-                height={200}
-              />
-              <Typography color="#454545" variant="subtitle2" gutterBottom>
-                Enter the URL and click Send to get a response
-              </Typography>
-            </Box>
-          )}
-        </Box>
-      </Paper>
+      <ResponseViewer response={response} />
     </Container>
   );
 };
 
-export default RestClinet;
+export default RestClient;
