@@ -2,12 +2,12 @@
 
 import { AxiosError } from '@/node_modules/axios/index';
 import {
-    Box,
-    Container,
-    TextField,
-    Typography,
-    Tabs,
-    Tab,
+  Box,
+  Container,
+  TextField,
+  Typography,
+  Tabs,
+  Tab,
 } from '@mui/material';
 import axios from 'axios';
 import { useState } from 'react';
@@ -56,10 +56,6 @@ const RestClient = () => {
     setValue(newValue);
   };
 
-  function isAxiosError(error: unknown): error is AxiosError {
-    return axios.isAxiosError(error);
-  }
-
   const handleSendRequest = async () => {
     if (!url) {
       setUrlError(true);
@@ -68,29 +64,35 @@ const RestClient = () => {
     }
 
     try {
-      const config = {
-        method,
-        url,
-        headers: headers.reduce(
-          (acc, header) => {
-            if (header.key && header.value) {
-              acc[header.key] = header.value;
-            }
-            return acc;
-          },
-          {} as Record<string, string>,
-        ),
-        data: body,
-      };
+      const urlBase64 = Buffer.from(url).toString('base64');
+      const bodyBase64 = body
+        ? Buffer.from(JSON.stringify(body)).toString('base64')
+        : '';
 
-      const responseUrl = await axios(config);
-      setResponse(responseUrl);
+      const queryParams = headers
+        .filter((header) => header.key && header.value)
+        .map(
+          (header) =>
+            `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`,
+        )
+        .join('&');
+
+      let fullUrl = `/api/rest-client?method=${method}&urlBase64=${urlBase64}`;
+      if (['POST', 'PUT', 'PATCH'].includes(method) && bodyBase64) {
+        fullUrl += `&bodyBase64=${bodyBase64}`;
+      }
+      if (queryParams) {
+        fullUrl += `&${queryParams}`;
+      }
+
+      const respond = await axios.get(fullUrl);
+      setResponse({ status: respond.data.status, data: respond.data.data });
       setUrlError(false);
     } catch (error: unknown) {
-      if (isAxiosError(error)) {
+      if (error instanceof AxiosError) {
         setResponse({
-          status: error.response?.status,
-          data: error.response?.data,
+          status: error.response?.data?.status || error.response?.status,
+          data: error.response?.data?.data || '',
           message: error.message,
         });
         setUrlError(false);
@@ -123,6 +125,8 @@ const RestClient = () => {
         </Typography>
       </Box>
       <RestUrl
+        method={method}
+        setMethod={setMethod}
         setUrl={setUrl}
         url={url}
         handleSendRequest={handleSendRequest}

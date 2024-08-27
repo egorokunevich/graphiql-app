@@ -8,7 +8,6 @@ import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 import { ResponseType } from '@/app/[lang]/client/rest-client/page';
 
-
 SyntaxHighlighter.registerLanguage('json', json);
 SyntaxHighlighter.registerLanguage('html', xml);
 

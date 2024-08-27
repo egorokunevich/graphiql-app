@@ -13,13 +13,13 @@ import {
 } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
-import { ResponseType } from '@/app/[lang]/client/rest-client/page';
-
 interface ChildProps {
   urlError: boolean;
   handleSendRequest: () => Promise<void>;
   url: string;
   setUrl: Dispatch<SetStateAction<string>>;
+  method: string;
+  setMethod: Dispatch<SetStateAction<string>>;
 }
 
 export const RestUrl = ({
@@ -27,8 +27,9 @@ export const RestUrl = ({
   handleSendRequest,
   url,
   setUrl,
+  method,
+  setMethod,
 }: ChildProps) => {
-  const [method, setMethod] = useState('GET');
   const options = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
 
   const handleMethodChange = (event: SelectChangeEvent<string>) => {
