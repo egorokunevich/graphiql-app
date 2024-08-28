@@ -13,8 +13,8 @@ import {
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import { ResponseViewer } from '@/src/components/ResponseViewer';
-import { RestUrl } from '@/src/components/RestUrl';
+import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
+import { RestUrl } from '@/src/components/RestUrl/RestUrl';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -108,7 +108,7 @@ const RestClient = () => {
 
       const respond = await axios.get(restUrl);
       setFullUrl(restUrl);
-      // router.push(fullUrl, undefined, { shallow: true });
+      // router.push(restUrl, undefined, { shallow: true });
       setResponse({ status: respond.data.status, data: respond.data.data });
       setUrlError(false);
     } catch (error: unknown) {
