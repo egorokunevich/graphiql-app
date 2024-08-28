@@ -1,5 +1,6 @@
 'use client';
 
+// import { useRouter } from 'next/navigation';
 import { AxiosError } from '@/node_modules/axios/index';
 import {
   Box,
@@ -10,7 +11,7 @@ import {
   Tab,
 } from '@mui/material';
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ResponseViewer } from '@/src/components/ResponseViewer';
 import { RestUrl } from '@/src/components/RestUrl';
@@ -26,6 +27,15 @@ export interface ResponseType<T = unknown> {
   data?: T;
   message?: string;
 }
+
+export type Method =
+  | 'GET'
+  | 'POST'
+  | 'PUT'
+  | 'DELETE'
+  | 'PATCH'
+  | 'HEAD'
+  | 'OPTIONS';
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -44,13 +54,24 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 
 const RestClient = () => {
+  // const router = useRouter();
   const [value, setValue] = useState(0);
-  const [method, setMethod] = useState('GET');
+  const [method, setMethod] = useState<Method>('GET');
   const [url, setUrl] = useState('');
+  const [fullUrl, setFullUrl] = useState('');
   const [response, setResponse] = useState<ResponseType | null>(null);
   const [headers, setHeaders] = useState([{ key: '', value: '' }]);
   const [body, setBody] = useState('');
   const [urlError, setUrlError] = useState(false);
+
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+
+  //     if (fullUrl) {
+  //       router.push(fullUrl);
+  //     }
+  //   }
+  //  }, [fullUrl]);
 
   const handleValueChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -77,15 +98,17 @@ const RestClient = () => {
         )
         .join('&');
 
-      let fullUrl = `/api/rest-client?method=${method}&urlBase64=${urlBase64}`;
+      let restUrl = `/api/rest-client?method=${method}&urlBase64=${urlBase64}`;
       if (['POST', 'PUT', 'PATCH'].includes(method) && bodyBase64) {
-        fullUrl += `&bodyBase64=${bodyBase64}`;
+        restUrl += `&bodyBase64=${bodyBase64}`;
       }
       if (queryParams) {
-        fullUrl += `&${queryParams}`;
+        restUrl += `&${queryParams}`;
       }
 
-      const respond = await axios.get(fullUrl);
+      const respond = await axios.get(restUrl);
+      setFullUrl(restUrl);
+      // router.push(fullUrl, undefined, { shallow: true });
       setResponse({ status: respond.data.status, data: respond.data.data });
       setUrlError(false);
     } catch (error: unknown) {

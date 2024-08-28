@@ -27,7 +27,7 @@ const MainContent = ({ t }: MainInterface) => {
 
   const handleTabChange = (e: React.SyntheticEvent, newValue: TabsType) => {
     setValue(newValue);
-    router.push(`/${params.lang}/${newValue}`);
+    router.push(`/${params.lang}/client/${newValue}`);
   };
 
   const a11yProps = (TabValue: TabsType) => {

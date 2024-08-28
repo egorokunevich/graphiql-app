@@ -13,13 +13,15 @@ import {
 } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
+import { Method } from '@/app/[lang]/client/rest-client/page';
+
 interface ChildProps {
   urlError: boolean;
   handleSendRequest: () => Promise<void>;
   url: string;
   setUrl: Dispatch<SetStateAction<string>>;
-  method: string;
-  setMethod: Dispatch<SetStateAction<string>>;
+  method: Method;
+  setMethod: Dispatch<SetStateAction<Method>>;
 }
 
 export const RestUrl = ({
@@ -30,10 +32,10 @@ export const RestUrl = ({
   method,
   setMethod,
 }: ChildProps) => {
-  const options = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
+  const options = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'];
 
   const handleMethodChange = (event: SelectChangeEvent<string>) => {
-    setMethod(event.target.value as string);
+    setMethod(event.target.value as Method);
   };
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {

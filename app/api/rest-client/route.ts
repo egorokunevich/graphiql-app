@@ -5,25 +5,30 @@ const handleRequest = async (
   method: string,
   requestUrl: string,
   requestBody: object | null = null,
+  headers: Record<string, string> = {},
 ): Promise<NextResponse> => {
   try {
     let response: AxiosResponse;
 
+    const config = {
+      headers: headers,
+    };
+
     switch (method) {
       case 'GET':
-        response = await axios.get(requestUrl);
+        response = await axios.get(requestUrl, config);
         break;
       case 'POST':
-        response = await axios.post(requestUrl, requestBody);
+        response = await axios.post(requestUrl, requestBody, config);
         break;
       case 'PUT':
-        response = await axios.put(requestUrl, requestBody);
+        response = await axios.put(requestUrl, requestBody, config);
         break;
       case 'PATCH':
-        response = await axios.patch(requestUrl, requestBody);
+        response = await axios.patch(requestUrl, requestBody, config);
         break;
       case 'DELETE':
-        response = await axios.delete(requestUrl);
+        response = await axios.delete(requestUrl, config);
         break;
       default:
         return NextResponse.json(
@@ -35,7 +40,6 @@ const handleRequest = async (
     return NextResponse.json({ status: response.status, data: response.data });
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      console.error('Axios Error:', error);
       const axiosError = error as AxiosError;
 
       return NextResponse.json(
@@ -71,40 +75,56 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const urlBase64 = searchParams.get('urlBase64');
-  const requestUrl = Buffer.from(urlBase64!, 'base64').toString('utf-8');
+  const method = 'POST';
+  const urlBase64 = searchParams.get('urlBase64') || '';
+  const headers = Object.fromEntries(searchParams.entries());
+  delete headers.urlBase64;
+
+  const requestUrl = Buffer.from(urlBase64, 'base64').toString('utf-8');
   const bodyBase64 = searchParams.get('bodyBase64');
   const requestBody = bodyBase64
     ? JSON.parse(Buffer.from(bodyBase64, 'base64').toString('utf-8'))
     : null;
-  return handleRequest('POST', requestUrl, requestBody);
+  return handleRequest(method, requestUrl, requestBody, headers);
 }
 
 export async function PUT(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const urlBase64 = searchParams.get('urlBase64');
-  const requestUrl = Buffer.from(urlBase64!, 'base64').toString('utf-8');
+  const method = 'PUT';
+  const urlBase64 = searchParams.get('urlBase64') || '';
+  const headers = Object.fromEntries(searchParams.entries());
+  delete headers.urlBase64;
+
+  const requestUrl = Buffer.from(urlBase64, 'base64').toString('utf-8');
   const bodyBase64 = searchParams.get('bodyBase64');
   const requestBody = bodyBase64
     ? JSON.parse(Buffer.from(bodyBase64, 'base64').toString('utf-8'))
     : null;
-  return handleRequest('PUT', requestUrl, requestBody);
+  return handleRequest(method, requestUrl, requestBody, headers);
 }
 
 export async function PATCH(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const urlBase64 = searchParams.get('urlBase64');
-  const requestUrl = Buffer.from(urlBase64!, 'base64').toString('utf-8');
+  const method = 'PATCH';
+  const urlBase64 = searchParams.get('urlBase64') || '';
+  const headers = Object.fromEntries(searchParams.entries());
+  delete headers.urlBase64;
+
+  const requestUrl = Buffer.from(urlBase64, 'base64').toString('utf-8');
   const bodyBase64 = searchParams.get('bodyBase64');
   const requestBody = bodyBase64
     ? JSON.parse(Buffer.from(bodyBase64, 'base64').toString('utf-8'))
     : null;
-  return handleRequest('PATCH', requestUrl, requestBody);
+  return handleRequest(method, requestUrl, requestBody, headers);
 }
 
 export async function DELETE(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const urlBase64 = searchParams.get('urlBase64');
-  const requestUrl = Buffer.from(urlBase64!, 'base64').toString('utf-8');
-  return handleRequest('DELETE', requestUrl);
+  const method = 'DELETE';
+  const urlBase64 = searchParams.get('urlBase64') || '';
+  const headers = Object.fromEntries(searchParams.entries());
+  delete headers.urlBase64;
+
+  const requestUrl = Buffer.from(urlBase64, 'base64').toString('utf-8');
+  return handleRequest(method, requestUrl, null, headers);
 }
