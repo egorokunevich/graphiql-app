@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
 
 const handleRequest = async (
@@ -35,16 +35,23 @@ const handleRequest = async (
     return NextResponse.json({ status: response.status, data: response.data });
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      console.log(error);
-      return error
-      // return NextResponse.json(
-      //   { error: error.message, status: error.response.status },
-      //   { status: error.response.status },
-      // );
-    } else if (error instanceof Error) {
+      console.error('Axios Error:', error);
+      const axiosError = error as AxiosError;
+
       return NextResponse.json(
-        { error: error.message, status: 404 },
-        { status: 404 },
+        {
+          error: axiosError.message,
+          status: axiosError.response?.status || 404,
+          data: axiosError.response?.data || null,
+        },
+        { status: axiosError.response?.status || 500 },
+      );
+    } else if (error instanceof Error) {
+      console.error('instance Error:', error);
+
+      return NextResponse.json(
+        { error: error.message, status: 500 },
+        { status: 500 },
       );
     } else {
       return NextResponse.json(
