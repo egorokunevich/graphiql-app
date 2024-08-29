@@ -29,7 +29,15 @@ export default async function RootLayout({
   return (
     <html lang={lang}>
       <body>
-        <Container sx={{ maxWidth: '1440px' }}>
+        <Container
+          sx={{
+            maxWidth: '1440px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            height: '100vh',
+          }}
+        >
           <Header t={t.basic} />
           {children}
           <Footer />

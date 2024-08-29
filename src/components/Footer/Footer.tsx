@@ -6,7 +6,18 @@ import './Footer.css';
 
 const Footer = () => {
   return (
-    <footer>
+    <Box
+      component="footer"
+      sx={{
+        height: '60px',
+        padding: '40px 10px',
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        backgroundColor: 'cornsilk',
+        border: '1px solid #000',
+      }}
+    >
       <Box
         width={'100%'}
         display={'flex'}
@@ -19,7 +30,7 @@ const Footer = () => {
         <span>2024</span>
         <a href="https://rs.school/">
           <Image
-            className="footer__img"
+            style={{ maxWidth: '100px' }}
             src="/static/logo-rsschool.png"
             alt="RS School Logo"
             width={100}
@@ -27,7 +38,7 @@ const Footer = () => {
           />
         </a>
       </Box>
-    </footer>
+    </Box>
   );
 };
 
