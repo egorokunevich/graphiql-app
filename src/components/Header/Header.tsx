@@ -14,10 +14,10 @@ import LanguageToggle, {
   LanguageType,
 } from '@/src/components/LanguageToggle/LanguageToggle';
 import { auth } from '@/src/utils/firebase';
-import { type getDictionary } from '@/src/utils/getDictionary';
+import type { Dictionary } from '@/src/utils/getDictionary';
 
 interface HeaderProps {
-  t: Awaited<ReturnType<typeof getDictionary>>['basic'];
+  t: Dictionary['basic'];
 }
 
 const Header = ({ t }: HeaderProps) => {

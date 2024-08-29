@@ -7,10 +7,10 @@ import { useState } from 'react';
 import './MainContent.css';
 
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
-import { getDictionary } from '@/src/utils/getDictionary';
+import type { Dictionary } from '@/src/utils/getDictionary';
 
 interface MainContentProps {
-  t: Awaited<ReturnType<typeof getDictionary>>['basic'];
+  t: Dictionary['basic'];
 }
 
 const MainContent = ({ t }: MainContentProps) => {

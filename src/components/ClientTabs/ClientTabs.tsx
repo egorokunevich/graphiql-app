@@ -7,12 +7,12 @@ import { useState } from 'react';
 
 import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
-import { getDictionary } from '@/src/utils/getDictionary';
+import type { Dictionary } from '@/src/utils/getDictionary';
 
 type TabsType = '' | 'rest-client' | 'graphiql-client' | 'history';
 
 interface ClientTabsProps {
-  t: Awaited<ReturnType<typeof getDictionary>>['basic'];
+  t: Dictionary['basic'];
 }
 
 const ClientTabs = ({ t }: ClientTabsProps) => {
