@@ -51,7 +51,6 @@ const handleRequest = async (
         { status: axiosError.response?.status || 500 },
       );
     } else if (error instanceof Error) {
-
       return NextResponse.json(
         { error: error.message, status: 500 },
         { status: 500 },
