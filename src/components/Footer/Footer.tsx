@@ -4,7 +4,13 @@ import Link from 'next/link';
 
 import './Footer.css';
 
-const Footer = () => {
+import type { Dictionary } from '@/src/utils/getDictionary';
+
+interface FooterProps {
+  t: Dictionary['basic'];
+}
+
+const Footer = ({ t }: FooterProps) => {
   return (
     <Box
       component="footer"
@@ -14,8 +20,7 @@ const Footer = () => {
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
-        backgroundColor: 'cornsilk',
-        border: '1px solid #000',
+        borderTop: '1px solid rgba(0, 0, 0, 0.12)',
       }}
     >
       <Box
@@ -25,7 +30,7 @@ const Footer = () => {
         justifyContent={'space-between'}
       >
         <Link href="https://github.com/egorokunevich/graphiql-app">
-          GitHub Repo
+          GitHub {t.repo}
         </Link>
         <span>2024</span>
         <a href="https://rs.school/">

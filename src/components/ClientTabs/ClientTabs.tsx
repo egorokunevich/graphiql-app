@@ -18,9 +18,8 @@ interface ClientTabsProps {
 const ClientTabs = ({ t }: ClientTabsProps) => {
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [value, setValue] = useState<TabsType>('');
-  const params = useParams<{ lang: LanguageType }>();
+  const params = useParams<{ lang: LanguageType; client: TabsType }>();
   const router = useRouter();
-
   useAuthEffect(setAuthUser);
 
   const handleTabChange = (e: React.SyntheticEvent, newValue: TabsType) => {

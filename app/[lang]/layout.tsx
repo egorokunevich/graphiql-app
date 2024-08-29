@@ -42,7 +42,7 @@ export default async function RootLayout({
           <Header t={t.basic} />
           <ClientTabs t={t.basic} />
           {children}
-          <Footer />
+          <Footer t={t.basic} />
         </Container>
       </body>
     </html>
