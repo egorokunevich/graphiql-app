@@ -39,7 +39,7 @@ const MainContent = ({ t }: MainInterface) => {
 
   return (
     <main>
-      <Box sx={{ height: '100%' }}>
+      <Box sx={{ height: '100%', padding: 0 }}>
         <h1>{authUser ? `${t.welcome}, ${authUser.email}!` : t.welcome}</h1>
         {authUser && (
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

@@ -11,11 +11,11 @@ import {
   Tooltip,
   SelectChangeEvent,
 } from '@mui/material';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 import { Method } from '@/app/[lang]/client/rest-client/page';
 
-interface ChildProps {
+interface RestUrlProps {
   urlError: boolean;
   handleSendRequest: () => Promise<void>;
   url: string;
@@ -31,11 +31,15 @@ export const RestUrl = ({
   setUrl,
   method,
   setMethod,
-}: ChildProps) => {
+}: RestUrlProps) => {
   const options = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'];
 
   const handleMethodChange = (event: SelectChangeEvent<string>) => {
-    setMethod(event.target.value as Method);
+    const selectedMethod = event.target.value as Method;
+    setMethod(selectedMethod);
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.set('method', selectedMethod);
+    window.history.pushState({}, '', newUrl.toString());
   };
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
