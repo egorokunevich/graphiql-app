@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 import { i18n, type Locale } from '@/i18n-config';
+import ClientTabs from '@/src/components/ClientTabs/ClientTabs';
 import Footer from '@/src/components/Footer/Footer';
 import Header from '@/src/components/Header/Header';
 import { getDictionary } from '@/src/utils/getDictionary';
@@ -39,6 +40,7 @@ export default async function RootLayout({
           }}
         >
           <Header t={t.basic} />
+          <ClientTabs t={t.basic} />
           {children}
           <Footer />
         </Container>
