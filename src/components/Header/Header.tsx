@@ -1,3 +1,86 @@
+// 'use client';
+
+// const ButtonSignIn = React.lazy(() => import('../Buttons/ButtonSignIn'));
+// const ButtonSignUp = React.lazy(() => import('../Buttons/ButtonSignUp'));
+// import { Button, Box } from '@mui/material';
+// import { signOut, User } from 'firebase/auth';
+// import Image from 'next/image';
+// import Link from 'next/link';
+// import { useParams } from 'next/navigation';
+// import React from 'react';
+// import { useState } from 'react';
+
+// import './Header.css';
+
+// import { useAuthEffect } from '@/src//hooks/useAuthEffect';
+// import LanguageToggle, {
+//   LanguageType,
+// } from '@/src/components/LanguageToggle/LanguageToggle';
+// import { auth } from '@/src/utils/firebase';
+// import { type getDictionary } from '@/src/utils/getDictionary';
+
+// interface HeaderProps {
+//   t: Awaited<ReturnType<typeof getDictionary>>['basic'];
+// }
+
+// const Header = ({ t }: HeaderProps) => {
+//   const [authUser, setAuthUser] = useState<User | null>(null);
+//   const params = useParams<{ lang: LanguageType }>();
+
+//   useAuthEffect(setAuthUser);
+
+//   function userSignOut() {
+//     signOut(auth);
+//   }
+
+//   return (
+//     <header>
+//       <Box
+//         sx={{
+//           display: 'flex',
+//           alignItems: 'center',
+//           justifyContent: 'space-between',
+//           padding: '1rem 2rem',
+//           width: '100%',
+//           backgroundColor: '#F0F7F4',
+//         }}
+//       >
+//         <Link href={`/${params.lang}`}>
+//           <Image
+//             src="/static/logo.png"
+//             alt="RS School Logo"
+//             width={40}
+//             height={40}
+//           />
+//         </Link>
+//         <LanguageToggle t={t} />
+//         {authUser ? (
+//           <Button variant="outlined" onClick={userSignOut}>
+//             {t.signOut}
+//           </Button>
+//         ) : (
+//           <Box
+//             sx={{
+//               display: 'flex',
+//               gap: '1rem',
+//             }}
+//           >
+//             <ButtonSignIn t={t} />
+//             <ButtonSignUp t={t} />
+//             {/* <Button variant="outlined" href={`/${params.lang}/authorization`}>
+//               {t.signIn}
+//             </Button>
+//             <Button variant="outlined" href={`/${params.lang}/registration`}>
+//               {t.signUp}
+//             </Button> */}
+//           </Box>
+//         )}
+//       </Box>
+//     </header>
+//   );
+// };
+
+// export default Header;
 'use client';
 
 import { Button, Box } from '@mui/material';
@@ -5,14 +88,17 @@ import { signOut, User } from 'firebase/auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+const ButtonSignIn = React.lazy(() => import('../Buttons/ButtonSignIn'));
+const ButtonSignUp = React.lazy(() => import('../Buttons/ButtonSignUp'));
 
 import './Header.css';
 
-import { useAuthEffect } from '@/src//hooks/useAuthEffect';
 import LanguageToggle, {
   LanguageType,
 } from '@/src/components/LanguageToggle/LanguageToggle';
+import { useAuthEffect } from '@/src/hooks/useAuthEffect';
 import { auth } from '@/src/utils/firebase';
 import { type getDictionary } from '@/src/utils/getDictionary';
 
@@ -22,9 +108,25 @@ interface HeaderProps {
 
 const Header = ({ t }: HeaderProps) => {
   const [authUser, setAuthUser] = useState<User | null>(null);
+  const [isSticky, setIsSticky] = useState(false);
   const params = useParams<{ lang: LanguageType }>();
 
   useAuthEffect(setAuthUser);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY >= 1) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   function userSignOut() {
     signOut(auth);
@@ -33,13 +135,14 @@ const Header = ({ t }: HeaderProps) => {
   return (
     <header>
       <Box
+        className={isSticky ? 'header sticky' : 'header'}
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '1rem 2rem',
+          // padding: '1rem 2rem',
           width: '100%',
-          backgroundColor: '#F0F7F4',
+          // backgroundColor: '#F0F7F4',
         }}
       >
         <Link href={`/${params.lang}`}>
@@ -62,12 +165,8 @@ const Header = ({ t }: HeaderProps) => {
               gap: '1rem',
             }}
           >
-            <Button variant="outlined" href={`/${params.lang}/authorization`}>
-              {t.signIn}
-            </Button>
-            <Button variant="outlined" href={`/${params.lang}/registration`}>
-              {t.signUp}
-            </Button>
+            <ButtonSignIn t={t} />
+            <ButtonSignUp t={t} />
           </Box>
         )}
       </Box>
@@ -76,3 +175,4 @@ const Header = ({ t }: HeaderProps) => {
 };
 
 export default Header;
+

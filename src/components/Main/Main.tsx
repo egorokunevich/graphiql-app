@@ -3,6 +3,7 @@
 import { Box, Tabs, Tab } from '@mui/material';
 import { User } from 'firebase/auth';
 import { useParams, useRouter } from 'next/navigation';
+import React from 'react';
 import { useState } from 'react';
 
 import './Main.css';
@@ -10,6 +11,8 @@ import './Main.css';
 import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
 import { getDictionary } from '@/src/utils/getDictionary';
+
+const Welcome = React.lazy(() => import('../Welcome/Welcome'));
 
 interface MainInterface {
   t: Awaited<ReturnType<typeof getDictionary>>['basic'];
@@ -40,7 +43,13 @@ const MainContent = ({ t }: MainInterface) => {
   return (
     <main>
       <Box sx={{ height: '100%' }}>
-        <h1>{authUser ? `${t.welcome}, ${authUser.email}!` : t.welcome}</h1>
+        {authUser ? (
+          <h1>
+            `${t.welcome}, ${authUser.email}!`
+          </h1>
+        ) : (
+          <Welcome t={t} />
+        )}
         {authUser && (
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleTabChange}>
@@ -74,3 +83,4 @@ const MainContent = ({ t }: MainInterface) => {
 };
 
 export default MainContent;
+
