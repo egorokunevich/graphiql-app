@@ -7,7 +7,7 @@ import ButtonProps from './ButtonProps';
 
 import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
 
-function ButtonSighIn({ t }: ButtonProps) {
+function ButtonSignIn({ t }: ButtonProps) {
   const params = useParams<{ lang: LanguageType }>();
 
   return (
@@ -22,5 +22,5 @@ function ButtonSighIn({ t }: ButtonProps) {
     </>
   );
 }
-export default ButtonSighIn;
+export default ButtonSignIn;
 

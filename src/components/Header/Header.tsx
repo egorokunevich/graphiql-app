@@ -1,7 +1,7 @@
 'use client';
 
-import { Button, Box } from '@mui/material';
-import { signOut, User } from 'firebase/auth';
+import { Box } from '@mui/material';
+import { User } from 'firebase/auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 
 const ButtonSignIn = React.lazy(() => import('../Buttons/ButtonSignIn'));
 const ButtonSignUp = React.lazy(() => import('../Buttons/ButtonSignUp'));
+const ButtonSignOut = React.lazy(() => import('../Buttons/ButtonSignOut'));
 
 import './Header.css';
 
@@ -16,7 +17,6 @@ import LanguageToggle, {
   LanguageType,
 } from '@/src/components/LanguageToggle/LanguageToggle';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
-import { auth } from '@/src/utils/firebase';
 import { type getDictionary } from '@/src/utils/getDictionary';
 
 interface HeaderProps {
@@ -45,10 +45,6 @@ const Header = ({ t }: HeaderProps) => {
     };
   }, []);
 
-  function userSignOut() {
-    signOut(auth);
-  }
-
   return (
     <header>
       <Box
@@ -70,9 +66,7 @@ const Header = ({ t }: HeaderProps) => {
         </Link>
         <LanguageToggle t={t} />
         {authUser ? (
-          <Button variant="outlined" onClick={userSignOut}>
-            {t.signOut}
-          </Button>
+          <ButtonSignOut t={t} />
         ) : (
           <Box
             sx={{
