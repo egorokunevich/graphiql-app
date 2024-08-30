@@ -92,6 +92,9 @@ const RestClient = () => {
       if (method === 'POST') {
         respond = await axios.post(restUrl);
       }
+      if (method === 'PUT') {
+        respond = await axios.put(restUrl);
+      }
 
       setFullUrl(restUrl);
       setResponse({ status: respond?.data.status, data: respond?.data.data });

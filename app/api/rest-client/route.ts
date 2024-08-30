@@ -19,9 +19,21 @@ const handleRequest = async (
         response = await axios.get(requestUrl, config);
         break;
       case 'POST':
+        if (!requestBody) {
+          return NextResponse.json(
+            { error: 'POST request requires a body' },
+            { status: 400 },
+          );
+        }
         response = await axios.post(requestUrl, requestBody, config);
         break;
       case 'PUT':
+        if (!requestBody) {
+          return NextResponse.json(
+            { error: 'PUT request requires a body' },
+            { status: 400 },
+          );
+        }
         response = await axios.put(requestUrl, requestBody, config);
         break;
       case 'PATCH':
@@ -84,6 +96,12 @@ export async function POST(req: NextRequest) {
   const requestBody = bodyBase64
     ? JSON.parse(Buffer.from(bodyBase64, 'base64').toString('utf-8'))
     : null;
+  if (!requestBody || Object.keys(requestBody).length === 0) {
+    return NextResponse.json(
+      { error: 'POST request requires a non-empty body' },
+      { status: 400 },
+    );
+  }
 
   return handleRequest('POST', requestUrl, requestBody, headers);
 }
@@ -100,6 +118,12 @@ export async function PUT(req: NextRequest) {
   const requestBody = bodyBase64
     ? JSON.parse(Buffer.from(bodyBase64, 'base64').toString('utf-8'))
     : null;
+  if (!requestBody || Object.keys(requestBody).length === 0) {
+    return NextResponse.json(
+      { error: 'PUT request requires a non-empty body' },
+      { status: 400 },
+    );
+  }
   return handleRequest(method, requestUrl, requestBody, headers);
 }
 

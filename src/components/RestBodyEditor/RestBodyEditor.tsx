@@ -45,7 +45,7 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({ body, setBody }) => {
         const base64Body = btoa(updatedBody);
 
         const url = new URL(window.location.href);
-        url.pathname = `${url.pathname.split('/').slice(0, -1).join('/')}/${base64Body}`;
+        url.searchParams.set('encodedBody', base64Body);
         window.history.pushState({}, '', url.toString());
 
         previousBodyRef.current = updatedBody;
@@ -54,6 +54,21 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({ body, setBody }) => {
       console.error('Failed to parse JSON or update URL:', error);
     }
   };
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const pathSegments = url.pathname.split('/');
+    if (pathSegments.length > 1) {
+      try {
+        const lastSegment = pathSegments[pathSegments.length - 1];
+        atob(lastSegment);
+        url.searchParams.delete('body');
+        window.history.replaceState({}, '', url.toString());
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const handleFocusOut = (event: FocusEvent) => {
@@ -85,13 +100,13 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({ body, setBody }) => {
           row
         >
           <FormControlLabel
-            sx={{ '& .MuiFormControlLabel-label': { fontSize: '0.75rem' } }}
+            sx={{ '& .MuiFormControlLabel-label': { fontSize: '14px' } }}
             value="json"
             control={<Radio size="small" />}
             label="JSON"
           />
           <FormControlLabel
-            sx={{ '& .MuiFormControlLabel-label': { fontSize: '0.75rem' } }}
+            sx={{ '& .MuiFormControlLabel-label': { fontSize: '14px' } }}
             value="plaintext"
             control={<Radio size="small" />}
             label="Plain Text"
@@ -105,6 +120,9 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({ body, setBody }) => {
         value={body}
         onChange={handleChange}
         theme="vs-white"
+        options={{
+          fontSize: 14,
+        }}
       />
     </Box>
   );
