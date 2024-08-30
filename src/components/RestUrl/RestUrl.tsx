@@ -43,7 +43,13 @@ export const RestUrl = ({
   };
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUrl(event.target.value);
+    const inputUrl = event.target.value;
+    setUrl(inputUrl);
+
+    const encodedUrl = btoa(inputUrl);
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.set('encodedUrl', encodedUrl);
+    window.history.pushState({}, '', newUrl.toString());
   };
 
   return (

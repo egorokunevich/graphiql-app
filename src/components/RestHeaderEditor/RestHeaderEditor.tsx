@@ -27,13 +27,29 @@ export const RestHeaderEditor = ({
     window.history.replaceState({}, '', url.pathname);
   }, []);
 
+  const updateUrlWithHeaders = (
+    updatedHeaders: { key: string; value: string }[],
+  ) => {
+    const url = new URL(window.location.href);
+    updatedHeaders.forEach((header) => {
+      url.searchParams.delete(header.key);
+    });
+    updatedHeaders.forEach((header) => {
+      if (header.key && header.value) {
+        url.searchParams.set(
+          encodeURIComponent(header.key),
+          encodeURIComponent(header.value),
+        );
+      }
+    });
+
+    window.history.pushState({}, '', url.toString());
+  };
+
   const handleRemoveHeader = (index: number) => {
     const updatedHeaders = headers.filter((_, i) => i !== index);
     setHeaders(updatedHeaders);
-    const encodedHeaders = btoa(JSON.stringify(updatedHeaders));
-    const url = new URL(window.location.href);
-    url.searchParams.set('headers', encodedHeaders);
-    window.history.pushState({}, '', url.toString());
+    updateUrlWithHeaders(updatedHeaders);
   };
 
   const handleHeaderChange = (
@@ -45,15 +61,12 @@ export const RestHeaderEditor = ({
       i === index ? { ...header, [field]: value } : header,
     );
     setHeaders(updatedHeaders);
-
-    const encodedHeaders = btoa(JSON.stringify(updatedHeaders));
-    const url = new URL(window.location.href);
-    url.searchParams.set('headers', encodedHeaders);
-    window.history.pushState({}, '', url.toString());
+    updateUrlWithHeaders(updatedHeaders);
   };
 
   const handleAddHeader = () => {
-    setHeaders([...headers, { key: '', value: '' }]);
+    const updatedHeaders = [...headers, { key: '', value: '' }];
+    setHeaders(updatedHeaders);
   };
 
   return (

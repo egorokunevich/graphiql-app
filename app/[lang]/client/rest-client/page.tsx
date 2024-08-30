@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import RestBodyEditor from '@/src/components/RestBodyEditor/RestBodyEditor';
 import { RestHeaderEditor } from '@/src/components/RestHeaderEditor/RestHeaderEditor';
+import { RestTabs } from '@/src/components/RestTabs/RestTabs';
 import { RestUrl } from '@/src/components/RestUrl/RestUrl';
 
 interface TabPanelProps {
@@ -56,10 +57,6 @@ const RestClient = () => {
   const [headers, setHeaders] = useState([{ key: '', value: '' }]);
   const [body, setBody] = useState('');
   const [urlError, setUrlError] = useState(false);
-
-  const handleValueChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
 
   const handleSendRequest = async () => {
     if (!url) {
@@ -121,13 +118,6 @@ const RestClient = () => {
     }
   };
 
-  function a11yProps(index: number) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
-
   return (
     <Container
       sx={{
@@ -153,18 +143,7 @@ const RestClient = () => {
       />
 
       <Box sx={{ paddingBottom: 1, minHeight: '250px' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 2 }}>
-          <Tabs
-            value={value}
-            onChange={handleValueChange}
-            aria-label="basic tabs example"
-            sx={{ padding: 0 }}
-          >
-            <Tab label="Headers" {...a11yProps(0)} />
-            <Tab label="Body" {...a11yProps(1)} />
-            <Tab label="Variables" {...a11yProps(2)} />
-          </Tabs>
-        </Box>
+        <RestTabs value={value} setValue={setValue} />
         <Box sx={{ maxHeight: '180px', overflow: 'hidden', overflowY: 'auto' }}>
           <CustomTabPanel value={value} index={0}>
             <RestHeaderEditor headers={headers} setHeaders={setHeaders} />
