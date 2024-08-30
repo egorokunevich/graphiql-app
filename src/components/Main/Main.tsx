@@ -30,7 +30,7 @@ const MainContent = ({ t }: MainInterface) => {
 
   const handleTabChange = (e: React.SyntheticEvent, newValue: TabsType) => {
     setValue(newValue);
-    router.push(`/${params.lang}/${newValue}`);
+    router.push(`/${params.lang}/client/${newValue}`);
   };
 
   const a11yProps = (TabValue: TabsType) => {
@@ -44,9 +44,7 @@ const MainContent = ({ t }: MainInterface) => {
     <main>
       <Box sx={{ height: '100%' }}>
         {authUser ? (
-          <h1>
-            `${t.welcome}, ${authUser.email}!`
-          </h1>
+          <h1>{`${t.welcome}, ${authUser.email}!`}</h1>
         ) : (
           <Welcome t={t} />
         )}
