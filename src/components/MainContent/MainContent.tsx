@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
 import { useState } from 'react';
 
-import './Main.css';
+import './MainContent.css';
 
 import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
@@ -14,13 +14,13 @@ import { getDictionary } from '@/src/utils/getDictionary';
 
 const Welcome = React.lazy(() => import('../Welcome/Welcome'));
 
-interface MainInterface {
+interface MainContentProps {
   t: Awaited<ReturnType<typeof getDictionary>>['basic'];
 }
 
 type TabsType = '' | 'rest-client' | 'graphiql-client' | 'history';
 
-const MainContent = ({ t }: MainInterface) => {
+const MainContent = ({ t }: MainContentProps) => {
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [value, setValue] = useState<TabsType>('');
   const router = useRouter();
