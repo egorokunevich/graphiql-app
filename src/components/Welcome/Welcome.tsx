@@ -69,4 +69,3 @@ const Welcome = ({ t }: ButtonProps) => {
 };
 
 export default Welcome;
-

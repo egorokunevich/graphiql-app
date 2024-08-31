@@ -56,4 +56,3 @@ export default function LanguageToggle({ t }: LanguageToggleProps) {
     </>
   );
 }
-

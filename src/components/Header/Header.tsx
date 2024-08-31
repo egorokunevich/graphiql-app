@@ -84,4 +84,3 @@ const Header = ({ t }: HeaderProps) => {
 };
 
 export default Header;
-

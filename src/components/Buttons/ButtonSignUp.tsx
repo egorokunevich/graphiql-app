@@ -23,4 +23,3 @@ function ButtonSignIn({ t }: ButtonProps) {
   );
 }
 export default ButtonSignIn;
-

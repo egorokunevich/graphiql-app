@@ -81,4 +81,3 @@ const MainContent = ({ t }: MainContentProps) => {
 };
 
 export default MainContent;
-

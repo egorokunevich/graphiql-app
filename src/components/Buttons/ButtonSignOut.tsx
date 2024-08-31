@@ -25,4 +25,3 @@ function ButtonSignOut({ t }: ButtonProps) {
   );
 }
 export default ButtonSignOut;
-
