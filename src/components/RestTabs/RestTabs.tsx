@@ -19,7 +19,15 @@ export const RestTabs = ({ value, setValue }: RestTabsProps) => {
   };
 
   return (
-    <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 2 }}>
+    <Box
+      sx={{
+        borderBottom: 1,
+        borderColor: 'divider',
+        marginTop: 2,
+        display: 'flex',
+        justifyContent: 'space-between',
+      }}
+    >
       <Tabs
         value={value}
         onChange={handleValueChange}
@@ -27,8 +35,7 @@ export const RestTabs = ({ value, setValue }: RestTabsProps) => {
         sx={{ padding: 0 }}
       >
         <Tab label="Headers" {...a11yProps(0)} />
-        <Tab label="Body" {...a11yProps(1)} />
-        <Tab label="Variables" {...a11yProps(2)} />
+        <Tab label={'Body'} {...a11yProps(1)} />
       </Tabs>
     </Box>
   );

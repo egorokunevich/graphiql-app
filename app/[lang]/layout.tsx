@@ -38,7 +38,9 @@ export default async function RootLayout({
             }}
           >
             <Header t={t.basic} />
-            <Box sx={{ flex: 1 }}>{children}</Box>
+            <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+              {children}
+            </Box>
             <Footer />
           </Box>
         </Container>

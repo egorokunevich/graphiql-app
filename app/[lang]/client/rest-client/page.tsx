@@ -1,7 +1,7 @@
 'use client';
 
 import { AxiosError } from '@/node_modules/axios/index';
-import { Box, Container, Typography, Tabs, Tab } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import axios from 'axios';
 import { useState } from 'react';
 
@@ -124,10 +124,9 @@ const RestClient = () => {
   return (
     <Container
       sx={{
-        height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        gap: 0,
       }}
       disableGutters
     >
@@ -153,9 +152,6 @@ const RestClient = () => {
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
             <RestBodyEditor body={body} setBody={setBody} />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
-            Variables Editor
           </CustomTabPanel>
         </Box>
       </Box>
