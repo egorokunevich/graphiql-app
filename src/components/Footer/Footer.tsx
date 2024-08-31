@@ -2,44 +2,41 @@ import { Box } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import './Footer.css';
-
-const Footer = () => {
-  return (
+const Footer = () => (
+  <Box
+    className="bg-gradient-to-b from-slate-100 to-teal-100"
+    component="footer"
+    sx={{ p: 2, px: 4, textAlign: 'center' }}
+  >
     <Box
-      component="footer"
-      sx={{
-        height: '60px',
-        padding: '40px 10px',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        backgroundColor: 'cornsilk',
-        border: '1px solid #000',
-      }}
+      width={'100%'}
+      display={'flex'}
+      alignItems={'center'}
+      justifyContent={'space-between'}
+      fontSize={22}
+      lineHeight={1}
+      fontWeight="fontWeightMedium"
     >
-      <Box
-        width={'100%'}
-        display={'flex'}
-        alignItems={'center'}
-        justifyContent={'space-between'}
+      <Link
+        href="https://github.com/egorokunevich/graphiql-app"
+        className="hover:text-sky-700 transition duration-300 ease-in-out"
       >
-        <Link href="https://github.com/egorokunevich/graphiql-app">
-          GitHub Repo
-        </Link>
-        <span>2024</span>
-        <a href="https://rs.school/">
-          <Image
-            style={{ maxWidth: '100px' }}
-            src="/static/logo-rsschool.png"
-            alt="RS School Logo"
-            width={100}
-            height={40}
-          />
-        </a>
+        GitHub Repo
+      </Link>
+      <Box component="span" m={1}>
+        2024
       </Box>
+      <a href="https://rs.school/">
+        <Image
+          className="footer__img"
+          src="/static/logo-rsschool.png"
+          alt="RS School Logo"
+          width={100}
+          height={40}
+        />
+      </a>
     </Box>
-  );
-};
+  </Box>
+);
 
 export default Footer;

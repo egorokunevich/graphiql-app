@@ -1,19 +1,22 @@
 'use client';
 
-import { Button, Box } from '@mui/material';
-import { signOut, User } from 'firebase/auth';
+import { Box } from '@mui/material';
+import { User } from 'firebase/auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+const ButtonSignIn = React.lazy(() => import('../Buttons/ButtonSignIn'));
+const ButtonSignUp = React.lazy(() => import('../Buttons/ButtonSignUp'));
+const ButtonSignOut = React.lazy(() => import('../Buttons/ButtonSignOut'));
 
 import './Header.css';
 
-import { useAuthEffect } from '@/src//hooks/useAuthEffect';
 import LanguageToggle, {
   LanguageType,
 } from '@/src/components/LanguageToggle/LanguageToggle';
-import { auth } from '@/src/utils/firebase';
+import { useAuthEffect } from '@/src/hooks/useAuthEffect';
 import { type getDictionary } from '@/src/utils/getDictionary';
 
 interface HeaderProps {
@@ -22,24 +25,35 @@ interface HeaderProps {
 
 const Header = ({ t }: HeaderProps) => {
   const [authUser, setAuthUser] = useState<User | null>(null);
+  const [isSticky, setIsSticky] = useState(false);
   const params = useParams<{ lang: LanguageType }>();
 
   useAuthEffect(setAuthUser);
 
-  function userSignOut() {
-    signOut(auth);
-  }
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY >= 1) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <header>
       <Box
+        className={isSticky ? 'header sticky' : 'header'}
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '1rem 2rem',
           width: '100%',
-          backgroundColor: '#F0F7F4',
         }}
       >
         <Link href={`/${params.lang}`}>
@@ -52,9 +66,7 @@ const Header = ({ t }: HeaderProps) => {
         </Link>
         <LanguageToggle t={t} />
         {authUser ? (
-          <Button variant="outlined" onClick={userSignOut}>
-            {t.signOut}
-          </Button>
+          <ButtonSignOut t={t} />
         ) : (
           <Box
             sx={{
@@ -62,12 +74,8 @@ const Header = ({ t }: HeaderProps) => {
               gap: '1rem',
             }}
           >
-            <Button variant="outlined" href={`/${params.lang}/authorization`}>
-              {t.signIn}
-            </Button>
-            <Button variant="outlined" href={`/${params.lang}/registration`}>
-              {t.signUp}
-            </Button>
+            <ButtonSignIn t={t} />
+            <ButtonSignUp t={t} />
           </Box>
         )}
       </Box>
@@ -76,3 +84,4 @@ const Header = ({ t }: HeaderProps) => {
 };
 
 export default Header;
+
