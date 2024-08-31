@@ -42,6 +42,12 @@ const handleRequest = async (
       case 'DELETE':
         response = await axios.delete(requestUrl, config);
         break;
+      case 'HEAD':
+        response = await axios.head(requestUrl, config);
+        break;
+      case 'OPTIONS':
+        response = await axios.options(requestUrl, config);
+        break;
       default:
         return NextResponse.json(
           { error: 'Invalid HTTP method' },
@@ -145,6 +151,27 @@ export async function PATCH(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const method = 'DELETE';
+  const urlBase64 = searchParams.get('urlBase64') || '';
+  const headers = Object.fromEntries(searchParams.entries());
+  delete headers.urlBase64;
+
+  const requestUrl = Buffer.from(urlBase64, 'base64').toString('utf-8');
+  return handleRequest(method, requestUrl, null, headers);
+}
+
+export async function HEAD(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const urlBase64 = searchParams.get('urlBase64') || '';
+  const headers = Object.fromEntries(searchParams.entries());
+  delete headers.urlBase64;
+
+  const requestUrl = Buffer.from(urlBase64, 'base64').toString('utf-8');
+  return handleRequest('HEAD', requestUrl, null, headers);
+}
+
+export async function OPTIONS(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const method = 'OPTIONS';
   const urlBase64 = searchParams.get('urlBase64') || '';
   const headers = Object.fromEntries(searchParams.entries());
   delete headers.urlBase64;

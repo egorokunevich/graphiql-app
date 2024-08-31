@@ -19,7 +19,6 @@ import React, {
 
 import { RestVariablesEditor } from '@src/components/RestVariablesEditor/RestVariablesEditor';
 
-
 interface RestBodyEditorProps {
   body: string;
   setBody: Dispatch<SetStateAction<string>>;

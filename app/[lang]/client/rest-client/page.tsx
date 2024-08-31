@@ -1,6 +1,7 @@
 'use client';
 
 import { AxiosError } from '@/node_modules/axios/index';
+import { NextResponse } from '@/node_modules/next/server';
 import { Box, Container, Typography } from '@mui/material';
 import axios from 'axios';
 import { useState } from 'react';
@@ -86,14 +87,31 @@ const RestClient = () => {
       }
 
       let respond;
-      if (method === 'GET') {
-        respond = await axios.get(restUrl);
-      }
-      if (method === 'POST') {
-        respond = await axios.post(restUrl);
-      }
-      if (method === 'PUT') {
-        respond = await axios.put(restUrl);
+      switch (method) {
+        case 'GET':
+          respond = await axios.get(restUrl);
+          break;
+        case 'POST':
+          respond = await axios.post(restUrl);
+          break;
+        case 'PUT':
+          respond = await axios.put(restUrl);
+          break;
+        case 'PATCH':
+          respond = await axios.patch(restUrl);
+          break;
+        case 'DELETE':
+          respond = await axios.delete(restUrl);
+          break;
+        case 'HEAD':
+          respond = await axios.head(restUrl);
+          return NextResponse.json({ status: response?.status, data: null });
+
+        case 'OPTIONS':
+          respond = await axios.options(restUrl);
+          break;
+        default:
+          throw new Error('Invalid HTTP method');
       }
 
       setFullUrl(restUrl);
