@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 
 import { Locale } from '@/i18n-config';
 import { getDictionary } from '@/src/utils/getDictionary';
-import MainContent from '@src/components/Main/Main';
+import MainContent from '@src/components/MainContent/MainContent';
 
 async function MainPage({ params: { lang } }: { params: { lang: Locale } }) {
   const t = await getDictionary(lang);

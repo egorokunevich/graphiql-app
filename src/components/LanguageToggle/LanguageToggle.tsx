@@ -39,6 +39,7 @@ export default function LanguageToggle({ t }: LanguageToggleProps) {
       <FormControl fullWidth sx={{ maxWidth: '200px' }}>
         <InputLabel id="language-toggle-label">{t.language}</InputLabel>
         <Select
+          sx={{ maxHeight: '36px' }}
           variant="outlined"
           labelId="language-toggle-label"
           id="language-toggle"
