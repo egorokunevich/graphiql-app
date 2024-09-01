@@ -1,18 +1,16 @@
 import { Add, Delete } from '@mui/icons-material';
 import { Box, Button, IconButton, TextField } from '@mui/material';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 interface RestVariablesEditorProps {
-  body: string;
-  setBody: Dispatch<SetStateAction<string>>;
+  variables: { key: string; value: string }[];
+  setVariables: Dispatch<SetStateAction<{ key: string; value: string }[]>>;
 }
 
 export const RestVariablesEditor = ({
-  body,
-  setBody,
+  variables,
+  setVariables,
 }: RestVariablesEditorProps) => {
-  const [variables, setVariables] = useState([{ key: '', value: '' }]);
-
   const handleAddVariable = () => {
     setVariables([...variables, { key: '', value: '' }]);
   };

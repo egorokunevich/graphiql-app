@@ -97,11 +97,11 @@ export async function POST(req: NextRequest) {
   delete headers.urlBase64;
 
   const requestUrl = Buffer.from(urlBase64, 'base64').toString('utf-8');
-
   const bodyBase64 = searchParams.get('bodyBase64');
   const requestBody = bodyBase64
     ? JSON.parse(Buffer.from(bodyBase64, 'base64').toString('utf-8'))
     : null;
+
   if (!requestBody || Object.keys(requestBody).length === 0) {
     return NextResponse.json(
       { error: 'POST request requires a non-empty body' },
@@ -161,12 +161,13 @@ export async function DELETE(req: NextRequest) {
 
 export async function HEAD(req: NextRequest) {
   const { searchParams } = new URL(req.url);
+  const method = 'HEAD';
   const urlBase64 = searchParams.get('urlBase64') || '';
   const headers = Object.fromEntries(searchParams.entries());
   delete headers.urlBase64;
 
   const requestUrl = Buffer.from(urlBase64, 'base64').toString('utf-8');
-  return handleRequest('HEAD', requestUrl, null, headers);
+  return handleRequest(method, requestUrl, null, headers);
 }
 
 export async function OPTIONS(req: NextRequest) {

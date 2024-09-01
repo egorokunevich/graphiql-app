@@ -16,6 +16,10 @@ interface ResponseViewerProps {
 }
 
 export const ResponseViewer = ({ response }: ResponseViewerProps) => {
+  // if (!response || response.data === null) {
+  //   return null;
+  // }
+
   const isJson = (data: string): boolean => {
     try {
       JSON.parse(data);
@@ -132,7 +136,7 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
                     showLineNumbers={true}
                     lineNumberStyle={{ color: '#888888' }}
                   >
-                    {response.data}
+                    {response.data !== null ? response.data : '{}'}
                   </SyntaxHighlighter>
                 ) : (
                   <SyntaxHighlighter
@@ -147,7 +151,7 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
                     showLineNumbers={true}
                     lineNumberStyle={{ color: '#888888' }}
                   >
-                    {response.data}
+                    {response.data !== null ? response.data : '{}'}
                   </SyntaxHighlighter>
                 )
               ) : (
@@ -163,7 +167,9 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
                   showLineNumbers={true}
                   lineNumberStyle={{ color: '#888888' }}
                 >
-                  {JSON.stringify(response.data, null, 2)}
+                  {response.data !== null
+                    ? JSON.stringify(response.data, null, 2)
+                    : '{}'}
                 </SyntaxHighlighter>
               )}
             </Box>

@@ -16,7 +16,6 @@ import React, { Dispatch, SetStateAction } from 'react';
 
 import { Method } from '@/app/[lang]/client/rest-client/page';
 
-
 interface RestUrlProps {
   urlError: boolean;
   handleSendRequest: () => Promise<

@@ -58,6 +58,7 @@ const RestClient = () => {
   const [headers, setHeaders] = useState([{ key: '', value: '' }]);
   const [body, setBody] = useState('');
   const [urlError, setUrlError] = useState(false);
+  const [variables, setVariables] = useState([{ key: '', value: '' }]);
 
   const handleSendRequest = async () => {
     if (!url) {
@@ -68,7 +69,14 @@ const RestClient = () => {
 
     try {
       const urlBase64 = Buffer.from(url).toString('base64');
-      const bodyBase64 = body ? Buffer.from(body).toString('base64') : '';
+      let combinedBody = body ? JSON.parse(body) : {};
+      variables.forEach((variable) => {
+        combinedBody[variable.key] = variable.value;
+      });
+
+      const bodyBase64 = Buffer.from(JSON.stringify(combinedBody)).toString(
+        'base64',
+      );
 
       const queryParams = headers
         .filter((header) => header.key && header.value)
@@ -105,8 +113,8 @@ const RestClient = () => {
           break;
         case 'HEAD':
           respond = await axios.head(restUrl);
-          return NextResponse.json({ status: response?.status, data: null });
-
+          setResponse({ status: respond?.status, data: null });
+          return NextResponse.json({ status: respond?.status, data: null });
         case 'OPTIONS':
           respond = await axios.options(restUrl);
           break;
@@ -169,7 +177,12 @@ const RestClient = () => {
             <RestHeaderEditor headers={headers} setHeaders={setHeaders} />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            <RestBodyEditor body={body} setBody={setBody} />
+            <RestBodyEditor
+              variables={variables}
+              setVariables={setVariables}
+              body={body}
+              setBody={setBody}
+            />
           </CustomTabPanel>
         </Box>
       </Box>

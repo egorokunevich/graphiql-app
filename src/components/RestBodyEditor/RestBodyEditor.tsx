@@ -22,9 +22,16 @@ import { RestVariablesEditor } from '@src/components/RestVariablesEditor/RestVar
 interface RestBodyEditorProps {
   body: string;
   setBody: Dispatch<SetStateAction<string>>;
+  variables: { key: string; value: string }[];
+  setVariables: Dispatch<SetStateAction<{ key: string; value: string }[]>>;
 }
 
-const RestBodyEditor: React.FC<RestBodyEditorProps> = ({ body, setBody }) => {
+const RestBodyEditor: React.FC<RestBodyEditorProps> = ({
+  body,
+  setBody,
+  variables,
+  setVariables,
+}) => {
   const [language, setLanguage] = useState<string>('json');
   const previousBodyRef = useRef<string>(body);
   const [showVariables, setShowVariables] = useState(false);
@@ -44,14 +51,48 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({ body, setBody }) => {
     setLanguage(event.target.value);
   };
 
+  const appendVariablesToBody = (defaultBody: string): string => {
+    if (variables?.length === 0) return defaultBody;
+
+    let updatedBody = defaultBody;
+
+    if (language === 'json') {
+      try {
+        const parsedBody = JSON.parse(defaultBody || '{}');
+        const variablesObject = variables?.reduce(
+          (acc, variable) => {
+            acc[variable.key] = variable.value;
+            return acc;
+          },
+          {} as Record<string, string>,
+        );
+
+        updatedBody = JSON.stringify(
+          { ...parsedBody, ...variablesObject },
+          null,
+          2,
+        );
+      } catch (error) {
+        console.error('Failed to parse JSON:', error);
+      }
+    } else {
+      const variablesString =
+        variables && variables.length > 0
+          ? variables
+              .map((variable) => `${variable.key}: ${variable.value}`)
+              .join('\n')
+          : '';
+
+      updatedBody = `${body}\n\n${variablesString}`;
+    }
+
+    return updatedBody;
+  };
+
   const updateUrlWithEncodedBody = () => {
     try {
-      let updatedBody = body;
+      let updatedBody = appendVariablesToBody(body);
 
-      if (language === 'json') {
-        const parsed = JSON.parse(body);
-        updatedBody = JSON.stringify(parsed, null, 2);
-      }
       if (updatedBody !== previousBodyRef.current) {
         const base64Body = btoa(updatedBody);
 
@@ -106,7 +147,7 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({ body, setBody }) => {
     return () => {
       window.removeEventListener('focusout', handleFocusOut);
     };
-  }, [body, language]);
+  }, [body, language, variables]);
 
   return (
     <>
@@ -132,7 +173,12 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({ body, setBody }) => {
           </Typography>
         )}
       </Box>
-      {showVariables && <RestVariablesEditor body={body} setBody={setBody} />}
+      {showVariables && (
+        <RestVariablesEditor
+          variables={variables}
+          setVariables={setVariables}
+        />
+      )}
       <Box sx={{ padding: 1, backgroundColor: '#F0F7F4', borderRadius: 1 }}>
         <FormControl component="fieldset">
           <RadioGroup
