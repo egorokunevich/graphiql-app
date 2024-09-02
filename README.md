@@ -4,7 +4,7 @@ The application is developed in React and Next.js. Firebase is responsible for u
 
 ## Deploy
 
-(https://rng-graphiql.vercel.app/)[Graphiql App]
+[Graphiql App](https://rng-graphiql.vercel.app/)
 
 ## Team
 
