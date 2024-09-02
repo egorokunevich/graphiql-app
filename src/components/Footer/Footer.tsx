@@ -2,8 +2,6 @@ import { Box } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import './Footer.css';
-
 import type { Dictionary } from '@/src/utils/getDictionary';
 
 interface FooterProps {
