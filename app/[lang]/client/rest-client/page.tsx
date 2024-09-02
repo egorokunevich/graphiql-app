@@ -37,7 +37,7 @@ export type Method =
   | 'HEAD'
   | 'OPTIONS';
 
-async function CustomTabPanel(props: TabPanelProps) {
+function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
