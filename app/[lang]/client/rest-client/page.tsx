@@ -1,19 +1,14 @@
 'use client';
 
-// import { useRouter } from 'next/navigation';
 import { AxiosError } from '@/node_modules/axios/index';
-import {
-  Box,
-  Container,
-  TextField,
-  Typography,
-  Tabs,
-  Tab,
-} from '@mui/material';
+import { Box, Container, Typography, Tabs, Tab } from '@mui/material';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
+import RestBodyEditor from '@/src/components/RestBodyEditor/RestBodyEditor';
+import { RestHeaderEditor } from '@/src/components/RestHeaderEditor/RestHeaderEditor';
+import { RestTabs } from '@/src/components/RestTabs/RestTabs';
 import { RestUrl } from '@/src/components/RestUrl/RestUrl';
 
 interface TabPanelProps {
@@ -48,13 +43,12 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ padding: '15px 0' }}>{children}</Box>}
     </div>
   );
 }
 
 const RestClient = () => {
-  // const router = useRouter();
   const [value, setValue] = useState(0);
   const [method, setMethod] = useState<Method>('GET');
   const [url, setUrl] = useState('');
@@ -63,19 +57,6 @@ const RestClient = () => {
   const [headers, setHeaders] = useState([{ key: '', value: '' }]);
   const [body, setBody] = useState('');
   const [urlError, setUrlError] = useState(false);
-
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-
-  //     if (fullUrl) {
-  //       router.push(fullUrl);
-  //     }
-  //   }
-  //  }, [fullUrl]);
-
-  const handleValueChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
 
   const handleSendRequest = async () => {
     if (!url) {
@@ -86,9 +67,7 @@ const RestClient = () => {
 
     try {
       const urlBase64 = Buffer.from(url).toString('base64');
-      const bodyBase64 = body
-        ? Buffer.from(JSON.stringify(body)).toString('base64')
-        : '';
+      const bodyBase64 = body ? Buffer.from(body).toString('base64') : '';
 
       const queryParams = headers
         .filter((header) => header.key && header.value)
@@ -100,16 +79,25 @@ const RestClient = () => {
 
       let restUrl = `/api/rest-client?method=${method}&urlBase64=${urlBase64}`;
       if (['POST', 'PUT', 'PATCH'].includes(method) && bodyBase64) {
-        restUrl += `&bodyBase64=${bodyBase64}`;
+        restUrl = `/api/rest-client?method=${method}&urlBase64=${urlBase64}&bodyBase64=${bodyBase64}`;
       }
       if (queryParams) {
         restUrl += `&${queryParams}`;
       }
 
-      const respond = await axios.get(restUrl);
+      let respond;
+      if (method === 'GET') {
+        respond = await axios.get(restUrl);
+      }
+      if (method === 'POST') {
+        respond = await axios.post(restUrl);
+      }
+      if (method === 'PUT') {
+        respond = await axios.put(restUrl);
+      }
+
       setFullUrl(restUrl);
-      // router.push(restUrl, undefined, { shallow: true });
-      setResponse({ status: respond.data.status, data: respond.data.data });
+      setResponse({ status: respond?.data.status, data: respond?.data.data });
       setUrlError(false);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -133,17 +121,18 @@ const RestClient = () => {
     }
   };
 
-  function a11yProps(index: number) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
-
   return (
-    <Container sx={{ paddingLeft: 0, paddingRight: 0 }}>
-      <Box sx={{ marginTop: 2, marginBottom: 2 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+    <Container
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      }}
+      disableGutters
+    >
+      <Box sx={{ marginTop: 1, marginBottom: 1 }}>
+        <Typography variant="h4" component="h1">
           REST Client
         </Typography>
       </Box>
@@ -156,36 +145,19 @@ const RestClient = () => {
         urlError={urlError}
       />
 
-      <Box sx={{ paddingBottom: 10 }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 2 }}>
-          <Tabs
-            value={value}
-            onChange={handleValueChange}
-            aria-label="basic tabs example"
-          >
-            <Tab label="Headers" {...a11yProps(0)} />
-            <Tab label="Body" {...a11yProps(1)} />
-            <Tab label="Variables" {...a11yProps(2)} />
-          </Tabs>
+      <Box sx={{ paddingBottom: 1, minHeight: '250px' }}>
+        <RestTabs value={value} setValue={setValue} />
+        <Box sx={{ maxHeight: '180px', overflow: 'hidden', overflowY: 'auto' }}>
+          <CustomTabPanel value={value} index={0}>
+            <RestHeaderEditor headers={headers} setHeaders={setHeaders} />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            <RestBodyEditor body={body} setBody={setBody} />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={2}>
+            Variables Editor
+          </CustomTabPanel>
         </Box>
-        <CustomTabPanel value={value} index={0}>
-          <Box
-            sx={{ display: 'flex', gap: 1, paddingLeft: 0, paddingRight: 0 }}
-          >
-            <TextField label="Key" variant="outlined" sx={{ width: '100%' }} />
-            <TextField
-              label="Value"
-              variant="outlined"
-              sx={{ width: '100%' }}
-            />
-          </Box>
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-          Body Editor
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={2}>
-          Variables Editor
-        </CustomTabPanel>
       </Box>
       <ResponseViewer response={response} />
     </Container>

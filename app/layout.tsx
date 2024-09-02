@@ -1,4 +1,4 @@
-import { Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import type { Metadata } from 'next';
 
 import './globals.css';
@@ -30,21 +30,22 @@ export default async function RootLayout({
   return (
     <html lang={lang}>
       <body>
-        <Container
-          sx={{
-            maxWidth: '1440px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            height: '100vh',
-          }}
-        >
-          <Header t={t.basic} />
-          <ClientTabs t={t.basic} />
-          {children}
-          <Footer t={t.basic} />
+        <Container sx={{ maxWidth: '1440px' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: '100vh',
+            }}
+          >
+            <Header t={t.basic} />
+            <ClientTabs t={t.basic} />
+            <Box sx={{ flex: 1 }}>{children}</Box>
+            <Footer t={t.basic} />
+          </Box>
         </Container>
       </body>
     </html>
   );
 }
+

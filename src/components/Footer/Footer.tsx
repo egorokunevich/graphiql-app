@@ -13,29 +13,31 @@ interface FooterProps {
 const Footer = ({ t }: FooterProps) => {
   return (
     <Box
+      className="bg-gradient-to-b from-slate-100 to-teal-100"
       component="footer"
-      sx={{
-        height: '60px',
-        padding: '40px 10px',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        borderTop: '1px solid rgba(0, 0, 0, 0.12)',
-      }}
+      sx={{ p: 2, px: 4, textAlign: 'center' }}
     >
       <Box
         width={'100%'}
         display={'flex'}
         alignItems={'center'}
         justifyContent={'space-between'}
+        fontSize={22}
+        lineHeight={1}
+        fontWeight="fontWeightMedium"
       >
-        <Link href="https://github.com/egorokunevich/graphiql-app">
+        <Link
+          href="https://github.com/egorokunevich/graphiql-app"
+          className="hover:text-sky-700 transition duration-300 ease-in-out"
+        >
           GitHub {t.repo}
         </Link>
-        <span>2024</span>
+        <Box component="span" m={1}>
+          2024
+        </Box>
         <a href="https://rs.school/">
           <Image
-            style={{ maxWidth: '100px' }}
+            className="footer__img"
             src="/static/logo-rsschool.png"
             alt="RS School Logo"
             width={100}

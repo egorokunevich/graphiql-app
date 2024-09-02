@@ -32,9 +32,9 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
         borderTop: 1,
         borderColor: 'divider',
         borderRadius: 'unset',
-        padding: 1,
-        maxHeight: '500px',
-        overflowY: 'auto',
+        height: '380px',
+        alignSelf: 'flex-end',
+        width: '100%',
       }}
     >
       <Box
@@ -44,7 +44,10 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
           width: '100%',
         }}
       >
-        <Box sx={{ display: 'flex', gap: 1 }}>
+        <Typography variant="h6" fontWeight="400" color="#707070">
+          Response
+        </Typography>
+        <Box sx={{ display: 'flex' }}>
           <Typography variant="h6" fontWeight="400" color="#707070">
             Status:
           </Typography>
@@ -60,9 +63,6 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
             </Typography>
           )}
         </Box>
-        <Typography variant="h6" fontWeight="400" color="#707070">
-          Response
-        </Typography>
       </Box>
       <Box
         sx={{
@@ -103,9 +103,11 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
                 whiteSpace: 'pre-wrap',
                 wordBreak: 'break-all',
                 maxHeight: '330px',
+                minHeight: '330px',
                 overflowY: 'auto',
-                padding: 1,
+
                 borderRadius: 1,
+                width: '100%',
               }}
             >
               {typeof response.data === 'string' ? (
@@ -113,7 +115,7 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
                   <SyntaxHighlighter
                     language="json"
                     style={docco}
-                    customStyle={{ backgroundColor: '#F0F7F4' }}
+                    customStyle={{ backgroundColor: '#F0F7F4', padding: '0' }}
                     showLineNumbers={true}
                     lineNumberStyle={{ color: '#888888' }}
                   >
