@@ -17,10 +17,10 @@ import LanguageToggle, {
   LanguageType,
 } from '@/src/components/LanguageToggle/LanguageToggle';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
-import { type getDictionary } from '@/src/utils/getDictionary';
+import type { Dictionary } from '@/src/utils/getDictionary';
 
 interface HeaderProps {
-  t: Awaited<ReturnType<typeof getDictionary>>['basic'];
+  t: Dictionary['basic'];
 }
 
 const Header = ({ t }: HeaderProps) => {

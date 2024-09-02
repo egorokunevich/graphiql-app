@@ -6,6 +6,19 @@
     "history": "History",
     "signIn": "Sign In",
     "signOut": "Sign Out",
-    "signUp": "Sign Up"
+    "signUp": "Sign Up",
+    "repo": "Repo"
+  },
+  "client": {
+    "status": "Status",
+    "response": "Response",
+    "method": "Method",
+    "key": "Key",
+    "value": "Value",
+    "send": "Send",
+    "welcome": "Enter the URL and click Send to get a response",
+    "headers": "Headers",
+    "body": "Body",
+    "variables": "Variables"
   }
 }

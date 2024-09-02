@@ -5,10 +5,10 @@ import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { type Locale } from '@/i18n-config';
-import { getDictionary } from '@/src/utils/getDictionary';
+import type { Dictionary } from '@/src/utils/getDictionary';
 
 interface LanguageToggleProps {
-  t: Awaited<ReturnType<typeof getDictionary>>['basic'];
+  t: Dictionary['basic'];
 }
 export type LanguageType = 'en' | 'ru';
 
