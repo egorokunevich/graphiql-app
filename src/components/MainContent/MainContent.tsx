@@ -2,12 +2,15 @@
 
 import { Box } from '@mui/material';
 import { User } from 'firebase/auth';
+import React from 'react';
 import { useState } from 'react';
 
 import './MainContent.css';
 
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
 import type { Dictionary } from '@/src/utils/getDictionary';
+
+const Welcome = React.lazy(() => import('../Welcome/Welcome'));
 
 interface MainContentProps {
   t: Dictionary['basic'];
@@ -21,7 +24,11 @@ const MainContent = ({ t }: MainContentProps) => {
   return (
     <main>
       <Box sx={{ height: '100%' }}>
-        <h1>{authUser ? `${t.welcome}, ${authUser.email}!` : t.welcome}</h1>
+        {authUser ? (
+          <h1>{`${t.welcome}, ${authUser.email}!`}</h1>
+        ) : (
+          <Welcome t={t} />
+        )}
       </Box>
     </main>
   );
