@@ -1,5 +1,6 @@
 import { Box, Card, CardContent, Container, Typography } from '@mui/material';
 import React from 'react';
+import { useErrorBoundary } from 'react-error-boundary';
 
 const ButtonSignIn = React.lazy(() => import('../Buttons/ButtonSignIn'));
 const ButtonSignUp = React.lazy(() => import('../Buttons/ButtonSignUp'));
@@ -11,6 +12,29 @@ interface ButtonProps {
 }
 
 const Welcome = ({ t }: ButtonProps) => {
+  const { showBoundary } = useErrorBoundary();
+
+  async function handleClickForError() {
+    try {
+      const response = await fetch('/zapros-dlia-proverki-na-oshibku');
+      if (!response.ok) {
+        if (response.status >= 400 && response.status < 600) {
+          showBoundary(
+            new Error(
+              `${response.url}. HTTP Error: ${response.status} ${response.statusText}`,
+            ),
+          );
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        showBoundary(error);
+      }
+    }
+  }
+
   return (
     <Container maxWidth="md" sx={{ mt: 4, mb: 5 }}>
       <Typography variant="h4" align="center" gutterBottom>
@@ -63,6 +87,7 @@ const Welcome = ({ t }: ButtonProps) => {
       >
         <ButtonSignIn t={t} />
         <ButtonSignUp t={t} />
+        <button onClick={handleClickForError}>Test Error</button>
       </Box>
     </Container>
   );
