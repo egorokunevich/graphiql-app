@@ -2,7 +2,7 @@ import { Box, Container } from '@mui/material';
 import type { Metadata } from 'next';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import './globals.css';
+import './../globals.css';
 
 import { i18n, type Locale } from '@/i18n-config';
 import ClientTabs from '@/src/components/ClientTabs/ClientTabs';

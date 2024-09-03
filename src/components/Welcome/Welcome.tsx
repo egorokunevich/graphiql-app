@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Card, CardContent, Container, Typography } from '@mui/material';
 import React from 'react';
 import { useErrorBoundary } from 'react-error-boundary';

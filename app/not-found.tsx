@@ -6,6 +6,10 @@ import React from 'react';
 function NotFound() {
   return (
     <html>
+      <head>
+        <title>Graphiql App</title>
+        <meta name="description" content="By RNG team"></meta>
+      </head>
       <body>
         <Container
           sx={{
@@ -14,21 +18,39 @@ function NotFound() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            padding: '24px',
           }}
         >
-          <Box className="flex flex-col items-center justify-center max-w-md w-full p-6 shadow-lg">
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              maxWidth: '100%',
+              width: '100%',
+              padding: '24px',
+              boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+            }}
+          >
             <Typography
+              sx={{
+                textAlign: 'center',
+                fontSize: '9rem',
+                fontWeight: 'bold',
+                color: 'gray',
+                marginBottom: '16px',
+              }}
               variant="h1"
               component="div"
-              className="text-center text-9xl font-bold text-gray-700 mb-4"
             >
               404
             </Typography>
             <Typography
               variant="h5"
               component="div"
-              className="text-center mb-5"
               sx={{
+                textAlign: 'center',
                 marginBottom: '20px',
               }}
             >
@@ -39,7 +61,9 @@ function NotFound() {
               variant="contained"
               color="primary"
               onClick={() => (window.location.href = '/')}
-              className="text-1xl"
+              sx={{
+                fontSize: '1rem',
+              }}
             >
               return to main page
             </Button>
