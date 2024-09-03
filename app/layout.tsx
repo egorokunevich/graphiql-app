@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 
-// import './[lang]/globals.css';
-
 export const metadata: Metadata = {
   title: 'Graphiql App',
   description: 'By RNG team',

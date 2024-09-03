@@ -5,6 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import './globals.css';
 
 import { i18n, type Locale } from '@/i18n-config';
+import ClientTabs from '@/src/components/ClientTabs/ClientTabs';
 import ErrorFallback from '@/src/components/ErrorFallback/ErrorFallback';
 import Footer from '@/src/components/Footer/Footer';
 import Header from '@/src/components/Header/Header';
@@ -41,8 +42,9 @@ export default async function RootLayout({
           >
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <Header t={t.basic} />
-              <Box sx={{ flex: 1, flexGrow: 1 }}>{children}</Box>
-              <Footer />
+              <ClientTabs t={t.basic} />
+              <Box sx={{ flex: 1 }}>{children}</Box>
+              <Footer t={t.basic} />
             </ErrorBoundary>
           </Box>
         </Container>
@@ -50,3 +52,4 @@ export default async function RootLayout({
     </html>
   );
 }
+
