@@ -4,7 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import './../globals.css';
+import './globals.css';
 
 import ClientTabs from '@/src/components/ClientTabs/ClientTabs';
 import ErrorFallback from '@/src/components/ErrorFallback/ErrorFallback';
