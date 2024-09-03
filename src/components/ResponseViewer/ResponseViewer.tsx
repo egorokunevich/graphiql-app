@@ -18,6 +18,7 @@ interface ResponseViewerProps {
 
 export const ResponseViewer = ({ response }: ResponseViewerProps) => {
   const t = useTranslations('client');
+
   const isJson = (data: string): boolean => {
     try {
       JSON.parse(data);
@@ -34,7 +35,7 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
         borderTop: 1,
         borderColor: 'divider',
         borderRadius: 'unset',
-        height: '380px',
+        height: '100%',
         alignSelf: 'flex-end',
         width: '100%',
       }}
@@ -88,12 +89,20 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
                 gap: 4,
               }}
             >
-              <Image
-                src="/static/astronaut.svg"
-                alt="astronaut"
-                width={200}
-                height={200}
-              />
+              <Box
+                sx={{
+                  width: 200,
+                  height: 200,
+                  position: 'relative',
+                }}
+              >
+                <Image
+                  src="/static/astronaut.svg"
+                  alt="astronaut"
+                  fill
+                  style={{ objectFit: 'contain' }}
+                />
+              </Box>
               <Typography color="#454545" variant="subtitle2">
                 Could not send request
               </Typography>
@@ -104,10 +113,10 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
               sx={{
                 whiteSpace: 'pre-wrap',
                 wordBreak: 'break-all',
-                maxHeight: '330px',
-                minHeight: '330px',
+                maxHeight: '370px',
+                minHeight: '370px',
                 overflowY: 'auto',
-
+                height: '100%',
                 borderRadius: 1,
                 width: '100%',
               }}
@@ -117,32 +126,49 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
                   <SyntaxHighlighter
                     language="json"
                     style={docco}
-                    customStyle={{ backgroundColor: '#F0F7F4', padding: '0' }}
+                    customStyle={{
+                      margin: 0,
+                      height: '100%',
+                      backgroundColor: '#F0F7F4',
+                      padding: '0',
+                    }}
                     showLineNumbers={true}
                     lineNumberStyle={{ color: '#888888' }}
                   >
-                    {response.data}
+                    {response.data !== null ? response.data : '{}'}
                   </SyntaxHighlighter>
                 ) : (
                   <SyntaxHighlighter
                     language="html"
                     style={docco}
-                    customStyle={{ backgroundColor: '#F0F7F4' }}
+                    customStyle={{
+                      margin: 0,
+                      height: '100%',
+                      backgroundColor: '#F0F7F4',
+                      padding: '0',
+                    }}
                     showLineNumbers={true}
                     lineNumberStyle={{ color: '#888888' }}
                   >
-                    {response.data}
+                    {response.data !== null ? response.data : '{}'}
                   </SyntaxHighlighter>
                 )
               ) : (
                 <SyntaxHighlighter
                   language="json"
                   style={docco}
-                  customStyle={{ backgroundColor: '#F0F7F4' }}
+                  customStyle={{
+                    margin: 0,
+                    height: '100%',
+                    backgroundColor: '#F0F7F4',
+                    padding: '0',
+                  }}
                   showLineNumbers={true}
                   lineNumberStyle={{ color: '#888888' }}
                 >
-                  {JSON.stringify(response.data, null, 2)}
+                  {response.data !== null
+                    ? JSON.stringify(response.data, null, 2)
+                    : '{}'}
                 </SyntaxHighlighter>
               )}
             </Box>
@@ -159,12 +185,20 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
               gap: 4,
             }}
           >
-            <Image
-              src="/static/illustration.svg"
-              alt=""
-              width={200}
-              height={200}
-            />
+            <Box
+              sx={{
+                width: 200,
+                height: 200,
+                position: 'relative',
+              }}
+            >
+              <Image
+                src="/static/illustration.svg"
+                alt="illustration"
+                fill
+                style={{ objectFit: 'contain' }}
+              />
+            </Box>
             <Typography color="#454545" variant="subtitle2" gutterBottom>
               {t('welcome')}
             </Typography>

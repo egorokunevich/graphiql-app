@@ -1,12 +1,38 @@
+'use client';
+
 import { Box, Card, CardContent, Container, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import React from 'react';
+import { useErrorBoundary } from 'react-error-boundary';
 
 const ButtonSignIn = React.lazy(() => import('../Buttons/ButtonSignIn'));
 const ButtonSignUp = React.lazy(() => import('../Buttons/ButtonSignUp'));
 
 const Welcome = () => {
   const t = useTranslations();
+  const { showBoundary } = useErrorBoundary();
+
+  async function handleClickForError() {
+    try {
+      const response = await fetch('/zapros-dlia-proverki-na-oshibku');
+      if (!response.ok) {
+        if (response.status >= 400 && response.status < 600) {
+          showBoundary(
+            new Error(
+              `${response.url}. HTTP Error: ${response.status} ${response.statusText}`,
+            ),
+          );
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        showBoundary(error);
+      }
+    }
+  }
+
   return (
     <Container maxWidth="md" sx={{ mt: 4, mb: 5 }}>
       <Typography variant="h4" align="center" gutterBottom>

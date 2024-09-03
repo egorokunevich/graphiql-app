@@ -22,7 +22,15 @@ export const RestTabs = ({ value, setValue }: RestTabsProps) => {
   };
 
   return (
-    <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 2 }}>
+    <Box
+      sx={{
+        borderBottom: 1,
+        borderColor: 'divider',
+        marginTop: 2,
+        display: 'flex',
+        justifyContent: 'space-between',
+      }}
+    >
       <Tabs
         value={value}
         onChange={handleValueChange}
