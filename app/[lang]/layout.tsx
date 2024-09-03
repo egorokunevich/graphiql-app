@@ -1,0 +1,55 @@
+import { Box, Container } from '@mui/material';
+import type { Metadata } from 'next';
+import { ErrorBoundary } from 'react-error-boundary';
+
+import './../globals.css';
+
+import { i18n, type Locale } from '@/i18n-config';
+import ClientTabs from '@/src/components/ClientTabs/ClientTabs';
+import ErrorFallback from '@/src/components/ErrorFallback/ErrorFallback';
+import Footer from '@/src/components/Footer/Footer';
+import Header from '@/src/components/Header/Header';
+import { getDictionary } from '@/src/utils/getDictionary';
+
+export const metadata: Metadata = {
+  title: 'Graphiql App',
+  description: 'By RNG team',
+};
+
+export async function generateStaticParams() {
+  return i18n.locales.map((locale) => ({ lang: locale }));
+}
+
+export default async function RootLayout({
+  children,
+  params: { lang },
+}: {
+  children: React.ReactNode;
+  params: { lang: Locale };
+}) {
+  const t = await getDictionary(lang);
+
+  return (
+    <html lang={lang}>
+      <body>
+        <Container sx={{ maxWidth: '1440px' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: '100vh',
+            }}
+          >
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Header t={t.basic} />
+              <ClientTabs t={t.basic} />
+              <Box sx={{ flex: 1 }}>{children}</Box>
+              <Footer t={t.basic} />
+            </ErrorBoundary>
+          </Box>
+        </Container>
+      </body>
+    </html>
+  );
+}
+
