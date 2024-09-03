@@ -11,6 +11,7 @@ import {
   Tooltip,
   SelectChangeEvent,
 } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import React, { Dispatch, SetStateAction } from 'react';
 
 import { Method } from '@/app/[lang]/client/rest-client/page';
@@ -32,6 +33,7 @@ export const RestUrl = ({
   method,
   setMethod,
 }: RestUrlProps) => {
+  const t = useTranslations('client');
   const options = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'];
 
   const handleMethodChange = (event: SelectChangeEvent<string>) => {
@@ -60,7 +62,7 @@ export const RestUrl = ({
       }}
     >
       <FormControl sx={{ width: '10%', borderRadius: 'unset' }}>
-        <InputLabel id="method-label">Method</InputLabel>
+        <InputLabel id="method-label">{t('method')}</InputLabel>
         <Select
           labelId="method-label"
           value={method}
@@ -78,7 +80,7 @@ export const RestUrl = ({
         <TextField
           value={url}
           onChange={handleUrlChange}
-          label="Endpoint URL"
+          label={t('endpointURL')}
           variant="outlined"
           sx={{ borderRadius: 'unset', width: '100%' }}
           error={urlError}
@@ -104,7 +106,7 @@ export const RestUrl = ({
         }}
         onClick={handleSendRequest}
       >
-        Send
+        {t('send')}
       </Button>
     </Box>
   );

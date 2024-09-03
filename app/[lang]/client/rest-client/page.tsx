@@ -3,6 +3,7 @@
 import { AxiosError } from '@/node_modules/axios/index';
 import { Box, Container, Typography, Tabs, Tab } from '@mui/material';
 import axios from 'axios';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { Locale } from '@/i18n-config';
@@ -11,7 +12,6 @@ import RestBodyEditor from '@/src/components/RestBodyEditor/RestBodyEditor';
 import { RestHeaderEditor } from '@/src/components/RestHeaderEditor/RestHeaderEditor';
 import { RestTabs } from '@/src/components/RestTabs/RestTabs';
 import { RestUrl } from '@/src/components/RestUrl/RestUrl';
-import { Dictionary, getDictionary } from '@/src/utils/getDictionary';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -50,7 +50,7 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
-const RestClient = ({ params: { lang } }: { params: { lang: Locale } }) => {
+const RestClient = () => {
   const [value, setValue] = useState(0);
   const [method, setMethod] = useState<Method>('GET');
   const [url, setUrl] = useState('');
@@ -59,6 +59,7 @@ const RestClient = ({ params: { lang } }: { params: { lang: Locale } }) => {
   const [headers, setHeaders] = useState([{ key: '', value: '' }]);
   const [body, setBody] = useState('');
   const [urlError, setUrlError] = useState(false);
+  const t = useTranslations();
 
   const handleSendRequest = async () => {
     if (!url) {
@@ -135,7 +136,7 @@ const RestClient = ({ params: { lang } }: { params: { lang: Locale } }) => {
     >
       <Box sx={{ marginTop: 1, marginBottom: 1 }}>
         <Typography variant="h4" component="h1">
-          REST Client
+          REST {t('basic.client')}
         </Typography>
       </Box>
       <RestUrl

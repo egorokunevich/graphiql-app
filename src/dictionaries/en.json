@@ -16,13 +16,16 @@
     "status": "Status",
     "response": "Response",
     "method": "Method",
+    "endpointURL": "Endpoint URL",
+    "plainText": "Plain Text",
     "key": "Key",
     "value": "Value",
     "send": "Send",
     "welcome": "Enter the URL and click Send to get a response",
     "headers": "Headers",
     "body": "Body",
-    "variables": "Variables"
+    "variables": "Variables",
+    "addHeader": "Add Header"
   },
   "welcome": {
     "ourDevs": "Our Developers",

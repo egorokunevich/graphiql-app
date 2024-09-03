@@ -1,16 +1,11 @@
-// 'use client';
 import { Box } from '@mui/material';
 
-import { Locale } from '@/i18n-config';
-import { getDictionary } from '@/src/utils/getDictionary';
 import MainContent from '@src/components/MainContent/MainContent';
 
-async function MainPage({ params: { lang } }: { params: { lang: Locale } }) {
-  const t = await getDictionary(lang);
-
+async function MainPage() {
   return (
     <Box sx={{ position: 'relative', height: '100%' }}>
-      <MainContent t={t.basic} />
+      <MainContent />
     </Box>
   );
 }
