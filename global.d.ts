@@ -2,7 +2,7 @@ import en from '@src/dictionaries/en.json';
 
 type Messages = typeof en;
 
+// Used to define types for a translation function
 declare global {
-  // Use type safe message keys with `next-intl`
   interface IntlMessages extends Messages {}
 }
