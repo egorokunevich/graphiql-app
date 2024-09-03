@@ -73,6 +73,7 @@ const Welcome = () => {
       >
         <ButtonSignIn />
         <ButtonSignUp />
+        <button onClick={handleClickForError}>Test Error</button>
       </Box>
     </Container>
   );
