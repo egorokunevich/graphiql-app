@@ -39,7 +39,6 @@ export const RestTabs = ({ value, setValue }: RestTabsProps) => {
       >
         <Tab label={t('headers')} {...a11yProps(0)} />
         <Tab label={t('body')} {...a11yProps(1)} />
-        <Tab label={t('variables')} {...a11yProps(2)} />
       </Tabs>
     </Box>
   );

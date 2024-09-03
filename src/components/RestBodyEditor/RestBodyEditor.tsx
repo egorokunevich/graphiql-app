@@ -200,7 +200,7 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({
               sx={{ '& .MuiFormControlLabel-label': { fontSize: '14px' } }}
               value="plaintext"
               control={<Radio size="small" />}
-              label="Plain Text"
+              label={t('plainText')}
             />
           </RadioGroup>
         </FormControl>
