@@ -1,10 +1,13 @@
 import MonacoEditor from '@monaco-editor/react';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   Box,
   Radio,
   FormControl,
   FormControlLabel,
   RadioGroup,
+  IconButton,
+  Typography,
 } from '@mui/material';
 import React, {
   Dispatch,
@@ -14,14 +17,29 @@ import React, {
   useState,
 } from 'react';
 
+import { RestVariablesEditor } from '@src/components/RestVariablesEditor/RestVariablesEditor';
+
 interface RestBodyEditorProps {
   body: string;
   setBody: Dispatch<SetStateAction<string>>;
+  variables: { key: string; value: string }[];
+  setVariables: Dispatch<SetStateAction<{ key: string; value: string }[]>>;
 }
 
-const RestBodyEditor: React.FC<RestBodyEditorProps> = ({ body, setBody }) => {
+const RestBodyEditor: React.FC<RestBodyEditorProps> = ({
+  body,
+  setBody,
+  variables,
+  setVariables,
+}) => {
   const [language, setLanguage] = useState<string>('json');
   const previousBodyRef = useRef<string>(body);
+  const [showVariables, setShowVariables] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  const toggleVariablesVisibility = () => {
+    setShowVariables((prev) => !prev);
+  };
 
   const handleChange = (value: string | undefined) => {
     if (value !== undefined) {
@@ -33,14 +51,48 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({ body, setBody }) => {
     setLanguage(event.target.value);
   };
 
+  const appendVariablesToBody = (defaultBody: string): string => {
+    if (variables?.length === 0) return defaultBody;
+
+    let updatedBody = defaultBody;
+
+    if (language === 'json') {
+      try {
+        const parsedBody = JSON.parse(defaultBody || '{}');
+        const variablesObject = variables?.reduce(
+          (acc, variable) => {
+            acc[variable.key] = variable.value;
+            return acc;
+          },
+          {} as Record<string, string>,
+        );
+
+        updatedBody = JSON.stringify(
+          { ...parsedBody, ...variablesObject },
+          null,
+          2,
+        );
+      } catch (error) {
+        console.error('Failed to parse JSON:', error);
+      }
+    } else {
+      const variablesString =
+        variables && variables.length > 0
+          ? variables
+              .map((variable) => `${variable.key}: ${variable.value}`)
+              .join('\n')
+          : '';
+
+      updatedBody = `${body}\n\n${variablesString}`;
+    }
+
+    return updatedBody;
+  };
+
   const updateUrlWithEncodedBody = () => {
     try {
-      let updatedBody = body;
+      let updatedBody = appendVariablesToBody(body);
 
-      if (language === 'json') {
-        const parsed = JSON.parse(body);
-        updatedBody = JSON.stringify(parsed, null, 2);
-      }
       if (updatedBody !== previousBodyRef.current) {
         const base64Body = btoa(updatedBody);
 
@@ -61,11 +113,19 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({ body, setBody }) => {
     if (pathSegments.length > 1) {
       try {
         const lastSegment = pathSegments[pathSegments.length - 1];
-        atob(lastSegment);
-        url.searchParams.delete('body');
-        window.history.replaceState({}, '', url.toString());
+        const isBase64 = /^[A-Za-z0-9+/=]+$/.test(lastSegment);
+        if (isBase64) {
+          const decodedBody = atob(lastSegment);
+          try {
+            setBody(decodedBody);
+          } catch (error) {
+            console.error('Failed to set body from decoded string:', error);
+          }
+          url.searchParams.delete('body');
+          window.history.replaceState({}, '', url.toString());
+        }
       } catch (error) {
-        console.error(error);
+        console.error('Failed to decode base64 string:', error);
       }
     }
   }, []);
@@ -87,44 +147,74 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({ body, setBody }) => {
     return () => {
       window.removeEventListener('focusout', handleFocusOut);
     };
-  }, [body, language]);
+  }, [body, language, variables]);
 
   return (
-    <Box sx={{ padding: 1, backgroundColor: '#F0F7F4', borderRadius: 1 }}>
-      <FormControl component="fieldset">
-        <RadioGroup
-          aria-label="language"
-          name="language"
-          value={language}
-          onChange={handleLanguageChange}
-          row
+    <>
+      <Box sx={{ position: 'relative' }}>
+        <IconButton
+          onClick={toggleVariablesVisibility}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          sx={{ fontSize: '14px' }}
         >
-          <FormControlLabel
-            sx={{ '& .MuiFormControlLabel-label': { fontSize: '14px' } }}
-            value="json"
-            control={<Radio size="small" />}
-            label="JSON"
-          />
-          <FormControlLabel
-            sx={{ '& .MuiFormControlLabel-label': { fontSize: '14px' } }}
-            value="plaintext"
-            control={<Radio size="small" />}
-            label="Plain Text"
-          />
-        </RadioGroup>
-      </FormControl>
+          {!showVariables ? <VisibilityOff /> : <Visibility />}
+        </IconButton>
+        {!showVariables && hovered && (
+          <Typography
+            variant="h6"
+            sx={{
+              position: 'absolute',
+              fontSize: '12px',
+              background: '#e8e8e8',
+            }}
+          >
+            Variables
+          </Typography>
+        )}
+      </Box>
+      {showVariables && (
+        <RestVariablesEditor
+          variables={variables}
+          setVariables={setVariables}
+        />
+      )}
+      <Box sx={{ padding: 1, backgroundColor: '#F0F7F4', borderRadius: 1 }}>
+        <FormControl component="fieldset">
+          <RadioGroup
+            aria-label="language"
+            name="language"
+            value={language}
+            onChange={handleLanguageChange}
+            row
+          >
+            <FormControlLabel
+              sx={{ '& .MuiFormControlLabel-label': { fontSize: '14px' } }}
+              value="json"
+              control={<Radio size="small" />}
+              label="JSON"
+            />
+            <FormControlLabel
+              sx={{ '& .MuiFormControlLabel-label': { fontSize: '14px' } }}
+              value="plaintext"
+              control={<Radio size="small" />}
+              label="Plain Text"
+            />
+          </RadioGroup>
+        </FormControl>
 
-      <MonacoEditor
-        height="200px"
-        language={language === 'json' ? 'json' : 'plaintext'}
-        value={body}
-        onChange={handleChange}
-        theme="vs-white"
-        options={{
-          fontSize: 14,
-        }}
-      />
-    </Box>
+        <MonacoEditor
+          height="200px"
+          language={language === 'json' ? 'json' : 'plaintext'}
+          value={body}
+          onChange={handleChange}
+          theme="vs-grey"
+          options={{
+            fontSize: 14,
+          }}
+        />
+      </Box>
+    </>
   );
 };
 

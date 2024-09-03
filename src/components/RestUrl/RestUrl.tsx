@@ -1,3 +1,4 @@
+import { NextResponse } from '@/node_modules/next/server';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import {
   Box,
@@ -17,7 +18,9 @@ import { Method } from '@/app/[lang]/client/rest-client/page';
 
 interface RestUrlProps {
   urlError: boolean;
-  handleSendRequest: () => Promise<void>;
+  handleSendRequest: () => Promise<
+    NextResponse<{ status: number | undefined; data: null }> | undefined
+  >;
   url: string;
   setUrl: Dispatch<SetStateAction<string>>;
   method: Method;
