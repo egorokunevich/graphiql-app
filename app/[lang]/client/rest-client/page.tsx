@@ -7,7 +7,6 @@ import axios from 'axios';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-import { Locale } from '@/i18n-config';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import RestBodyEditor from '@/src/components/RestBodyEditor/RestBodyEditor';
 import { RestHeaderEditor } from '@/src/components/RestHeaderEditor/RestHeaderEditor';
