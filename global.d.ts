@@ -1,4 +1,4 @@
-import en from './messages/en.json';
+import en from '@src/dictionaries/en.json';
 
 type Messages = typeof en;
 

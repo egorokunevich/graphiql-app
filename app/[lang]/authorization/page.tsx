@@ -2,6 +2,7 @@
 import { Button } from '@mui/material';
 import { signInWithEmailAndPassword, User } from 'firebase/auth';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import InputField from '@/src/components/InputField/InputField';
@@ -20,6 +21,7 @@ function SignIn() {
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [authUser, setAuthUser] = useState<User | null>(null);
+  const t = useTranslations();
 
   useAuthEffect(setAuthUser);
   useEffect(() => {
@@ -32,10 +34,19 @@ function SignIn() {
     setPasswordErrors([]);
 
     if (!validateEmail(email)) {
-      setEmailError('Invalid email address. Please enter a valid email.');
+      setEmailError(t('errors.email'));
     }
 
-    const passwordErrorsList = validatePassword(password);
+    const passwordErrorKeys = validatePassword(password);
+    const passwordErrorsList = passwordErrorKeys.map((key) => {
+      const errorKey = key as
+        | 'passwordLength'
+        | 'passwordDigit'
+        | 'passwordLetter'
+        | 'passwordSpecial'
+        | 'email';
+      return t(`errors.${errorKey}`);
+    });
     if (passwordErrorsList.length > 0) {
       setPasswordErrors(passwordErrorsList);
     }
@@ -51,33 +62,33 @@ function SignIn() {
       })
       .catch(() => {
         if (!emailError && passwordErrors.length === 0)
-          setError('Your account is not found =(');
+          setError(t('errors.accountNotFound'));
         setIsLoading(false);
       });
   }
 
   return (
     <div className="max-w-md mx-auto p-6 m-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-3xl font-semibold mb-4">Sign In</h1>
+      <h1 className="text-3xl font-semibold mb-4">{t('login.login')}</h1>
       <form>
         <InputField
           id="email"
-          label="Email"
+          label={t('basic.email')}
           type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
+          placeholder={t('login.emailPlaceholder')}
           required
           error={emailError}
         />
 
         <InputField
           id="password"
-          label="Password"
+          label={t('basic.password')}
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
+          placeholder={t('login.passwordPlaceholder')}
           required
           error={passwordErrors.length > 0 ? passwordErrors.join(' ') : ''}
         />
@@ -85,7 +96,7 @@ function SignIn() {
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
         {isLoading ? (
-          <p>Loading...</p>
+          <p>{t('basic.loading')}...</p>
         ) : (
           <Button
             variant="contained"
@@ -93,7 +104,7 @@ function SignIn() {
             className="w-full m-auto bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
             onClick={login}
           >
-            Login
+            {t('basic.signIn')}
           </Button>
         )}
       </form>

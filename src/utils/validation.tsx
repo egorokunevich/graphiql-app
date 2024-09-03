@@ -6,16 +6,16 @@ export function validatePassword(password: string) {
   const errors = [];
 
   if (!/^.{8,}$/.test(password)) {
-    errors.push('Password must be at least 8 characters long.');
+    errors.push('passwordLength');
   }
   if (!/(?=.*[a-zA-Z])/.test(password)) {
-    errors.push('Password must contain at least one letter.');
+    errors.push('passwordLetter');
   }
   if (!/(?=.*\d)/.test(password)) {
-    errors.push('Password must contain at least one digit.');
+    errors.push('passwordDigit');
   }
   if (!/(?=.*[@$!%*?&])/.test(password)) {
-    errors.push('Password must contain at least one special character.');
+    errors.push('passwordSpecial');
   }
 
   return errors;
