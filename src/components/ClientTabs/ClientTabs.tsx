@@ -3,19 +3,16 @@
 import { Box, Tabs, Tab } from '@mui/material';
 import { User } from 'firebase/auth';
 import { useParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
-import type { Dictionary } from '@/src/utils/getDictionary';
 
 type TabsType = '' | 'rest-client' | 'graphiql-client' | 'history';
 
-interface ClientTabsProps {
-  t: Dictionary['basic'];
-}
-
-const ClientTabs = ({ t }: ClientTabsProps) => {
+const ClientTabs = () => {
+  const t = useTranslations('basic');
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [value, setValue] = useState<TabsType>('');
   const params = useParams<{ lang: LanguageType; client: TabsType }>();
@@ -47,15 +44,19 @@ const ClientTabs = ({ t }: ClientTabsProps) => {
             />
             <Tab
               value="rest-client"
-              label={`REST ${t.client}`}
+              label={`REST ${t('client')}`}
               {...a11yProps('rest-client')}
             />
             <Tab
               value="graphiql-client"
-              label={`GraphiQL ${t.client}`}
+              label={`GraphiQL ${t('client')}`}
               {...a11yProps('graphiql-client')}
             />
-            <Tab value="history" label={t.history} {...a11yProps('history')} />
+            <Tab
+              value="history"
+              label={t('history')}
+              {...a11yProps('history')}
+            />
           </Tabs>
         </Box>
       )}

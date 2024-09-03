@@ -17,13 +17,8 @@ import LanguageToggle, {
   LanguageType,
 } from '@/src/components/LanguageToggle/LanguageToggle';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
-import type { Dictionary } from '@/src/utils/getDictionary';
 
-interface HeaderProps {
-  t: Dictionary['basic'];
-}
-
-const Header = ({ t }: HeaderProps) => {
+const Header = () => {
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [isSticky, setIsSticky] = useState(false);
   const params = useParams<{ lang: LanguageType }>();
@@ -64,9 +59,9 @@ const Header = ({ t }: HeaderProps) => {
             height={40}
           />
         </Link>
-        <LanguageToggle t={t} />
+        <LanguageToggle />
         {authUser ? (
-          <ButtonSignOut t={t} />
+          <ButtonSignOut />
         ) : (
           <Box
             sx={{
@@ -74,8 +69,8 @@ const Header = ({ t }: HeaderProps) => {
               gap: '1rem',
             }}
           >
-            <ButtonSignIn t={t} />
-            <ButtonSignUp t={t} />
+            <ButtonSignIn />
+            <ButtonSignUp />
           </Box>
         )}
       </Box>

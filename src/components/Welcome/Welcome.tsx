@@ -1,19 +1,15 @@
 'use client';
 
 import { Box, Card, CardContent, Container, Typography } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 
 const ButtonSignIn = React.lazy(() => import('../Buttons/ButtonSignIn'));
 const ButtonSignUp = React.lazy(() => import('../Buttons/ButtonSignUp'));
 
-import { type getDictionary } from '@/src/utils/getDictionary';
-
-interface ButtonProps {
-  t: Awaited<ReturnType<typeof getDictionary>>['basic'];
-}
-
-const Welcome = ({ t }: ButtonProps) => {
+const Welcome = () => {
+  const t = useTranslations();
   const { showBoundary } = useErrorBoundary();
 
   async function handleClickForError() {
@@ -40,44 +36,32 @@ const Welcome = ({ t }: ButtonProps) => {
   return (
     <Container maxWidth="md" sx={{ mt: 4, mb: 5 }}>
       <Typography variant="h4" align="center" gutterBottom>
-        {t.welcome}
+        {t('basic.welcome')}
       </Typography>
       <Card variant="outlined" sx={{ mb: 2 }}>
         <CardContent>
           <Typography variant="h6" align="center" gutterBottom>
-            Our Developers
+            {t('welcome.ourDevs')}
           </Typography>
-          <Typography>
-            We are a team of 3 developers working on creating lightweight
-            version of Postman and GraphQL, combined into a single application.
-          </Typography>
+          <Typography>{t('welcome.teamDescription')}</Typography>
         </CardContent>
       </Card>
 
       <Card variant="outlined" sx={{ mb: 2 }}>
         <CardContent>
           <Typography variant="h6" align="center" gutterBottom>
-            Project
+            {t('welcome.project')}
           </Typography>
-          <Typography>
-            The application is developed in React and Next.js. Firebase is
-            responsible for user registration. The application supports 2
-            languages: Russian and English.
-          </Typography>
+          <Typography>{t('welcome.projectDescription')}</Typography>
         </CardContent>
       </Card>
 
       <Card variant="outlined" sx={{ mb: 2 }}>
         <CardContent>
           <Typography variant="h6" align="center" gutterBottom>
-            Rolling Scopes
+            {t('welcome.rollingScopes')}
           </Typography>
-          <Typography>
-            The project was created as part of the Rolling Scopes training
-            course. RS School offers a unique learning experience as a free,
-            community-based online education initiative. The RS School has been
-            run by the Rolling Scopes community since 2013.
-          </Typography>
+          <Typography>{t('welcome.RSSchoolDescription')}</Typography>
         </CardContent>
       </Card>
       <Box
@@ -87,8 +71,8 @@ const Welcome = ({ t }: ButtonProps) => {
           gap: '1rem',
         }}
       >
-        <ButtonSignIn t={t} />
-        <ButtonSignUp t={t} />
+        <ButtonSignIn />
+        <ButtonSignUp />
         <button onClick={handleClickForError}>Test Error</button>
       </Box>
     </Container>

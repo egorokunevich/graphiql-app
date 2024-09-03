@@ -1,5 +1,6 @@
 import { Box, Typography, Paper } from '@mui/material';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json';
@@ -16,9 +17,7 @@ interface ResponseViewerProps {
 }
 
 export const ResponseViewer = ({ response }: ResponseViewerProps) => {
-  // if (!response || response.data === null) {
-  //   return null;
-  // }
+  const t = useTranslations('client');
 
   const isJson = (data: string): boolean => {
     try {
@@ -49,11 +48,11 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
         }}
       >
         <Typography variant="h6" fontWeight="400" color="#707070">
-          Response
+          {t('response')}:
         </Typography>
         <Box sx={{ display: 'flex' }}>
           <Typography variant="h6" fontWeight="400" color="#707070">
-            Status:
+            {t('status')}:
           </Typography>
           {response && (
             <Typography
@@ -201,7 +200,7 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
               />
             </Box>
             <Typography color="#454545" variant="subtitle2" gutterBottom>
-              Enter the URL and click Send to get a response
+              {t('welcome')}
             </Typography>
           </Box>
         )}

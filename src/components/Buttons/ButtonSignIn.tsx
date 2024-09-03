@@ -2,13 +2,13 @@
 
 import { Button } from '@mui/material';
 import { useParams } from 'next/navigation';
-
-import ButtonProps from './ButtonProps';
+import { useTranslations } from 'next-intl';
 
 import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
 
-function ButtonSignIn({ t }: ButtonProps) {
+function ButtonSignIn() {
   const params = useParams<{ lang: LanguageType }>();
+  const t = useTranslations('basic');
 
   return (
     <>
@@ -17,7 +17,7 @@ function ButtonSignIn({ t }: ButtonProps) {
         style={{ fontWeight: 'bold' }}
         href={`/${params.lang}/authorization`}
       >
-        {t.signIn}
+        {t('signIn')}
       </Button>
     </>
   );

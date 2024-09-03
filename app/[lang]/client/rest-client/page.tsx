@@ -4,7 +4,8 @@ import { AxiosError } from '@/node_modules/axios/index';
 import { NextResponse } from '@/node_modules/next/server';
 import { Box, Container, Typography } from '@mui/material';
 import axios from 'axios';
-import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import RestBodyEditor from '@/src/components/RestBodyEditor/RestBodyEditor';
@@ -59,6 +60,7 @@ const RestClient = () => {
   const [body, setBody] = useState('');
   const [urlError, setUrlError] = useState(false);
   const [variables, setVariables] = useState([{ key: '', value: '' }]);
+  const t = useTranslations();
 
   const handleSendRequest = async () => {
     if (!url) {
@@ -158,7 +160,7 @@ const RestClient = () => {
     >
       <Box sx={{ marginTop: 1, marginBottom: 1 }}>
         <Typography variant="h4" component="h1">
-          REST Client
+          REST {t('basic.client')}
         </Typography>
       </Box>
       <RestUrl

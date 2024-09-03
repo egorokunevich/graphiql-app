@@ -9,6 +9,7 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import React, {
   Dispatch,
   SetStateAction,
@@ -32,6 +33,7 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({
   variables,
   setVariables,
 }) => {
+  const t = useTranslations('client');
   const [language, setLanguage] = useState<string>('json');
   const previousBodyRef = useRef<string>(body);
   const [showVariables, setShowVariables] = useState(false);
@@ -198,7 +200,7 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({
               sx={{ '& .MuiFormControlLabel-label': { fontSize: '14px' } }}
               value="plaintext"
               control={<Radio size="small" />}
-              label="Plain Text"
+              label={t('plainText')}
             />
           </RadioGroup>
         </FormControl>
