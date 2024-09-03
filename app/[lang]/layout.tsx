@@ -1,9 +1,12 @@
 import { Box, Container } from '@mui/material';
 import type { Metadata } from 'next';
+import { ErrorBoundary } from 'react-error-boundary';
 
-import './globals.css';
+import './../globals.css';
 
 import { i18n, type Locale } from '@/i18n-config';
+import ClientTabs from '@/src/components/ClientTabs/ClientTabs';
+import ErrorFallback from '@/src/components/ErrorFallback/ErrorFallback';
 import Footer from '@/src/components/Footer/Footer';
 import Header from '@/src/components/Header/Header';
 import { getDictionary } from '@/src/utils/getDictionary';
@@ -37,14 +40,16 @@ export default async function RootLayout({
               minHeight: '100vh',
             }}
           >
-            <Header t={t.basic} />
-            <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-              {children}
-            </Box>
-            <Footer />
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Header t={t.basic} />
+              <ClientTabs t={t.basic} />
+              <Box sx={{ flex: 1 }}>{children}</Box>
+              <Footer t={t.basic} />
+            </ErrorBoundary>
           </Box>
         </Container>
       </body>
     </html>
   );
 }
+
