@@ -3,13 +3,15 @@
 import { AxiosError } from '@/node_modules/axios/index';
 import { Box, Container, Typography, Tabs, Tab } from '@mui/material';
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { Locale } from '@/i18n-config';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import RestBodyEditor from '@/src/components/RestBodyEditor/RestBodyEditor';
 import { RestHeaderEditor } from '@/src/components/RestHeaderEditor/RestHeaderEditor';
 import { RestTabs } from '@/src/components/RestTabs/RestTabs';
 import { RestUrl } from '@/src/components/RestUrl/RestUrl';
+import { Dictionary, getDictionary } from '@/src/utils/getDictionary';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -48,7 +50,7 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
-const RestClient = () => {
+const RestClient = ({ params: { lang } }: { params: { lang: Locale } }) => {
   const [value, setValue] = useState(0);
   const [method, setMethod] = useState<Method>('GET');
   const [url, setUrl] = useState('');

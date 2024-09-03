@@ -1,15 +1,17 @@
+import { useTranslations } from 'next-intl';
 import 'server-only';
 
 import type { Locale } from '@/i18n-config';
 
 const dictionaries = {
   en: () =>
-    import('@/public/dictionaries/en.json').then((module) => module.default),
+    import('@src/dictionaries/en.json').then((module) => module.default),
   ru: () =>
-    import('@/public/dictionaries/ru.json').then((module) => module.default),
+    import('@src/dictionaries/ru.json').then((module) => module.default),
 };
 
 export const getDictionary = async (locale: Locale) =>
   dictionaries[locale]?.() ?? dictionaries.en();
 
-export type Dictionary = Awaited<ReturnType<typeof getDictionary>>;
+export type Dictionary = Awaited<ReturnType<typeof useTranslations>>;
+// export type Dictionary = Awaited<ReturnType<typeof getDictionary>>;
