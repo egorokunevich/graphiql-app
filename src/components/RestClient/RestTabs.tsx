@@ -1,11 +1,8 @@
 import { Box, Tabs, Tab } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
-interface RestTabsProps {
-  value: number;
-  setValue: Dispatch<SetStateAction<number>>;
-}
+import { RestTabsProps } from '@/src/types/index';
 
 export const RestTabs = ({ value, setValue }: RestTabsProps) => {
   const t = useTranslations('client');

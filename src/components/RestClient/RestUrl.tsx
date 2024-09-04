@@ -1,4 +1,3 @@
-import { NextResponse } from '@/node_modules/next/server';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import {
   Box,
@@ -13,20 +12,10 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
-import { Method } from '@/app/[lang]/client/rest-client/page';
 
-interface RestUrlProps {
-  urlError: boolean;
-  handleSendRequest: () => Promise<
-    NextResponse<{ status: number | undefined; data: null }> | undefined
-  >;
-  url: string;
-  setUrl: Dispatch<SetStateAction<string>>;
-  method: Method;
-  setMethod: Dispatch<SetStateAction<Method>>;
-}
+import { RestUrlProps, Method } from '@/src/types/index';
 
 export const RestUrl = ({
   urlError,

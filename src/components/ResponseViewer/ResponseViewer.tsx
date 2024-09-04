@@ -7,14 +7,10 @@ import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json';
 import xml from 'react-syntax-highlighter/dist/esm/languages/hljs/xml';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-import { ResponseType } from '@/app/[lang]/client/rest-client/page';
+import { ResponseViewerProps } from '@/src/types/index';
 
 SyntaxHighlighter.registerLanguage('json', json);
 SyntaxHighlighter.registerLanguage('html', xml);
-
-interface ResponseViewerProps {
-  response: ResponseType<unknown> | null;
-}
 
 export const ResponseViewer = ({ response }: ResponseViewerProps) => {
   const t = useTranslations('client');

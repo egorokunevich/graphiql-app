@@ -6,8 +6,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
-import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
+import { LanguageType } from '@/src/types/index';
 
 type TabsType = '' | 'rest-client' | 'graphiql-client' | 'history';
 
