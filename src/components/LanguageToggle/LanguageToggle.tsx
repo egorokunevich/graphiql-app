@@ -6,8 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { type Locale } from '@/i18n-config';
-
-export type LanguageType = 'en' | 'ru';
+import { LanguageType } from '@/src/types/index';
 
 export default function LanguageToggle() {
   const router = useRouter();

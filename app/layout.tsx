@@ -5,4 +5,3 @@ export default async function RootLayout({
 }) {
   return <>{children}</>;
 }
-

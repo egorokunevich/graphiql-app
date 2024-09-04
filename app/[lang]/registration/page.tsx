@@ -5,8 +5,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import InputField from '@/src/components/InputField/InputField';
-import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
+import { LanguageType } from '@/src/types/index';
 import { auth } from '@/src/utils/firebase';
 import { validateEmail, validatePassword } from '@/src/utils/validation';
 

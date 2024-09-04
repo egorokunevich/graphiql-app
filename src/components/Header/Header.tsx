@@ -13,10 +13,9 @@ const ButtonSignOut = React.lazy(() => import('../Buttons/ButtonSignOut'));
 
 import './Header.css';
 
-import LanguageToggle, {
-  LanguageType,
-} from '@/src/components/LanguageToggle/LanguageToggle';
+import LanguageToggle from '@/src/components/LanguageToggle/LanguageToggle';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
+import { LanguageType } from '@/src/types/index';
 
 const Header = () => {
   const [authUser, setAuthUser] = useState<User | null>(null);

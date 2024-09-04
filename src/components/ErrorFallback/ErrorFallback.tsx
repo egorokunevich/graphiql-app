@@ -3,11 +3,7 @@
 import { Box, Button, Typography, Card, CardContent } from '@mui/material';
 import React from 'react';
 
-interface ErrorProps {
-  error: Error;
-  resetErrorBoundary: () => void;
-  httpError?: string | null;
-}
+import { ErrorProps } from '@/src/types/index';
 
 function ErrorFallback({ error, resetErrorBoundary, httpError }: ErrorProps) {
   return (

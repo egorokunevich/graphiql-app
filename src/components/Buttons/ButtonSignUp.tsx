@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
-import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
+import { LanguageType } from '@/src/types/index';
 
 function ButtonSignIn() {
   const params = useParams<{ lang: LanguageType }>();
