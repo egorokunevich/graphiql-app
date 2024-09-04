@@ -8,9 +8,10 @@ export interface TabPanelProps {
 }
 
 export interface ResponseType<T = unknown> {
-  status?: number;
+  status?: number | string;
   data?: T;
   message?: string;
+  error?: string;
 }
 
 export interface RestBodyEditorProps {

@@ -14,7 +14,6 @@ import {
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
-
 import { RestUrlProps, Method } from '@/src/types/index';
 
 export const RestUrl = ({

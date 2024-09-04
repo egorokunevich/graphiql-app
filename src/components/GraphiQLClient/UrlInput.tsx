@@ -1,19 +1,31 @@
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import {
-    Box,
-    Button,
-    TextField,
-    IconButton,
-    Tooltip,
-} from '@mui/material';
-import React, { useState } from 'react';
+import { Box, Button, TextField, IconButton, Tooltip } from '@mui/material';
+import React, { Dispatch, SetStateAction } from 'react';
 
-type UrlInputProps = {};
+type UrlInputProps = {
+  endpoint: string;
+  setEndpoint: Dispatch<SetStateAction<string>>;
+  sdlUrl: string;
+  setSdlUrl: Dispatch<SetStateAction<string>>;
+};
 
-export default function UrlInput({}: UrlInputProps) {
-  const [endpoint, setEndpoint] = useState('');
-  const [sdlEndpoint, setSdlEndpoint] = useState('');
-  const [urlError, setUrlError] = useState(false);
+export default function UrlInput({
+  sdlUrl,
+  setSdlUrl,
+  endpoint,
+  setEndpoint,
+}: UrlInputProps) {
+  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newUrl = e.target.value;
+    setEndpoint(newUrl);
+    if (!sdlUrl || sdlUrl === `${endpoint}?sdl`) {
+      setSdlUrl(`${newUrl}?sdl`);
+    }
+  };
+
+  const handleSdlUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSdlUrl(e.target.value);
+  };
   return (
     <Box
       sx={{
@@ -28,10 +40,10 @@ export default function UrlInput({}: UrlInputProps) {
           variant="outlined"
           sx={{ borderRadius: 'unset', width: '100%' }}
           value={endpoint}
-          onChange={(e) => setEndpoint(e.target.value)}
-          error={urlError}
+          onChange={handleUrlChange}
+          // error={urlError}
         />
-        {urlError && (
+        {/* {urlError && (
           <Tooltip
             title="URL cannot be empty"
             placement="right"
@@ -41,14 +53,14 @@ export default function UrlInput({}: UrlInputProps) {
               <ErrorOutlineIcon color="error" />
             </IconButton>
           </Tooltip>
-        )}
+        )} */}
       </Box>
 
       <Box sx={{ position: 'relative', width: '100%' }}>
         <TextField
           label="SDL Endpoint URL"
-          value={sdlEndpoint}
-          onChange={(e) => setSdlEndpoint(e.target.value)}
+          value={sdlUrl}
+          onChange={handleSdlUrlChange}
           variant="outlined"
           sx={{ borderRadius: 'unset', width: '100%' }}
         />
