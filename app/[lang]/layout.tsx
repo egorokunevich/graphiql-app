@@ -1,53 +1,51 @@
 import { Box, Container } from '@mui/material';
 import type { Metadata } from 'next';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import './../globals.css';
+import './globals.css';
 
-import { i18n, type Locale } from '@/i18n-config';
 import ClientTabs from '@/src/components/ClientTabs/ClientTabs';
 import ErrorFallback from '@/src/components/ErrorFallback/ErrorFallback';
 import Footer from '@/src/components/Footer/Footer';
 import Header from '@/src/components/Header/Header';
-import { getDictionary } from '@/src/utils/getDictionary';
 
 export const metadata: Metadata = {
   title: 'Graphiql App',
   description: 'By RNG team',
 };
 
-export async function generateStaticParams() {
-  return i18n.locales.map((locale) => ({ lang: locale }));
-}
-
 export default async function RootLayout({
   children,
-  params: { lang },
+  params: { locale },
 }: {
   children: React.ReactNode;
-  params: { lang: Locale };
+  params: { locale: string };
 }) {
-  const t = await getDictionary(lang);
+  const messages = await getMessages();
 
   return (
-    <html lang={lang}>
+    <html lang={locale}>
       <body>
-        <Container sx={{ maxWidth: '1440px' }}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              minHeight: '100vh',
-            }}
-          >
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <Header t={t.basic} />
-              <ClientTabs t={t.basic} />
-              <Box sx={{ flex: 1 }}>{children}</Box>
-              <Footer t={t.basic} />
-            </ErrorBoundary>
-          </Box>
-        </Container>
+        <NextIntlClientProvider messages={messages}>
+          <Container sx={{ maxWidth: '1440px' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '100vh',
+              }}
+            >
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Header />
+                <ClientTabs />
+                <Box sx={{ flex: 1 }}>{children}</Box>
+                <Footer />
+              </ErrorBoundary>
+            </Box>
+          </Container>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

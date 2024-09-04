@@ -1,14 +1,10 @@
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
-import type { Dictionary } from '@/src/utils/getDictionary';
-
-interface FooterProps {
-  t: Dictionary['basic'];
-}
-
-const Footer = ({ t }: FooterProps) => {
+const Footer = () => {
+  const t = useTranslations('basic');
   return (
     <Box
       className="bg-gradient-to-b from-slate-100 to-teal-100"
@@ -28,7 +24,7 @@ const Footer = ({ t }: FooterProps) => {
           href="https://github.com/egorokunevich/graphiql-app"
           className="hover:text-sky-700 transition duration-300 ease-in-out"
         >
-          GitHub {t.repo}
+          GitHub {t('repo')}
         </Link>
         <Box component="span" m={1}>
           2024

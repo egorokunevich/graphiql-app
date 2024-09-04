@@ -2,12 +2,13 @@
 
 import { Button } from '@mui/material';
 import { signOut } from 'firebase/auth';
-
-import ButtonProps from './ButtonProps';
+import { useTranslations } from 'next-intl';
 
 import { auth } from '@/src/utils/firebase';
 
-function ButtonSignOut({ t }: ButtonProps) {
+function ButtonSignOut() {
+  const t = useTranslations('basic');
+
   function userSignOut() {
     signOut(auth);
   }
@@ -19,7 +20,7 @@ function ButtonSignOut({ t }: ButtonProps) {
         style={{ fontWeight: 'bold' }}
         onClick={userSignOut}
       >
-        {t.signOut}
+        {t('signOut')}
       </Button>
     </>
   );

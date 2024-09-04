@@ -1,5 +1,6 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, TextField, Button, IconButton } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 
 interface RestHeaderEditorProps {
@@ -21,6 +22,8 @@ export const RestHeaderEditor = ({
   headers,
   setHeaders,
 }: RestHeaderEditorProps) => {
+  const t = useTranslations('client');
+
   useEffect(() => {
     const url = new URL(window.location.href);
     url.searchParams.delete('headers');
@@ -84,7 +87,7 @@ export const RestHeaderEditor = ({
         {headers.map((header, index) => (
           <Box key={index} sx={{ display: 'flex', gap: 2, marginBottom: 1 }}>
             <TextField
-              label="Key"
+              label={t('key')}
               value={header.key}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleHeaderChange(index, 'key', e.target.value)
@@ -92,7 +95,7 @@ export const RestHeaderEditor = ({
               fullWidth
             />
             <TextField
-              label="Value"
+              label={t('value')}
               value={header.value}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleHeaderChange(index, 'value', e.target.value)
@@ -106,7 +109,7 @@ export const RestHeaderEditor = ({
         ))}
       </Box>
       <Button onClick={handleAddHeader} variant="contained">
-        Add Header
+        {t('addHeader')}
       </Button>
     </Box>
   );

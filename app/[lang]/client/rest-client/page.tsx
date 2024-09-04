@@ -1,9 +1,11 @@
 'use client';
 
 import { AxiosError } from '@/node_modules/axios/index';
-import { Box, Container, Typography, Tabs, Tab } from '@mui/material';
+import { NextResponse } from '@/node_modules/next/server';
+import { Box, Container, Typography } from '@mui/material';
 import axios from 'axios';
-import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import RestBodyEditor from '@/src/components/RestBodyEditor/RestBodyEditor';
@@ -57,6 +59,8 @@ const RestClient = () => {
   const [headers, setHeaders] = useState([{ key: '', value: '' }]);
   const [body, setBody] = useState('');
   const [urlError, setUrlError] = useState(false);
+  const [variables, setVariables] = useState([{ key: '', value: '' }]);
+  const t = useTranslations();
 
   const handleSendRequest = async () => {
     if (!url) {
@@ -67,7 +71,14 @@ const RestClient = () => {
 
     try {
       const urlBase64 = Buffer.from(url).toString('base64');
-      const bodyBase64 = body ? Buffer.from(body).toString('base64') : '';
+      let combinedBody = body ? JSON.parse(body) : {};
+      variables.forEach((variable) => {
+        combinedBody[variable.key] = variable.value;
+      });
+
+      const bodyBase64 = Buffer.from(JSON.stringify(combinedBody)).toString(
+        'base64',
+      );
 
       const queryParams = headers
         .filter((header) => header.key && header.value)
@@ -86,14 +97,31 @@ const RestClient = () => {
       }
 
       let respond;
-      if (method === 'GET') {
-        respond = await axios.get(restUrl);
-      }
-      if (method === 'POST') {
-        respond = await axios.post(restUrl);
-      }
-      if (method === 'PUT') {
-        respond = await axios.put(restUrl);
+      switch (method) {
+        case 'GET':
+          respond = await axios.get(restUrl);
+          break;
+        case 'POST':
+          respond = await axios.post(restUrl);
+          break;
+        case 'PUT':
+          respond = await axios.put(restUrl);
+          break;
+        case 'PATCH':
+          respond = await axios.patch(restUrl);
+          break;
+        case 'DELETE':
+          respond = await axios.delete(restUrl);
+          break;
+        case 'HEAD':
+          respond = await axios.head(restUrl);
+          setResponse({ status: respond?.status, data: null });
+          return NextResponse.json({ status: respond?.status, data: null });
+        case 'OPTIONS':
+          respond = await axios.options(restUrl);
+          break;
+        default:
+          throw new Error('Invalid HTTP method');
       }
 
       setFullUrl(restUrl);
@@ -124,16 +152,15 @@ const RestClient = () => {
   return (
     <Container
       sx={{
-        height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        gap: 0,
       }}
       disableGutters
     >
       <Box sx={{ marginTop: 1, marginBottom: 1 }}>
         <Typography variant="h4" component="h1">
-          REST Client
+          REST {t('basic.client')}
         </Typography>
       </Box>
       <RestUrl
@@ -152,10 +179,12 @@ const RestClient = () => {
             <RestHeaderEditor headers={headers} setHeaders={setHeaders} />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            <RestBodyEditor body={body} setBody={setBody} />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
-            Variables Editor
+            <RestBodyEditor
+              variables={variables}
+              setVariables={setVariables}
+              body={body}
+              setBody={setBody}
+            />
           </CustomTabPanel>
         </Box>
       </Box>
