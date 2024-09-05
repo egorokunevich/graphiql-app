@@ -20,6 +20,7 @@ const GraphiQLClient = () => {
   const [headers, setHeaders] = useState<{ key: string; value: string }[]>([]);
   const [body, setBody] = useState<string>('');
   const [variables, setVariables] = useState([{ key: '', value: '' }]);
+  const [updateUrl, setUpdateUrl] = useState('');
 
   const handleSendRequest = async () => {
     if (!endpoint) {
@@ -91,11 +92,17 @@ const GraphiQLClient = () => {
         setSdlUrl={setSdlUrl}
         endpoint={endpoint}
         setEndpoint={setEndpoint}
+        urlError={urlError}
       />
       <RestTabs value={tab} setValue={setTab} />
       <Box>
         <CustomTabPanel value={tab} index={0}>
-          <HeadersEditor headers={headers} setHeaders={setHeaders} />
+          <HeadersEditor
+            headers={headers}
+            setHeaders={setHeaders}
+            updateUrl={updateUrl}
+            setUpdateUrl={setUpdateUrl}
+          />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={1}>
           <RequestEditor body={body} setBody={setBody} />

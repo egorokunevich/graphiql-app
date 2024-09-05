@@ -36,6 +36,23 @@ export interface RestHeaderEditorProps {
   >;
 }
 
+export interface HeadersEditorProps {
+  headers: {
+    key: string;
+    value: string;
+  }[];
+  setHeaders: Dispatch<
+    SetStateAction<
+      {
+        key: string;
+        value: string;
+      }[]
+    >
+  >;
+  updateUrl: string;
+  setUpdateUrl: Dispatch<SetStateAction<string>>;
+}
+
 export interface RestTabsProps {
   value: number;
   setValue: Dispatch<SetStateAction<number>>;
