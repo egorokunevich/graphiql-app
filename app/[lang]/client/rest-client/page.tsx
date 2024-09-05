@@ -94,14 +94,10 @@ const RestClient = () => {
         display: 'flex',
         flexDirection: 'column',
         gap: 0,
+        paddingTop: 2,
       }}
       disableGutters
     >
-      <Box sx={{ marginTop: 1, marginBottom: 1 }}>
-        <Typography variant="h4" component="h1">
-          REST {t('basic.client')}
-        </Typography>
-      </Box>
       <RestUrl
         method={method}
         setMethod={setMethod}

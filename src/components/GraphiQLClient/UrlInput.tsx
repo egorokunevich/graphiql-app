@@ -21,11 +21,10 @@ export default function UrlInput({
     const newUrl = e.target.value;
     const url = new URL(window.location.href);
 
-    const encodedUrl = Buffer.from(newUrl).toString('base64');
-
     setEndpoint(newUrl);
     setSdlUrl(`${newUrl}?sdl`);
 
+    const encodedUrl = Buffer.from(newUrl).toString('base64');
     url.searchParams.set('encodedUrl', encodedUrl);
     window.history.pushState({}, '', url.toString());
     if (!newUrl) {

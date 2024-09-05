@@ -1,29 +1,18 @@
 import MonacoEditor from '@monaco-editor/react';
 import { Box } from '@mui/material';
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-} from 'react';
+import React from 'react';
 
 interface RequestEditorProps {
-    body: string;
-    setBody: (newUrl: string) => void;
+  body: string;
+  setBody: (newUrl: string) => void;
 }
 
-export default function RequestEditor({
-  body,
-  setBody,
-}: RequestEditorProps) {
-
-
+export default function RequestEditor({ body, setBody }: RequestEditorProps) {
   const handleChange = (value: string | undefined) => {
     if (value !== undefined) {
       setBody(value);
     }
   };
-
-
 
   return (
     <Box sx={{ padding: 1, backgroundColor: '#F0F7F4', borderRadius: 1 }}>

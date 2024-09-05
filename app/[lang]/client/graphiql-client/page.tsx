@@ -1,14 +1,15 @@
 'use client';
-import { Box, Button, Typography, Container } from '@mui/material';
+import { Box, Button, Tabs, Tab, Container } from '@mui/material';
 import axios from 'axios';
 import React, { useState } from 'react';
 
 import CustomTabPanel from '@/src/components/CustomTabPanel/CustomPanel';
 import HeadersEditor from '@/src/components/GraphiQLClient/HeadersEditor';
 import RequestEditor from '@/src/components/GraphiQLClient/RequestEditor';
+import SdlViewer from '@/src/components/GraphiQLClient/SdlViewer';
 import UrlInput from '@/src/components/GraphiQLClient/UrlInput';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
-import { RestTabs } from '@/src/components/RestClient/RestTabs';
+import { a11yProps, RestTabs } from '@/src/components/RestClient/RestTabs';
 import { ResponseType } from '@/src/types/index';
 
 const GraphiQLClient = () => {
@@ -21,6 +22,10 @@ const GraphiQLClient = () => {
   const [body, setBody] = useState<string>('');
   const [variables, setVariables] = useState([{ key: '', value: '' }]);
   const [updateUrl, setUpdateUrl] = useState('');
+  const [tabGraphiql, setTabGraphiql] = useState(true);
+  const [tabs, setTabs] = useState(0);
+  const [sdlResponse, setSdlResponse] = useState<string | null>(null);
+  const [isSdlFetched, setIsSdlFetched] = useState(false);
 
   const handleSendRequest = async () => {
     if (!endpoint) {
@@ -47,6 +52,7 @@ const GraphiQLClient = () => {
 
       setResponse({ status: responseUrl.status, data: responseUrl.data });
       setUrlError(false);
+      fetchSDL();
     } catch (error: unknown) {
       console.log('unknown:', error);
 
@@ -69,8 +75,44 @@ const GraphiQLClient = () => {
       }
       setUrlError(false);
     }
+    setTabs(0);
   };
-  console.log('url', response);
+
+  const fetchSDL = async () => {
+    if (!sdlUrl) {
+      setIsSdlFetched(false);
+      setSdlResponse(null);
+      return;
+    }
+
+    try {
+      const sdlresponse = await axios.post(
+        sdlUrl,
+        {
+          query: body,
+        },
+        {
+          headers: {
+            ...headers.reduce(
+              (acc, { key, value }) => (key ? { ...acc, [key]: value } : acc),
+              {},
+            ),
+          },
+        },
+      );
+      setSdlResponse(sdlresponse.data);
+      setIsSdlFetched(true);
+    } catch (error) {
+      setSdlResponse(null);
+      setIsSdlFetched(false);
+    }
+  };
+
+  const handleValueTabs = (event: React.SyntheticEvent, newValue: number) => {
+    setTabs(newValue);
+  };
+  console.log(sdlResponse);
+  console.log(response);
 
   return (
     <Container
@@ -79,14 +121,10 @@ const GraphiQLClient = () => {
         flexDirection: 'column',
         height: '100%',
         flex: 1,
+        paddingTop: 2,
       }}
       disableGutters
     >
-      <Box sx={{ marginTop: 1, marginBottom: 1 }}>
-        <Typography variant="h4" component="h1">
-          GraphiQL Client
-        </Typography>
-      </Box>
       <UrlInput
         sdlUrl={sdlUrl}
         setSdlUrl={setSdlUrl}
@@ -94,7 +132,12 @@ const GraphiQLClient = () => {
         setEndpoint={setEndpoint}
         urlError={urlError}
       />
-      <RestTabs value={tab} setValue={setTab} />
+      <RestTabs
+        value={tab}
+        setValue={setTab}
+        tabGraphiql={tabGraphiql}
+        setTabGraphiql={setTabGraphiql}
+      />
       <Box>
         <CustomTabPanel value={tab} index={0}>
           <HeadersEditor
@@ -111,12 +154,36 @@ const GraphiQLClient = () => {
           Variables
         </CustomTabPanel>
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Button variant="contained" onClick={handleSendRequest}>
           Send Request
         </Button>
       </Box>
-      <ResponseViewer response={response} />
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: 'divider',
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginBottom: '-16px',
+        }}
+      >
+        <Tabs
+          value={tabs}
+          onChange={handleValueTabs}
+          aria-label="basic tabs example"
+          sx={{ padding: 0 }}
+        >
+          <Tab label={'Response'} {...a11yProps(0)} />
+          {isSdlFetched && <Tab label={'Docs'} {...a11yProps(1)} />}
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={tabs} index={0}>
+        <ResponseViewer response={response} />
+      </CustomTabPanel>
+      <CustomTabPanel value={tabs} index={1}>
+        <SdlViewer sdlResponse={sdlResponse} />
+      </CustomTabPanel>
     </Container>
   );
 };

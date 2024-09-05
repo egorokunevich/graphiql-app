@@ -56,6 +56,8 @@ export interface HeadersEditorProps {
 export interface RestTabsProps {
   value: number;
   setValue: Dispatch<SetStateAction<number>>;
+  tabGraphiql?: boolean;
+  setTabGraphiql?: Dispatch<SetStateAction<boolean>>;
 }
 
 export type Method =
