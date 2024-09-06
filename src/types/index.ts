@@ -75,7 +75,6 @@ export type SdlViewerProps = {
   sdlResponse: string | null;
 };
 
-
 export interface RestTabsProps {
   value: number;
   setValue: Dispatch<SetStateAction<number>>;
@@ -110,6 +109,7 @@ export interface RestVariablesEditorProps {
 
 export interface ResponseViewerProps {
   response: ResponseType<unknown> | null;
+  tabGraphiql?: boolean;
 }
 
 export type LanguageType = 'en' | 'ru';

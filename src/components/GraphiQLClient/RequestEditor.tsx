@@ -4,8 +4,6 @@ import React from 'react';
 
 import { RequestEditorProps } from '@/src/types/index';
 
-
-
 export default function RequestEditor({ body, setBody }: RequestEditorProps) {
   const handleChange = (value: string | undefined) => {
     if (value !== undefined) {

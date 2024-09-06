@@ -1,7 +1,7 @@
 'use client';
 
 import { AxiosError } from '@/node_modules/axios/index';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container} from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 

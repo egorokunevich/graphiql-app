@@ -31,6 +31,7 @@ export default function LanguageToggle() {
       ),
     );
   };
+
   return (
     <>
       <FormControl fullWidth sx={{ maxWidth: '200px' }}>

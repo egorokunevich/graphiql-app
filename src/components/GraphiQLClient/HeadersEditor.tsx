@@ -23,7 +23,6 @@ export default function HeadersEditor({
       i === index ? { ...header, [field]: value } : header,
     );
     setHeaders(updatedHeaders);
-
     handleUpdateUrl(updatedHeaders);
   };
 
@@ -32,14 +31,12 @@ export default function HeadersEditor({
     setHeaders(newHeaders);
 
     const url = new URL(window.location.href);
-
     const headerToDelete = headers[index];
     if (headerToDelete && headerToDelete.key) {
       url.searchParams.delete(encodeURIComponent(headerToDelete.key));
     }
 
     window.history.pushState({}, '', url.toString());
-
     setUpdateUrl(url.toString());
   };
 
@@ -47,7 +44,6 @@ export default function HeadersEditor({
     updatedHeaders: { key: string; value: string }[],
   ) => {
     const url = new URL(window.location.href);
-
     updatedHeaders.forEach((header) => {
       url.searchParams.delete(encodeURIComponent(header.key));
     });

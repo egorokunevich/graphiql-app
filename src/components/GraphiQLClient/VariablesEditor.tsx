@@ -4,8 +4,6 @@ import React from 'react';
 
 import { VariablesEditorProps } from '@/src/types/index';
 
-
-
 export default function VariablesEditor({
   variables,
   setVariables,

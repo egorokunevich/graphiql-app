@@ -4,8 +4,6 @@ import React from 'react';
 
 import { UrlInputProps } from '@/src/types/index';
 
-
-
 export default function UrlInput({
   sdlUrl,
   setSdlUrl,

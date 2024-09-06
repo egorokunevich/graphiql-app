@@ -12,7 +12,10 @@ import { ResponseViewerProps } from '@/src/types/index';
 SyntaxHighlighter.registerLanguage('json', json);
 SyntaxHighlighter.registerLanguage('html', xml);
 
-export const ResponseViewer = ({ response }: ResponseViewerProps) => {
+export const ResponseViewer = ({
+  response,
+  tabGraphiql,
+}: ResponseViewerProps) => {
   const t = useTranslations('client');
 
   const isJson = (data: string): boolean => {
@@ -43,9 +46,11 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
           width: '100%',
         }}
       >
-        <Typography variant="h6" fontWeight="400" color="#707070">
-          {t('response')}:
-        </Typography>
+        {!tabGraphiql && (
+          <Typography variant="h6" fontWeight="400" color="#707070">
+            {t('response')}:
+          </Typography>
+        )}
         <Box sx={{ display: 'flex' }}>
           <Typography variant="h6" fontWeight="400" color="#707070">
             {t('status')}:
@@ -57,7 +62,7 @@ export const ResponseViewer = ({ response }: ResponseViewerProps) => {
               color={response?.message ? 'error' : 'green'}
             >
               {response?.message
-                ? `${response.status} Request Failed`
+                ? `${response.status} ${response.message}`
                 : `${response?.status} OK`}
             </Typography>
           )}

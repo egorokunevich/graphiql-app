@@ -6,12 +6,13 @@ import React, { useEffect, useState } from 'react';
 import CustomTabPanel from '@/src/components/CustomTabPanel/CustomPanel';
 import HeadersEditor from '@/src/components/GraphiQLClient/HeadersEditor';
 import RequestEditor from '@/src/components/GraphiQLClient/RequestEditor';
-import SdlViewer from '@/src/components/GraphiQLClient/SdlViewer';
 import UrlInput from '@/src/components/GraphiQLClient/UrlInput';
 import VariablesEditor from '@/src/components/GraphiQLClient/VariablesEditor';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import { a11yProps, RestTabs } from '@/src/components/RestClient/RestTabs';
+import { isValidUrl } from '@/src/hooks/useCheckUrl';
 import { ResponseType } from '@/src/types/index';
+import { introspectionQuery } from '@/src/utils/sdlUtils';
 
 const GraphiQLClient = () => {
   const [tab, setTab] = useState(0);
@@ -45,7 +46,28 @@ const GraphiQLClient = () => {
     }
 
     try {
-      const parsedVariables = variables ? JSON.parse(variables) : {};
+      new URL(endpoint);
+    } catch (_) {
+      setResponse({
+        status: 400,
+        message: 'The provided endpoint URL is not valid.',
+      });
+      return;
+    }
+
+    let parsedVariables = {};
+    try {
+      parsedVariables = variables ? JSON.parse(variables) : {};
+    } catch (error) {
+      setResponse({
+        status: 400,
+        message: 'Invalid JSON format in variables.',
+      });
+      return;
+    }
+
+    try {
+      setTabs(0);
 
       const combinedBody = {
         query: body,
@@ -59,48 +81,63 @@ const GraphiQLClient = () => {
         ),
       });
 
-      setResponse({ status: responseUrl.status, data: responseUrl.data });
-      setUrlError(false);
-      fetchSDL();
-      console.log(headers, 'headers');
-      
-    } catch (error: unknown) {
-      console.log('unknown:', error);
-
-      if (axios.isAxiosError(error)) {
+      if (responseUrl && responseUrl.data) {
+        setResponse({ status: responseUrl.status, data: responseUrl.data });
+      } else {
         setResponse({
-          status: error.response?.status ?? 'CORS error',
-          message: error.response?.data?.message || error.message,
-          data: error.response?.data || 'No data returned',
+          status: responseUrl.status,
+          message: 'Empty response received.',
         });
-      } else if (error instanceof Error) {
-        console.log('instance:', error);
+      }
 
+      setUrlError(false);
+      await fetchSDL();
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (!error.response) {
+          setResponse({
+            status: 'Network Error',
+            message:
+              'There was a problem with the network request. Please check your connection or the endpoint URL.',
+          });
+        } else {
+          setResponse({
+            status: error.response.status,
+            message:
+              error.response.data?.message ||
+              'An error occurred on the server.',
+            data: error.response.data,
+          });
+        }
+      } else if (error instanceof Error) {
         setResponse({
+          status: 0,
           message: error.message,
         });
       } else {
         setResponse({
+          status: 0,
           message: 'An unexpected error occurred',
         });
       }
       setUrlError(false);
     }
-    setTabs(0);
   };
 
   const fetchSDL = async () => {
-    if (!sdlUrl) {
+    if (!sdlUrl || !isValidUrl(sdlUrl)) {
       setIsSdlFetched(false);
       setSdlResponse(null);
       return;
     }
 
     try {
+      setIsSdlFetched(true);
+      setTabs(1);
       const sdlresponse = await axios.post(
         sdlUrl,
         {
-          query: body,
+          query: introspectionQuery,
         },
         {
           headers: {
@@ -112,7 +149,6 @@ const GraphiQLClient = () => {
         },
       );
       setSdlResponse(sdlresponse.data);
-      setIsSdlFetched(true);
     } catch (error) {
       setSdlResponse(null);
       setIsSdlFetched(false);
@@ -122,8 +158,6 @@ const GraphiQLClient = () => {
   const handleValueTabs = (event: React.SyntheticEvent, newValue: number) => {
     setTabs(newValue);
   };
-  console.log(sdlResponse);
-  console.log(response);
 
   return (
     <Container
@@ -176,7 +210,6 @@ const GraphiQLClient = () => {
           borderColor: 'divider',
           display: 'flex',
           justifyContent: 'space-between',
-          marginBottom: '-16px',
         }}
       >
         <Tabs
@@ -189,12 +222,8 @@ const GraphiQLClient = () => {
           {isSdlFetched && <Tab label={'Docs'} {...a11yProps(1)} />}
         </Tabs>
       </Box>
-      <CustomTabPanel value={tabs} index={0}>
-        <ResponseViewer response={response} />
-      </CustomTabPanel>
-      <CustomTabPanel value={tabs} index={1}>
-        <SdlViewer sdlResponse={sdlResponse} />
-      </CustomTabPanel>
+
+      <ResponseViewer response={response} tabGraphiql={tabGraphiql} />
     </Container>
   );
 };
