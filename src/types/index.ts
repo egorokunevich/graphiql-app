@@ -53,6 +53,29 @@ export interface HeadersEditorProps {
   setUpdateUrl: Dispatch<SetStateAction<string>>;
 }
 
+export interface VariablesEditorProps {
+  variables: string;
+  setVariables: (value: string) => void;
+}
+
+export interface RequestEditorProps {
+  body: string;
+  setBody: (newUrl: string) => void;
+}
+
+export type UrlInputProps = {
+  endpoint: string;
+  setEndpoint: Dispatch<SetStateAction<string>>;
+  sdlUrl: string;
+  setSdlUrl: Dispatch<SetStateAction<string>>;
+  urlError: boolean;
+};
+
+export type SdlViewerProps = {
+  sdlResponse: string | null;
+};
+
+
 export interface RestTabsProps {
   value: number;
   setValue: Dispatch<SetStateAction<number>>;

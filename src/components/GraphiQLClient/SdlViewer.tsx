@@ -1,11 +1,11 @@
-import { Box,  Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import React from 'react';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-type SdlViewerProps = {
-  sdlResponse: string | null;
-};
+import { SdlViewerProps } from '@/src/types/index';
+
+
 
 export default function SdlViewer({ sdlResponse }: SdlViewerProps) {
   const response = JSON.stringify(sdlResponse, null, 6);

@@ -1,14 +1,10 @@
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { Box, TextField, IconButton, Tooltip } from '@mui/material';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
-type UrlInputProps = {
-  endpoint: string;
-  setEndpoint: Dispatch<SetStateAction<string>>;
-  sdlUrl: string;
-  setSdlUrl: Dispatch<SetStateAction<string>>;
-  urlError: boolean;
-};
+import { UrlInputProps } from '@/src/types/index';
+
+
 
 export default function UrlInput({
   sdlUrl,

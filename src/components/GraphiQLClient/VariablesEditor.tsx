@@ -2,27 +2,27 @@ import MonacoEditor from '@monaco-editor/react';
 import { Box } from '@mui/material';
 import React from 'react';
 
-import { RequestEditorProps } from '@/src/types/index';
+import { VariablesEditorProps } from '@/src/types/index';
 
 
 
-export default function RequestEditor({ body, setBody }: RequestEditorProps) {
-  const handleChange = (value: string | undefined) => {
+export default function VariablesEditor({
+  variables,
+  setVariables,
+}: VariablesEditorProps) {
+  const handleVariablesChange = (value: string | undefined) => {
     if (value !== undefined) {
-      setBody(value);
+      setVariables(value);
     }
   };
 
   return (
     <Box sx={{ padding: 1, backgroundColor: '#F0F7F4', borderRadius: 1 }}>
-      {/* <Button onClick={handlePrettify} variant="outlined" sx={{ marginTop: 2 }}>
-                Prettify Query
-            </Button> */}
       <MonacoEditor
         height="200px"
-        language={'graphql'}
-        value={body}
-        onChange={handleChange}
+        language="json"
+        value={variables}
+        onChange={handleVariablesChange}
         theme="vs-grey"
         options={{
           minimap: { enabled: false },

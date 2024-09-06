@@ -1,13 +1,14 @@
 'use client';
 import { Box, Button, Tabs, Tab, Container } from '@mui/material';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import CustomTabPanel from '@/src/components/CustomTabPanel/CustomPanel';
 import HeadersEditor from '@/src/components/GraphiQLClient/HeadersEditor';
 import RequestEditor from '@/src/components/GraphiQLClient/RequestEditor';
 import SdlViewer from '@/src/components/GraphiQLClient/SdlViewer';
 import UrlInput from '@/src/components/GraphiQLClient/UrlInput';
+import VariablesEditor from '@/src/components/GraphiQLClient/VariablesEditor';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import { a11yProps, RestTabs } from '@/src/components/RestClient/RestTabs';
 import { ResponseType } from '@/src/types/index';
@@ -20,12 +21,21 @@ const GraphiQLClient = () => {
   const [sdlUrl, setSdlUrl] = useState('');
   const [headers, setHeaders] = useState<{ key: string; value: string }[]>([]);
   const [body, setBody] = useState<string>('');
-  const [variables, setVariables] = useState([{ key: '', value: '' }]);
+  const [variables, setVariables] = useState('');
   const [updateUrl, setUpdateUrl] = useState('');
   const [tabGraphiql, setTabGraphiql] = useState(true);
   const [tabs, setTabs] = useState(0);
   const [sdlResponse, setSdlResponse] = useState<string | null>(null);
   const [isSdlFetched, setIsSdlFetched] = useState(false);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.search || url.hash) {
+      url.search = '';
+      url.hash = '';
+      window.history.replaceState({}, '', url.toString());
+    }
+  }, []);
 
   const handleSendRequest = async () => {
     if (!endpoint) {
@@ -35,12 +45,11 @@ const GraphiQLClient = () => {
     }
 
     try {
+      const parsedVariables = variables ? JSON.parse(variables) : {};
+
       const combinedBody = {
         query: body,
-        variables: variables.reduce(
-          (acc, { key, value }) => (key ? { ...acc, [key]: value } : acc),
-          {},
-        ),
+        variables: parsedVariables,
       };
 
       const responseUrl = await axios.post(endpoint, combinedBody, {
@@ -53,6 +62,8 @@ const GraphiQLClient = () => {
       setResponse({ status: responseUrl.status, data: responseUrl.data });
       setUrlError(false);
       fetchSDL();
+      console.log(headers, 'headers');
+      
     } catch (error: unknown) {
       console.log('unknown:', error);
 
@@ -151,7 +162,7 @@ const GraphiQLClient = () => {
           <RequestEditor body={body} setBody={setBody} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index={2}>
-          Variables
+          <VariablesEditor variables={variables} setVariables={setVariables} />
         </CustomTabPanel>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
