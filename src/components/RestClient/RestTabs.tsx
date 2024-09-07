@@ -4,15 +4,15 @@ import React from 'react';
 
 import { RestTabsProps } from '@/src/types/index';
 
-export const RestTabs = ({ value, setValue }: RestTabsProps) => {
-  const t = useTranslations('client');
+export function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
-  function a11yProps(index: number) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
+export const RestTabs = ({ value, setValue, tabGraphiql }: RestTabsProps) => {
+  const t = useTranslations('client');
 
   const handleValueChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -35,7 +35,12 @@ export const RestTabs = ({ value, setValue }: RestTabsProps) => {
         sx={{ padding: 0 }}
       >
         <Tab label={t('headers')} {...a11yProps(0)} />
-        <Tab label={t('body')} {...a11yProps(1)} />
+        {tabGraphiql ? (
+          <Tab label={'Query'} {...a11yProps(1)} />
+        ) : (
+          <Tab label={t('body')} {...a11yProps(1)} />
+        )}
+        {tabGraphiql && <Tab label={'Variables'} {...a11yProps(2)} />}
       </Tabs>
     </Box>
   );

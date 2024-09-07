@@ -8,9 +8,10 @@ export interface TabPanelProps {
 }
 
 export interface ResponseType<T = unknown> {
-  status?: number;
+  status?: number | string;
   data?: T;
   message?: string;
+  error?: string;
 }
 
 export interface RestBodyEditorProps {
@@ -35,9 +36,50 @@ export interface RestHeaderEditorProps {
   >;
 }
 
+export interface HeadersEditorProps {
+  headers: {
+    key: string;
+    value: string;
+  }[];
+  setHeaders: Dispatch<
+    SetStateAction<
+      {
+        key: string;
+        value: string;
+      }[]
+    >
+  >;
+  updateUrl: string;
+  setUpdateUrl: Dispatch<SetStateAction<string>>;
+}
+
+export interface VariablesEditorProps {
+  variables: string;
+  setVariables: (value: string) => void;
+}
+
+export interface RequestEditorProps {
+  body: string;
+  setBody: (newUrl: string) => void;
+}
+
+export type UrlInputProps = {
+  endpoint: string;
+  setEndpoint: Dispatch<SetStateAction<string>>;
+  sdlUrl: string;
+  setSdlUrl: Dispatch<SetStateAction<string>>;
+  urlError: boolean;
+};
+
+export type SdlViewerProps = {
+  sdlResponse: string | null;
+};
+
 export interface RestTabsProps {
   value: number;
   setValue: Dispatch<SetStateAction<number>>;
+  tabGraphiql?: boolean;
+  setTabGraphiql?: Dispatch<SetStateAction<boolean>>;
 }
 
 export type Method =
@@ -67,6 +109,7 @@ export interface RestVariablesEditorProps {
 
 export interface ResponseViewerProps {
   response: ResponseType<unknown> | null;
+  tabGraphiql?: boolean;
 }
 
 export type LanguageType = 'en' | 'ru';
