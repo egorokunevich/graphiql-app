@@ -1,4 +1,4 @@
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, type User } from 'firebase/auth';
 import { useEffect } from 'react';
 
 import { auth } from '@/src/utils/firebase';
