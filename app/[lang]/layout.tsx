@@ -1,15 +1,16 @@
-import { Box, Container } from '@mui/material';
+// import { Box, Container } from '@mui/material';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
-import { ErrorBoundary } from 'react-error-boundary';
+// import { ErrorBoundary } from 'react-error-boundary';
 
 import './globals.css';
 
-import ClientTabs from '@/src/components/ClientTabs/ClientTabs';
-import ErrorFallback from '@/src/components/ErrorFallback/ErrorFallback';
-import Footer from '@/src/components/Footer/Footer';
-import Header from '@/src/components/Header/Header';
+// import ClientTabs from '@/src/components/ClientTabs/ClientTabs';
+// import ErrorFallback from '@/src/components/ErrorFallback/ErrorFallback';
+// import Footer from '@/src/components/Footer/Footer';
+// import Header from '@/src/components/Header/Header';
+import LangLayout from '@src/components/LangLayout/LangLayout';
 
 export const metadata: Metadata = {
   title: 'Graphiql App',
@@ -29,7 +30,8 @@ export default async function RootLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <Container sx={{ maxWidth: '1440px' }}>
+          <LangLayout>{children}</LangLayout>
+          {/* <Container sx={{ maxWidth: '1440px' }} data-testid="root-layout">
             <Box
               sx={{
                 display: 'flex',
@@ -44,7 +46,7 @@ export default async function RootLayout({
                 <Footer />
               </ErrorBoundary>
             </Box>
-          </Container>
+          </Container> */}
         </NextIntlClientProvider>
       </body>
     </html>

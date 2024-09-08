@@ -1,13 +1,8 @@
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
-import { ErrorBoundary } from 'react-error-boundary';
+import { screen } from '@testing-library/react';
 
-import { mockDictionary } from './mocks/mockDictionary';
-
+import { render } from '@/src/tests/test-utils';
 import MainPage from '@app/[lang]/page';
-import ErrorFallback from '@src/components/ErrorFallback/ErrorFallback';
 
 jest.mock('next/navigation', () => ({
   useParams: jest.fn().mockReturnValue({
@@ -15,24 +10,13 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-const mockGetMessages = jest.fn().mockReturnValue(mockDictionary);
-
-jest.mock('next-intl/server', () => ({
-  getMessages: () => mockGetMessages(),
-}));
-
-describe('MainPage test', () => {
+describe('MainPage', () => {
   it('Should render in the document', async () => {
-    const messages = await getMessages();
-    const ui = await MainPage();
+    const page = await MainPage();
 
-    render(
-      <NextIntlClientProvider locale="en" messages={messages}>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>{ui}</ErrorBoundary>
-      </NextIntlClientProvider>,
-    );
+    render(page);
 
-    const page = await screen.findByTestId('main-page');
-    expect(page).toBeInTheDocument();
+    const mainPage = await screen.findByTestId('main-page');
+    expect(mainPage).toBeInTheDocument();
   });
 });
