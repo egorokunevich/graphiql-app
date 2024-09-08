@@ -40,7 +40,8 @@
   "login": {
     "login": "Вход",
     "emailPlaceholder": "Введите эл. почту",
-    "passwordPlaceholder": "Введите пароль"
+    "passwordPlaceholder": "Введите пароль",
+    "createAccount": "Создать аккаунт"
   },
   "errors": {
     "email": "Некорректный адрес электронной почты. Пожалуйста, введите верный адрес.",

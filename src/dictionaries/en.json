@@ -40,7 +40,8 @@
   "login": {
     "login": "Login",
     "emailPlaceholder": "Enter your email",
-    "passwordPlaceholder": "Enter your password"
+    "passwordPlaceholder": "Enter your password",
+    "createAccount": "Create Account"
   },
   "errors": {
     "email": "Invalid email address. Please enter a valid email.",
