@@ -34,10 +34,21 @@ const Welcome = () => {
   }
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4, mb: 5 }}>
-      <Typography variant="h4" align="center" gutterBottom>
+    <Container maxWidth="md" sx={{ mt: 2, mb: 4 }}>
+      <Typography
+        variant="h4"
+        align="center"
+        gutterBottom
+        sx={{
+          fontSize: '1.875rem',
+          fontWeight: 'bold',
+          padding: '2rem',
+          textAlign: 'center',
+        }}
+      >
         {t('basic.welcome')}
       </Typography>
+
       <Card variant="outlined" sx={{ mb: 2 }}>
         <CardContent>
           <Typography variant="h6" align="center" gutterBottom>

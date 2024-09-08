@@ -12,6 +12,7 @@ import RestBodyEditor from '@/src/components/RestBodyEditor/RestBodyEditor';
 import { RestHeaderEditor } from '@/src/components/RestHeaderEditor/RestHeaderEditor';
 import { RestTabs } from '@/src/components/RestTabs/RestTabs';
 import { RestUrl } from '@/src/components/RestUrl/RestUrl';
+import useAuthRedirect from '@/src/hooks/useAuthRedirect';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -61,6 +62,7 @@ const RestClient = () => {
   const [urlError, setUrlError] = useState(false);
   const [variables, setVariables] = useState([{ key: '', value: '' }]);
   const t = useTranslations();
+  const { loading } = useAuthRedirect();
 
   const handleSendRequest = async () => {
     if (!url) {
@@ -148,6 +150,10 @@ const RestClient = () => {
       }
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container

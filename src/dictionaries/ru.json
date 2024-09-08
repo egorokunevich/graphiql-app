@@ -2,12 +2,14 @@
   "basic": {
     "loading": "Загрузка",
     "welcome": "Добро пожаловать",
+    "welcomeBack": "С возвращением",
     "language": "Язык",
     "client": "Клиент",
     "history": "История",
     "signIn": "Войти",
     "signOut": "Выйти",
     "signUp": "Регистрация",
+    "mainPage": "Главная страница",
     "email": "Эл. почта",
     "password": "Пароль",
     "repo": "Репозиторий"
@@ -49,3 +51,4 @@
     "accountNotFound": "Ваш аккаунт не найден =("
   }
 }
+

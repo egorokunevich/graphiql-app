@@ -2,12 +2,14 @@
   "basic": {
     "loading": "Loading",
     "welcome": "Welcome",
+    "welcomeBack": "Welcome Back",
     "language": "Language",
     "client": "Client",
     "history": "History",
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "signUp": "Sign Up",
+    "mainPage": "Main Page",
     "email": "Email",
     "password": "Password",
     "repo": "Repo"
@@ -49,3 +51,4 @@
     "accountNotFound": "Your account is not found =("
   }
 }
+

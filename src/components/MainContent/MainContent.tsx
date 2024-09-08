@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { User } from 'firebase/auth';
 import { useTranslations } from 'next-intl';
 import React from 'react';
@@ -8,23 +8,64 @@ import { useState } from 'react';
 
 import './MainContent.css';
 
+const ButtonSignIn = React.lazy(() => import('../Buttons/ButtonSignIn'));
+const ButtonSignUp = React.lazy(() => import('../Buttons/ButtonSignUp'));
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
-
-const Welcome = React.lazy(() => import('../Welcome/Welcome'));
 
 const MainContent = () => {
   const [authUser, setAuthUser] = useState<User | null>(null);
   const t = useTranslations('basic');
+  let userName = '';
+  if (authUser?.email) {
+    userName = authUser.email.split('@')[0];
+  }
 
   useAuthEffect(setAuthUser);
 
   return (
     <main>
-      <Box sx={{ height: '100%' }}>
+      <Box sx={{ height: '100%', mt: 2, mb: 4 }}>
         {authUser ? (
-          <h1>{`${t('welcome')}, ${authUser.email}!`}</h1>
+          <Typography
+            variant="h4"
+            align="center"
+            gutterBottom
+            sx={{
+              fontSize: '1.875rem',
+              fontWeight: 'bold',
+              padding: '2rem',
+              textAlign: 'center',
+            }}
+          >
+            {`${t('welcomeBack')}, ${userName}!`}
+          </Typography>
         ) : (
-          <Welcome />
+          <>
+            <Typography
+              variant="h4"
+              align="center"
+              gutterBottom
+              sx={{
+                fontSize: '1.875rem',
+                fontWeight: 'bold',
+                padding: '2rem',
+                textAlign: 'center',
+              }}
+            >
+              {`${t('welcome')}!`}
+            </Typography>
+
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '1rem',
+              }}
+            >
+              <ButtonSignIn />
+              <ButtonSignUp />
+            </Box>
+          </>
         )}
       </Box>
     </main>
@@ -32,3 +73,4 @@ const MainContent = () => {
 };
 
 export default MainContent;
+

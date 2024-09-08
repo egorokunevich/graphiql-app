@@ -12,7 +12,7 @@ interface ErrorProps {
 function ErrorFallback({ error, resetErrorBoundary, httpError }: ErrorProps) {
   return (
     <Box className="flex flex-col items-center justify-center min-h-screen p-4">
-      <Card className="max-w-md w-full shadow-lg text-center">
+      <Card className="max-w-md w-full shadow-lg text-center p-4">
         <CardContent>
           <Typography variant="h5" component="div" className="text-center mb-4">
             {httpError ? 'HTTP Error' : 'Something went wrong'}
