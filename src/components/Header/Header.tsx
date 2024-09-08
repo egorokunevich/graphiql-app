@@ -40,7 +40,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header>
+    <header data-testid="header">
       <Box
         className={isSticky ? 'header sticky' : 'header'}
         sx={{
