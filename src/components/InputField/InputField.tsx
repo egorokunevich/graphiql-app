@@ -1,5 +1,7 @@
 import { TextField } from '@mui/material';
 
+import { InputFieldProps } from '@/src/types/index';
+
 const InputField = ({
   id,
   label,
@@ -9,16 +11,7 @@ const InputField = ({
   placeholder,
   required,
   error,
-}: {
-  id: string;
-  label: string;
-  type: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
-  required: boolean;
-  error: string | undefined;
-}) => {
+}: InputFieldProps) => {
   return (
     <div className="mb-4">
       <label htmlFor={id} className="block text-gray-600">

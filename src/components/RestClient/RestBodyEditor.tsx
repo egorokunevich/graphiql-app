@@ -10,22 +10,10 @@ import {
   Typography,
 } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { RestVariablesEditor } from '@src/components/RestVariablesEditor/RestVariablesEditor';
-
-interface RestBodyEditorProps {
-  body: string;
-  setBody: Dispatch<SetStateAction<string>>;
-  variables: { key: string; value: string }[];
-  setVariables: Dispatch<SetStateAction<{ key: string; value: string }[]>>;
-}
+import { RestVariablesEditor } from '@/src/components/RestClient/RestVariablesEditor';
+import { RestBodyEditorProps } from '@/src/types/index';
 
 const RestBodyEditor: React.FC<RestBodyEditorProps> = ({
   body,

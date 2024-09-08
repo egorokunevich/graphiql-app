@@ -1,11 +1,8 @@
 import { Add, Delete } from '@mui/icons-material';
 import { Box, Button, IconButton, TextField } from '@mui/material';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
-interface RestVariablesEditorProps {
-  variables: { key: string; value: string }[];
-  setVariables: Dispatch<SetStateAction<{ key: string; value: string }[]>>;
-}
+import { RestVariablesEditorProps } from '@/src/types/index';
 
 export const RestVariablesEditor = ({
   variables,
@@ -43,13 +40,15 @@ export const RestVariablesEditor = ({
           <TextField
             label="Key"
             value={variable.key}
-            onChange={(e) => handleVariableChange(index, 'key', e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleVariableChange(index, 'key', e.target.value)
+            }
             sx={{ marginRight: 1, width: '100%' }}
           />
           <TextField
             label="Value"
             value={variable.value}
-            onChange={(e) =>
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleVariableChange(index, 'value', e.target.value)
             }
             sx={{ marginRight: 1, width: '100%' }}

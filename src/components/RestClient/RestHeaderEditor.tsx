@@ -1,22 +1,9 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, TextField, Button, IconButton } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-interface RestHeaderEditorProps {
-  headers: {
-    key: string;
-    value: string;
-  }[];
-  setHeaders: Dispatch<
-    SetStateAction<
-      {
-        key: string;
-        value: string;
-      }[]
-    >
-  >;
-}
+import { RestHeaderEditorProps } from '@/src/types/index';
 
 export const RestHeaderEditor = ({
   headers,
@@ -109,7 +96,7 @@ export const RestHeaderEditor = ({
         ))}
       </Box>
       <Button onClick={handleAddHeader} variant="contained">
-        {t('addHeader')}
+        Add header
       </Button>
     </Box>
   );

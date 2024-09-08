@@ -1,21 +1,18 @@
 import { Box, Tabs, Tab } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
-interface RestTabsProps {
-  value: number;
-  setValue: Dispatch<SetStateAction<number>>;
+import { RestTabsProps } from '@/src/types/index';
+
+export function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
 }
 
-export const RestTabs = ({ value, setValue }: RestTabsProps) => {
+export const RestTabs = ({ value, setValue, tabGraphiql }: RestTabsProps) => {
   const t = useTranslations('client');
-
-  function a11yProps(index: number) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
 
   const handleValueChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -38,7 +35,12 @@ export const RestTabs = ({ value, setValue }: RestTabsProps) => {
         sx={{ padding: 0 }}
       >
         <Tab label={t('headers')} {...a11yProps(0)} />
-        <Tab label={t('body')} {...a11yProps(1)} />
+        {tabGraphiql ? (
+          <Tab label={'Query'} {...a11yProps(1)} />
+        ) : (
+          <Tab label={t('body')} {...a11yProps(1)} />
+        )}
+        {tabGraphiql && <Tab label={'Variables'} {...a11yProps(2)} />}
       </Tabs>
     </Box>
   );

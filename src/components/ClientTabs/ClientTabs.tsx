@@ -4,20 +4,28 @@ import { Box, Tabs, Tab } from '@mui/material';
 import { User } from 'firebase/auth';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
+import { LanguageType } from '@/src/types/index';
 
 type TabsType = '' | 'rest-client' | 'graphiql-client' | 'history';
 
 const ClientTabs = () => {
   const t = useTranslations('basic');
   const [authUser, setAuthUser] = useState<User | null>(null);
-  const [value, setValue] = useState<TabsType>('');
   const params = useParams<{ lang: LanguageType; client: TabsType }>();
   const router = useRouter();
   useAuthEffect(setAuthUser);
+
+  const initialTabValue: TabsType = params.client || '';
+  const [value, setValue] = useState<TabsType>(initialTabValue);
+
+  useEffect(() => {
+    if (params.client && params.client !== value) {
+      setValue(params.client);
+    }
+  }, [params.client]);
 
   const handleTabChange = (e: React.SyntheticEvent, newValue: TabsType) => {
     setValue(newValue);

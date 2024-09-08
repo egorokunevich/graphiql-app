@@ -1,55 +1,19 @@
 'use client';
 
 import { AxiosError } from '@/node_modules/axios/index';
-import { NextResponse } from '@/node_modules/next/server';
-import { Box, Container, Typography } from '@mui/material';
-import axios from 'axios';
+import { Box, Container } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
+import CustomTabPanel from '@/src/components/CustomTabPanel/CustomPanel';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
-import RestBodyEditor from '@/src/components/RestBodyEditor/RestBodyEditor';
-import { RestHeaderEditor } from '@/src/components/RestHeaderEditor/RestHeaderEditor';
-import { RestTabs } from '@/src/components/RestTabs/RestTabs';
-import { RestUrl } from '@/src/components/RestUrl/RestUrl';
+import RestBodyEditor from '@/src/components/RestClient/RestBodyEditor';
+import { RestHeaderEditor } from '@/src/components/RestClient/RestHeaderEditor';
+import { RestTabs } from '@/src/components/RestClient/RestTabs';
+import { RestUrl } from '@/src/components/RestClient/RestUrl';
 import useAuthRedirect from '@/src/hooks/useAuthRedirect';
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-export interface ResponseType<T = unknown> {
-  status?: number;
-  data?: T;
-  message?: string;
-}
-
-export type Method =
-  | 'GET'
-  | 'POST'
-  | 'PUT'
-  | 'DELETE'
-  | 'PATCH'
-  | 'HEAD'
-  | 'OPTIONS';
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ padding: '15px 0' }}>{children}</Box>}
-    </div>
-  );
-}
+import { sendHttpRequest } from '@/src/hooks/useHttpRequest';
+import { Method, ResponseType } from '@/src/types/index';
 
 const RestClient = () => {
   const [value, setValue] = useState(0);
@@ -68,11 +32,12 @@ const RestClient = () => {
     if (!url) {
       setUrlError(true);
       setResponse(null);
-      return;
+      return undefined;
     }
 
     try {
       const urlBase64 = Buffer.from(url).toString('base64');
+
       let combinedBody = body ? JSON.parse(body) : {};
       variables.forEach((variable) => {
         combinedBody[variable.key] = variable.value;
@@ -92,39 +57,13 @@ const RestClient = () => {
 
       let restUrl = `/api/rest-client?method=${method}&urlBase64=${urlBase64}`;
       if (['POST', 'PUT', 'PATCH'].includes(method) && bodyBase64) {
-        restUrl = `/api/rest-client?method=${method}&urlBase64=${urlBase64}&bodyBase64=${bodyBase64}`;
+        restUrl = `&bodyBase64=${bodyBase64}`;
       }
       if (queryParams) {
         restUrl += `&${queryParams}`;
       }
 
-      let respond;
-      switch (method) {
-        case 'GET':
-          respond = await axios.get(restUrl);
-          break;
-        case 'POST':
-          respond = await axios.post(restUrl);
-          break;
-        case 'PUT':
-          respond = await axios.put(restUrl);
-          break;
-        case 'PATCH':
-          respond = await axios.patch(restUrl);
-          break;
-        case 'DELETE':
-          respond = await axios.delete(restUrl);
-          break;
-        case 'HEAD':
-          respond = await axios.head(restUrl);
-          setResponse({ status: respond?.status, data: null });
-          return NextResponse.json({ status: respond?.status, data: null });
-        case 'OPTIONS':
-          respond = await axios.options(restUrl);
-          break;
-        default:
-          throw new Error('Invalid HTTP method');
-      }
+      let respond = await sendHttpRequest(method, restUrl);
 
       setFullUrl(restUrl);
       setResponse({ status: respond?.data.status, data: respond?.data.data });
@@ -161,14 +100,10 @@ const RestClient = () => {
         display: 'flex',
         flexDirection: 'column',
         gap: 0,
+        paddingTop: 2,
       }}
       disableGutters
     >
-      <Box sx={{ marginTop: 1, marginBottom: 1 }}>
-        <Typography variant="h4" component="h1">
-          REST {t('basic.client')}
-        </Typography>
-      </Box>
       <RestUrl
         method={method}
         setMethod={setMethod}
