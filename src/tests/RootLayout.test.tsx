@@ -4,10 +4,6 @@ import { screen } from '@testing-library/react';
 import LangLayout from '@src/components/LangLayout/LangLayout';
 import { render } from '@src/tests/test-utils';
 
-jest.mock('next-intl/server', () => ({
-  getLocale: jest.fn().mockReturnValue('en'),
-}));
-
 describe('RootLayout', () => {
   it('Should render in the document', async () => {
     const child = <div></div>;
