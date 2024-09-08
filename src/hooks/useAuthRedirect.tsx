@@ -4,9 +4,9 @@ import { User } from 'firebase/auth';
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { LanguageType } from '@/src/components/LanguageToggle/LanguageToggle';
 import { useLayoutContext } from '@/src/context/LayoutContext';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
+import { LanguageType } from '@/src/types/index';
 
 const useAuthRedirect = () => {
   const router = useRouter();
