@@ -15,6 +15,7 @@ SyntaxHighlighter.registerLanguage('html', xml);
 export const ResponseViewer = ({
   response,
   tabGraphiql,
+  loading,
 }: ResponseViewerProps) => {
   const t = useTranslations('client');
 
@@ -77,7 +78,11 @@ export const ResponseViewer = ({
           alignItems: 'center',
         }}
       >
-        {response ? (
+        {loading ? (
+          <Typography variant="subtitle1" sx={{ marginTop: 10 }}>
+            Loading...
+          </Typography>
+        ) : response ? (
           response.message ? (
             <Box
               sx={{

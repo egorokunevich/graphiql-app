@@ -1,7 +1,7 @@
 'use client';
 
 import { AxiosError } from '@/node_modules/axios/index';
-import { Box, Container} from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
@@ -20,10 +20,13 @@ const RestClient = () => {
   const [url, setUrl] = useState('');
   const [fullUrl, setFullUrl] = useState('');
   const [response, setResponse] = useState<ResponseType | null>(null);
-  const [headers, setHeaders] = useState([{ key: '', value: '' }]);
+  const [headers, setHeaders] = useState([
+    { key: 'Content-Type', value: 'application/json' },
+  ]);
   const [body, setBody] = useState('');
   const [urlError, setUrlError] = useState(false);
   const [variables, setVariables] = useState([{ key: '', value: '' }]);
+  const [loading, setLoading] = useState(false);
   const t = useTranslations();
 
   const handleSendRequest = async () => {
@@ -123,7 +126,7 @@ const RestClient = () => {
           </CustomTabPanel>
         </Box>
       </Box>
-      <ResponseViewer response={response} />
+      <ResponseViewer response={response} loading={loading} />
     </Container>
   );
 };

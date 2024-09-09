@@ -9,9 +9,7 @@ export default function VariablesEditor({
   setVariables,
 }: VariablesEditorProps) {
   const handleVariablesChange = (value: string | undefined) => {
-    if (value !== undefined) {
-      setVariables(value);
-    }
+    setVariables(value ?? '');
   };
 
   return (
