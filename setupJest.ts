@@ -1,5 +1,4 @@
 // This mocks will run before all tests
-
 export const mockPush = jest.fn();
 
 jest.mock('next/navigation', () => {
