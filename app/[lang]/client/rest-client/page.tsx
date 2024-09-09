@@ -1,7 +1,7 @@
 'use client';
 
 import { AxiosError } from '@/node_modules/axios/index';
-import { Box, Container} from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
@@ -11,6 +11,7 @@ import RestBodyEditor from '@/src/components/RestClient/RestBodyEditor';
 import { RestHeaderEditor } from '@/src/components/RestClient/RestHeaderEditor';
 import { RestTabs } from '@/src/components/RestClient/RestTabs';
 import { RestUrl } from '@/src/components/RestClient/RestUrl';
+import useAuthRedirect from '@/src/hooks/useAuthRedirect';
 import { sendHttpRequest } from '@/src/hooks/useHttpRequest';
 import { Method, ResponseType } from '@/src/types/index';
 
@@ -25,6 +26,7 @@ const RestClient = () => {
   const [urlError, setUrlError] = useState(false);
   const [variables, setVariables] = useState([{ key: '', value: '' }]);
   const t = useTranslations();
+  const { loading } = useAuthRedirect();
 
   const handleSendRequest = async () => {
     if (!url) {
@@ -87,6 +89,10 @@ const RestClient = () => {
       }
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container

@@ -2,12 +2,14 @@
   "basic": {
     "loading": "Loading",
     "welcome": "Welcome",
+    "welcomeBack": "Welcome Back",
     "language": "Language",
     "client": "Client",
     "history": "History",
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "signUp": "Sign Up",
+    "mainPage": "Main Page",
     "email": "Email",
     "password": "Password",
     "repo": "Repo"
@@ -38,7 +40,8 @@
   "login": {
     "login": "Login",
     "emailPlaceholder": "Enter your email",
-    "passwordPlaceholder": "Enter your password"
+    "passwordPlaceholder": "Enter your password",
+    "createAccount": "Create Account"
   },
   "errors": {
     "email": "Invalid email address. Please enter a valid email.",
@@ -49,3 +52,4 @@
     "accountNotFound": "Your account is not found =("
   }
 }
+

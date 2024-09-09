@@ -2,12 +2,14 @@
   "basic": {
     "loading": "Загрузка",
     "welcome": "Добро пожаловать",
+    "welcomeBack": "С возвращением",
     "language": "Язык",
     "client": "Клиент",
     "history": "История",
     "signIn": "Войти",
     "signOut": "Выйти",
     "signUp": "Регистрация",
+    "mainPage": "Главная страница",
     "email": "Эл. почта",
     "password": "Пароль",
     "repo": "Репозиторий"
@@ -38,7 +40,8 @@
   "login": {
     "login": "Вход",
     "emailPlaceholder": "Введите эл. почту",
-    "passwordPlaceholder": "Введите пароль"
+    "passwordPlaceholder": "Введите пароль",
+    "createAccount": "Создать аккаунт"
   },
   "errors": {
     "email": "Некорректный адрес электронной почты. Пожалуйста, введите верный адрес.",
@@ -49,3 +52,4 @@
     "accountNotFound": "Ваш аккаунт не найден =("
   }
 }
+
