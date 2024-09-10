@@ -20,6 +20,7 @@ function NotFound() {
             alignItems: 'center',
             padding: '24px',
           }}
+          data-testid="not-found"
         >
           <Box
             sx={{

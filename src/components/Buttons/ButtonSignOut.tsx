@@ -18,6 +18,7 @@ function ButtonSignOut() {
       <Button
         variant="outlined"
         style={{ fontWeight: 'bold' }}
+        data-testid="btn-signOut"
         onClick={userSignOut}
       >
         {t('signOut')}
