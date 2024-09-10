@@ -32,9 +32,7 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({
   };
 
   const handleChange = (value: string | undefined) => {
-    if (value !== undefined) {
-      setBody(value);
-    }
+    setBody(value ?? '');
   };
 
   const handleLanguageChange = (event: React.ChangeEvent<HTMLInputElement>) => {

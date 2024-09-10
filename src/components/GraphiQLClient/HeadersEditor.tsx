@@ -71,7 +71,7 @@ export default function HeadersEditor({
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', height: '120px' }}>
       {headers.map((header, index) => (
         <Box key={index} sx={{ display: 'flex', gap: 2, marginBottom: 1 }}>
           <TextField
