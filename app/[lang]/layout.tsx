@@ -4,6 +4,7 @@ import { getMessages } from 'next-intl/server';
 
 import './globals.css';
 
+// import { LayoutProvider } from '@/src/context/LayoutContext';
 import LangLayout from '@src/components/LangLayout/LangLayout';
 
 export const metadata: Metadata = {
@@ -24,7 +25,9 @@ export default async function RootLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
+          {/* <LayoutProvider> */}
           <LangLayout>{children}</LangLayout>
+          {/* </LayoutProvider> */}
         </NextIntlClientProvider>
       </body>
     </html>

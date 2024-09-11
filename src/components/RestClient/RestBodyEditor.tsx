@@ -15,12 +15,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { RestVariablesEditor } from '@/src/components/RestClient/RestVariablesEditor';
 import { RestBodyEditorProps } from '@/src/types/index';
 
-const RestBodyEditor: React.FC<RestBodyEditorProps> = ({
+const RestBodyEditor = ({
   body,
   setBody,
   variables,
   setVariables,
-}) => {
+}: RestBodyEditorProps) => {
   const t = useTranslations('client');
   const [language, setLanguage] = useState<string>('json');
   const previousBodyRef = useRef<string>(body);
