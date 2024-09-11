@@ -4,8 +4,8 @@ import { parse, print } from 'graphql';
 import * as monaco from 'monaco-editor';
 import React, { useEffect, useRef } from 'react';
 
-import useEditorBlur from '@/src/hooks/useEditorBlue';
 import { RequestEditorProps } from '@/src/types/index';
+import { encodeBase64 } from '@/src/utils/base64';
 
 export default function RequestEditor({ body, setBody }: RequestEditorProps) {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -29,7 +29,19 @@ export default function RequestEditor({ body, setBody }: RequestEditorProps) {
     setBody(value ?? '');
   };
 
-  const handleEditorBlur = useEditorBlur(bodyRef);
+  const handleEditorBlur = () => {
+    const currentBody = bodyRef.current;
+    const currentUrl = new URL(window.location.href);
+
+    if (currentBody && currentBody.trim() !== '') {
+      const encodedBody = encodeBase64(currentBody);
+      currentUrl.searchParams.set('body', encodedBody);
+    } else {
+      currentUrl.searchParams.delete('body');
+    }
+    window.history.replaceState({}, '', currentUrl.toString());
+  };
+
   const handlePrettify = () => {
     try {
       if (editorRef.current) {

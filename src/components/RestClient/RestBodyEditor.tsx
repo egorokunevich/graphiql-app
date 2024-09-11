@@ -16,8 +16,8 @@ import { useTranslations } from 'next-intl';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { RestVariablesEditor } from '@/src/components/RestClient/RestVariablesEditor';
-import useEditorBlur from '@/src/hooks/useEditorBlue';
 import { RestBodyEditorProps } from '@/src/types/index';
+import { encodeBase64 } from '@/src/utils/base64';
 
 const RestBodyEditor: React.FC<RestBodyEditorProps> = ({
   body,
@@ -72,7 +72,18 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({
     setLanguage(event.target.value);
   };
 
-  const handleEditorBlur = useEditorBlur(bodyRef);
+  const handleEditorBlur = () => {
+    const currentBody = bodyRef.current;
+    const currentUrl = new URL(window.location.href);
+
+    if (currentBody && currentBody.trim() !== '') {
+      const encodedBody = encodeBase64(currentBody);
+      currentUrl.searchParams.set('body', encodedBody);
+    } else {
+      currentUrl.searchParams.delete('body');
+    }
+    window.history.replaceState({}, '', currentUrl.toString());
+  };
 
   const handlePrettify = () => {
     try {
