@@ -20,3 +20,4 @@ describe('MainPage', () => {
     expect(mainPage).toBeInTheDocument();
   });
 });
+

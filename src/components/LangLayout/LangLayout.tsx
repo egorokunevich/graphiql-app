@@ -1,7 +1,7 @@
 import { Box, Container } from '@mui/material';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import ClientTabs from '@src/components/ClientTabs/ClientTabs';
+// import ClientTabs from '@src/components/ClientTabs/ClientTabs';
 import ErrorFallback from '@src/components/ErrorFallback/ErrorFallback';
 import Footer from '@src/components/Footer/Footer';
 import Header from '@src/components/Header/Header';
