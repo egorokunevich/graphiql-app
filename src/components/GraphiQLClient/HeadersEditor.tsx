@@ -1,5 +1,5 @@
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, TextField, Button, IconButton, Typography } from '@mui/material';
+import { Box, TextField, Button, IconButton } from '@mui/material';
 import React from 'react';
 
 import { HeadersEditorProps } from '@/src/types/index';
@@ -98,10 +98,6 @@ export default function HeadersEditor({
       <Button variant="outlined" onClick={handleAddHeader}>
         Add Header
       </Button>
-      <Typography variant="body2" color="textSecondary" sx={{ marginTop: 2 }}>
-        If you are making a CORS request, each added header should be supported
-        on the backend.
-      </Typography>
     </Box>
   );
 }
