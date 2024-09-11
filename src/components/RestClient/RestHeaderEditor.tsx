@@ -96,7 +96,7 @@ export const RestHeaderEditor = ({
         ))}
       </Box>
       <Button onClick={handleAddHeader} variant="contained">
-        {t('addHeader')}
+        Add header
       </Button>
     </Box>
   );

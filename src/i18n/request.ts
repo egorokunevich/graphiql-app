@@ -5,10 +5,7 @@ import { routing } from './routing';
 
 import { LanguageType } from '@src/types/index';
 
-
-
 export default getRequestConfig(async ({ locale }) => {
-
   if (!routing.locales.includes(locale as LanguageType)) notFound();
 
   return {
