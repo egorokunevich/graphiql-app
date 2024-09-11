@@ -8,7 +8,7 @@ interface ButtonMainPageProps {
 }
 
 function ButtonMainPage({ onClick }: ButtonMainPageProps) {
-  const t = useTranslations('basic');
+  const t = useTranslations();
 
   return (
     <>
@@ -17,10 +17,9 @@ function ButtonMainPage({ onClick }: ButtonMainPageProps) {
         variant="outlined"
         style={{ fontWeight: 'bold' }}
       >
-        {t('mainPage')}
+        {t('basic.mainPage')}
       </Button>
     </>
   );
 }
 export default ButtonMainPage;
-
