@@ -8,18 +8,12 @@ interface ButtonMainPageProps {
 }
 
 function ButtonMainPage({ onClick }: ButtonMainPageProps) {
-  const t = useTranslations();
+  const t = useTranslations('basic');
 
   return (
-    <>
-      <Button
-        onClick={onClick}
-        variant="outlined"
-        style={{ fontWeight: 'bold' }}
-      >
-        {t('basic.mainPage')}
-      </Button>
-    </>
+    <Button onClick={onClick} variant="outlined" style={{ fontWeight: 'bold' }}>
+      {t('mainPage')}
+    </Button>
   );
 }
 export default ButtonMainPage;

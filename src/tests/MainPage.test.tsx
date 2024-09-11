@@ -1,48 +1,38 @@
-// import '@testing-library/jest-dom';
-// import { screen } from '@testing-library/react';
-// // import { ReactElement } from 'react';
+import '@testing-library/jest-dom';
+import { screen } from '@testing-library/react';
 
-// import {
-//   mockSignOut,
-//   mockUserCredential,
-//   mockSignInWithEmailAndPassword,
-// } from './mocks/mockFirebase';
+import {
+  mockSignOut,
+  mockSignInWithEmailAndPassword,
+  mockOnAuthStateChangedSignedOut,
+  mockGetAuthWithNull,
+  mockCreateUserWithEmailAndPassword,
+} from './mocks/mockFirebase';
 
-// import { render } from '@/src/tests/test-utils';
-// import MainPage from '@app/[lang]/page';
-// // import { LayoutProvider } from '@src/context/LayoutContext';
+import { render } from '@/src/tests/test-utils';
+import MainPage from '@app/[lang]/page';
 
-// jest.mock('firebase/app', () => {
-//   return {
-//     initializeApp: jest.fn(),
-//   };
-// });
+jest.mock('firebase/app', () => {
+  return {
+    initializeApp: jest.fn(),
+  };
+});
 
-// jest.mock('firebase/auth', () => {
-//   return {
-//     getAuth: jest.fn().mockResolvedValue(null), // or .mockResolvedValue(mockAuth)
-//     signOut: mockSignOut,
-//     onAuthStateChanged: jest.fn((auth, callback) => {
-//       callback({ uid: 'mock-uid', email: 'mock@example.com' });
-//       return jest.fn();
-//     }),
-//     createUserWithEmailAndPassword: jest
-//       .fn()
-//       .mockResolvedValue(mockUserCredential),
-//     signInWithEmailAndPassword: mockSignInWithEmailAndPassword,
-//   };
-// });
+jest.mock('firebase/auth', () => {
+  return {
+    getAuth: mockGetAuthWithNull,
+    signOut: mockSignOut,
+    onAuthStateChanged: mockOnAuthStateChangedSignedOut,
+    createUserWithEmailAndPassword: mockCreateUserWithEmailAndPassword,
+    signInWithEmailAndPassword: mockSignInWithEmailAndPassword,
+  };
+});
 
-// describe('MainPage', () => {
-//   it('Should render in the document', async () => {
-//     const page = await MainPage();
+describe('MainPage', () => {
+  it('Should render in the document', async () => {
+    render(<MainPage />);
 
-//     render(page);
-
-//     const mainPage = await screen.findByTestId('main-page');
-//     expect(mainPage).toBeInTheDocument();
-//   });
-// });
-test('x', () => {
-  expect(2 + 2).toBe(4);
+    const mainPage = await screen.findByTestId('main-page');
+    expect(mainPage).toBeInTheDocument();
+  });
 });

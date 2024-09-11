@@ -1,42 +1,65 @@
-// import '@testing-library/jest-dom';
-// import { screen } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-// import { mockPush } from '@/setupJest';
-// import LangLayout from '@src/components/LangLayout/LangLayout';
-// import { render } from '@src/tests/test-utils';
+import {
+  mockSignOut,
+  mockSignInWithEmailAndPassword,
+  mockOnAuthStateChangedSignedOut,
+  mockGetAuthWithNull,
+  mockCreateUserWithEmailAndPassword,
+} from './mocks/mockFirebase';
 
-// describe('RootLayout', () => {
-//   it('Should render in the document', async () => {
-//     const child = <div></div>;
-//     const langLayout = await LangLayout({
-//       children: child,
-//     });
+import { mockPush } from '@/setupJest';
+import LangLayout from '@src/components/LangLayout/LangLayout';
+import { render } from '@src/tests/test-utils';
 
-//     render(langLayout);
+jest.clearAllMocks();
 
-//     const layout = await screen.findByTestId('lang-layout');
-//     expect(layout).toBeInTheDocument();
-//   });
+jest.mock('firebase/app', () => {
+  return {
+    initializeApp: jest.fn(),
+  };
+});
 
-//   it('Should call a navigation function', async () => {
-//     const user = userEvent.setup();
+jest.mock('firebase/auth', () => {
+  return {
+    getAuth: mockGetAuthWithNull,
+    signOut: mockSignOut,
+    onAuthStateChanged: mockOnAuthStateChangedSignedOut,
+    createUserWithEmailAndPassword: mockCreateUserWithEmailAndPassword,
+    signInWithEmailAndPassword: mockSignInWithEmailAndPassword,
+  };
+});
 
-//     const child = <div>Mock Element</div>;
-//     const langLayout = await LangLayout({
-//       children: child,
-//     });
+describe('RootLayout', () => {
+  it('Should render in the document', async () => {
+    const child = <div></div>;
+    const langLayout = await LangLayout({
+      children: child,
+    });
 
-//     render(langLayout);
+    render(langLayout);
 
-//     const signInBtn = await screen.findByTestId('btn-signIn');
-//     expect(signInBtn).toBeInTheDocument();
+    const layout = await screen.findByTestId('lang-layout');
+    expect(layout).toBeInTheDocument();
+  });
 
-//     await user.click(signInBtn);
+  it('Should call a navigation function', async () => {
+    const user = userEvent.setup();
 
-//     expect(mockPush).toHaveBeenCalledWith('/en/authorization');
-//   });
-// });
-test('x', () => {
-  expect(2 + 2).toBe(4);
+    const child = <div>Mock Element</div>;
+    const langLayout = await LangLayout({
+      children: child,
+    });
+
+    render(langLayout);
+
+    const signInBtn = await screen.findByTestId('btn-signIn');
+    expect(signInBtn).toBeInTheDocument();
+
+    await user.click(signInBtn);
+
+    expect(mockPush).toHaveBeenCalledWith('/en/authorization');
+  });
 });
