@@ -14,6 +14,22 @@ export interface ResponseType<T = unknown> {
   error?: string;
 }
 
+export interface HistoryEntry {
+  type: 'REST' | 'GraphQL';
+  method?: string;
+  url: string;
+  headers: Record<string, string>;
+  body: string;
+  sdlUrl?: string;
+  variables?: Record<string, string>;
+}
+
+export interface HistoryContextType {
+  history: HistoryEntry[];
+  addHistoryEntry: (entry: HistoryEntry) => void;
+  clearHistory: () => void;
+}
+
 export interface RestBodyEditorProps {
   body: string;
   setBody: Dispatch<SetStateAction<string>>;

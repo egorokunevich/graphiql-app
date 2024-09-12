@@ -54,8 +54,8 @@ export const SdlResponseViewer = ({ sdlResponse, loading }: SdlViewerProps) => {
             sx={{
               whiteSpace: 'pre-wrap',
               wordBreak: 'break-all',
-              maxHeight: '370px',
-              minHeight: '370px',
+              maxHeight: '400px',
+              minHeight: '400px',
               overflowY: 'auto',
               height: '100%',
               borderRadius: 1,

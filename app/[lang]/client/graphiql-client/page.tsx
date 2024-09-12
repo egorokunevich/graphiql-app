@@ -10,6 +10,7 @@ import UrlInput from '@/src/components/GraphiQLClient/UrlInput';
 import VariablesEditor from '@/src/components/GraphiQLClient/VariablesEditor';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import { a11yProps, RestTabs } from '@/src/components/RestClient/RestTabs';
+import { useHistoryContext } from '@/src/context/HistoryContext';
 import useAuthRedirect from '@/src/hooks/useAuthRedirect';
 import { useGraphiQLRequest } from '@/src/hooks/useGraphqlRequest';
 
@@ -25,7 +26,7 @@ const GraphiQLClient = () => {
   const [updateUrl, setUpdateUrl] = useState('');
   const [tabGraphiql, setTabGraphiql] = useState(true);
   const [tabs, setTabs] = useState(0);
-
+  const { addHistoryEntry } = useHistoryContext();
   const { loading } = useAuthRedirect();
 
   useEffect(() => {
@@ -46,6 +47,27 @@ const GraphiQLClient = () => {
     resLoading,
     urlError,
   } = useGraphiQLRequest(endpoint, body, variables, headers, sdlUrl);
+
+  let parsedVariables = {};
+  try {
+    parsedVariables = variables ? JSON.parse(variables) : {};
+  } catch (error) {
+    console.error('Invalid JSON format for variables:', error);
+  }
+
+  const onSendRequest = async () => {
+    await handleSendRequest();
+    addHistoryEntry({
+      type: 'GraphQL',
+      url: endpoint,
+      headers: headers.reduce(
+        (acc, { key, value }) => (key ? { ...acc, [key]: value } : acc),
+        {},
+      ),
+      body,
+      variables: parsedVariables,
+    });
+  };
 
   const handleValueTabs = (event: React.SyntheticEvent, newValue: number) => {
     setTabs(newValue);
@@ -96,7 +118,7 @@ const GraphiQLClient = () => {
         </CustomTabPanel>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="contained" onClick={handleSendRequest}>
+        <Button variant="contained" onClick={onSendRequest}>
           Send Request
         </Button>
       </Box>
