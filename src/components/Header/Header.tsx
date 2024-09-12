@@ -10,14 +10,17 @@ import React, { useEffect, useState } from 'react';
 const ButtonSignIn = React.lazy(() => import('../Buttons/ButtonSignIn'));
 const ButtonSignUp = React.lazy(() => import('../Buttons/ButtonSignUp'));
 const ButtonSignOut = React.lazy(() => import('../Buttons/ButtonSignOut'));
+const ButtonMainPage = React.lazy(() => import('../Buttons/ButtonMainPage'));
 
 import './Header.css';
 
 import LanguageToggle from '@/src/components/LanguageToggle/LanguageToggle';
+import { useLayoutContext } from '@/src/context/LayoutContext';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
 import { LanguageType } from '@/src/types/index';
 
 const Header = () => {
+  const { mainPage, setMainPage } = useLayoutContext();
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [isSticky, setIsSticky] = useState(false);
   const params = useParams<{ lang: LanguageType }>();
@@ -38,6 +41,10 @@ const Header = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const handleMainPageClick = () => {
+    setMainPage(true);
+  };
 
   return (
     <header>
@@ -60,7 +67,13 @@ const Header = () => {
         </Link>
         <LanguageToggle />
         {authUser ? (
-          <ButtonSignOut />
+          <>
+            {mainPage ? (
+              <ButtonSignOut />
+            ) : (
+              <ButtonMainPage onClick={handleMainPageClick} />
+            )}
+          </>
         ) : (
           <Box
             sx={{

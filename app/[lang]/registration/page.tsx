@@ -2,6 +2,7 @@
 import { Button } from '@mui/material';
 import { createUserWithEmailAndPassword, User } from 'firebase/auth';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import InputField from '@/src/components/InputField/InputField';
@@ -20,6 +21,7 @@ function SignUp() {
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [authUser, setAuthUser] = useState<User | null>(null);
+  const t = useTranslations();
 
   useAuthEffect(setAuthUser);
   useEffect(() => {
@@ -32,13 +34,26 @@ function SignUp() {
     setPasswordErrors([]);
 
     if (!validateEmail(email)) {
-      setEmailError('Invalid email address. Please enter a valid email.');
+      setEmailError(t('errors.email'));
     }
 
-    const passwordErrorsList = validatePassword(password);
+    const passwordErrorKeys = validatePassword(password);
+    const passwordErrorsList = passwordErrorKeys.map((key) => {
+      const errorKey = key as
+        | 'passwordLength'
+        | 'passwordDigit'
+        | 'passwordLetter'
+        | 'passwordSpecial'
+        | 'email';
+      return t(`errors.${errorKey}`);
+    });
     if (passwordErrorsList.length > 0) {
       setPasswordErrors(passwordErrorsList);
     }
+    // const passwordErrorsList = validatePassword(password);
+    // if (passwordErrorsList.length > 0) {
+    //   setPasswordErrors(passwordErrorsList);
+    // }
   }, [email, password]);
 
   async function register(event: { preventDefault: () => void }) {
@@ -62,26 +77,26 @@ function SignUp() {
 
   return (
     <div className="max-w-md mx-auto p-6 m-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-3xl font-semibold mb-4">Sign Up</h1>
+      <h1 className="text-3xl font-semibold mb-4">{t('basic.signUp')}</h1>
       <form onSubmit={register}>
         <InputField
           id="email"
-          label="Email"
+          label={t('basic.email')}
           type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
+          placeholder={t('login.emailPlaceholder')}
           required
           error={emailError}
         />
 
         <InputField
           id="password"
-          label="Password"
+          label={t('basic.password')}
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
+          placeholder={t('login.passwordPlaceholder')}
           required
           error={passwordErrors.length > 0 ? passwordErrors.join(' ') : ''}
         />
@@ -89,13 +104,13 @@ function SignUp() {
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
         {isLoading ? (
-          <p>Loading...</p>
+          <p>{t('basic.loading')}...</p>
         ) : (
           <Button
             type="submit"
             className="w-full m-auto bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
           >
-            Create Account
+            {t('login.createAccount')}
           </Button>
         )}
       </form>

@@ -10,7 +10,13 @@ import UrlInput from '@/src/components/GraphiQLClient/UrlInput';
 import VariablesEditor from '@/src/components/GraphiQLClient/VariablesEditor';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import { a11yProps, RestTabs } from '@/src/components/RestClient/RestTabs';
+
 import { useGraphiQLRequest } from '@/src/hooks/useGraphqlRequest';
+import useAuthRedirect from '@/src/hooks/useAuthRedirect';
+import { isValidUrl } from '@/src/hooks/useCheckUrl';
+import { ResponseType } from '@/src/types/index';
+import { introspectionQuery } from '@/src/utils/sdlUtils';
+
 
 const GraphiQLClient = () => {
   const [tab, setTab] = useState(0);
@@ -24,6 +30,11 @@ const GraphiQLClient = () => {
   const [updateUrl, setUpdateUrl] = useState('');
   const [tabGraphiql, setTabGraphiql] = useState(true);
   const [tabs, setTabs] = useState(0);
+
+  const [sdlResponse, setSdlResponse] = useState<string | null>(null);
+  const [isSdlFetched, setIsSdlFetched] = useState(false);
+  const { loading } = useAuthRedirect();
+
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -47,6 +58,10 @@ const GraphiQLClient = () => {
   const handleValueTabs = (event: React.SyntheticEvent, newValue: number) => {
     setTabs(newValue);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container
