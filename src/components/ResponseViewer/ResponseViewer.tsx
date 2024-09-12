@@ -60,6 +60,7 @@ export const ResponseViewer = ({
               variant="h6"
               fontWeight="400"
               color={response?.message ? 'error' : 'green'}
+              data-testid="graphiql-response"
             >
               {response?.message
                 ? `${response.status} ${response.message}`

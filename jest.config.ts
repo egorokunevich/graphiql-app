@@ -14,10 +14,20 @@ const config: Config = {
     '^@src/(.*)$': '<rootDir>/src/$1',
     '^@app/(.*)$': '<rootDir>/app/$1',
   },
-  collectCoverageFrom: ['**/*.{ts,tsx}'],
+  collectCoverageFrom: ['**/*.{ts,tsx}', '!**/node_modules/**', '!**/.next/**'],
   setupFilesAfterEnv: ['<rootDir>/setupJest.ts'],
   clearMocks: true,
+  transformIgnorePatterns: ['node_modules/(?!react-syntax-highlighter)'],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-export default createJestConfig(config);
+// export default createJestConfig(config);
+
+async function transformedJestConfig() {
+  const nextJestConfig = await createJestConfig(config)();
+  nextJestConfig.transformIgnorePatterns![0] =
+    '/node_modules/(?!(react-syntax-highlighter))/';
+  return nextJestConfig;
+}
+
+export default transformedJestConfig;

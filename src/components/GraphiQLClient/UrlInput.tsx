@@ -48,6 +48,7 @@ export default function UrlInput({
           value={endpoint}
           onChange={handleUrlChange}
           error={urlError}
+          data-testid="graphiql-url"
         />
         {urlError && (
           <Tooltip

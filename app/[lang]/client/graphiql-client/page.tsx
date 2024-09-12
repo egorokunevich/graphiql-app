@@ -75,7 +75,6 @@ const GraphiQLClient = () => {
         query: body,
         variables: parsedVariables,
       };
-
       const responseUrl = await axios.post(endpoint, combinedBody, {
         headers: headers.reduce(
           (acc, { key, value }) => (key ? { ...acc, [key]: value } : acc),
@@ -175,6 +174,7 @@ const GraphiQLClient = () => {
         paddingTop: 2,
       }}
       disableGutters
+      data-testid="graphiql-client"
     >
       <UrlInput
         sdlUrl={sdlUrl}
@@ -206,7 +206,11 @@ const GraphiQLClient = () => {
         </CustomTabPanel>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="contained" onClick={handleSendRequest}>
+        <Button
+          variant="contained"
+          onClick={handleSendRequest}
+          data-testid="graphiql-send"
+        >
           Send Request
         </Button>
       </Box>
