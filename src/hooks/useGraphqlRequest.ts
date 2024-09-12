@@ -12,7 +12,7 @@ export const useGraphiQLRequest = (
   headers: { key: string; value: string }[],
   sdlUrl: string,
 ) => {
-  const [loading, setLoading] = useState(false);
+  const [resLoading, setResLoading] = useState(false);
   const [response, setResponse] = useState<ResponseType | null>(null);
   const [sdlResponse, setSdlResponse] = useState<ResponseType | null>(null);
   const [urlError, setUrlError] = useState(false);
@@ -24,7 +24,7 @@ export const useGraphiQLRequest = (
       setResponse(null);
       return;
     }
-    setLoading(true);
+    setResLoading(true);
 
     try {
       new URL(endpoint);
@@ -33,7 +33,7 @@ export const useGraphiQLRequest = (
         status: 400,
         message: 'The provided endpoint URL is not valid.',
       });
-      setLoading(false);
+      setResLoading(false);
       return;
     }
 
@@ -45,7 +45,7 @@ export const useGraphiQLRequest = (
         status: 400,
         message: 'Invalid JSON format in variables.',
       });
-      setLoading(false);
+      setResLoading(false);
       return;
     }
 
@@ -64,14 +64,14 @@ export const useGraphiQLRequest = (
 
       if (responseUrl && responseUrl.data) {
         setResponse({ status: responseUrl.status, data: responseUrl.data });
-        setLoading(false);
+        setResLoading(false);
         await fetchSDL();
       } else {
         setResponse({
           status: responseUrl.status,
           message: 'Empty response received.',
         });
-        setLoading(false);
+        setResLoading(false);
       }
       setUrlError(false);
     } catch (error: unknown) {
@@ -136,7 +136,7 @@ export const useGraphiQLRequest = (
         message: 'An unexpected error occurred',
       });
     }
-    setLoading(false);
+    setResLoading(false);
     setUrlError(false);
   };
 
@@ -145,7 +145,7 @@ export const useGraphiQLRequest = (
     response,
     sdlResponse,
     isSdlFetched,
-    loading,
+    resLoading,
     urlError,
   };
 };

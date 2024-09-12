@@ -10,13 +10,8 @@ import UrlInput from '@/src/components/GraphiQLClient/UrlInput';
 import VariablesEditor from '@/src/components/GraphiQLClient/VariablesEditor';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import { a11yProps, RestTabs } from '@/src/components/RestClient/RestTabs';
-
-import { useGraphiQLRequest } from '@/src/hooks/useGraphqlRequest';
 import useAuthRedirect from '@/src/hooks/useAuthRedirect';
-import { isValidUrl } from '@/src/hooks/useCheckUrl';
-import { ResponseType } from '@/src/types/index';
-import { introspectionQuery } from '@/src/utils/sdlUtils';
-
+import { useGraphiQLRequest } from '@/src/hooks/useGraphqlRequest';
 
 const GraphiQLClient = () => {
   const [tab, setTab] = useState(0);
@@ -31,10 +26,7 @@ const GraphiQLClient = () => {
   const [tabGraphiql, setTabGraphiql] = useState(true);
   const [tabs, setTabs] = useState(0);
 
-  const [sdlResponse, setSdlResponse] = useState<string | null>(null);
-  const [isSdlFetched, setIsSdlFetched] = useState(false);
   const { loading } = useAuthRedirect();
-
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -51,7 +43,7 @@ const GraphiQLClient = () => {
     response,
     sdlResponse,
     isSdlFetched,
-    loading,
+    resLoading,
     urlError,
   } = useGraphiQLRequest(endpoint, body, variables, headers, sdlUrl);
 
@@ -131,7 +123,7 @@ const GraphiQLClient = () => {
         <ResponseViewer
           response={response}
           tabGraphiql={tabGraphiql}
-          loading={loading}
+          resLoading={resLoading}
         />
       </CustomTabPanel>
       <CustomTabPanel value={tabs} index={1}>

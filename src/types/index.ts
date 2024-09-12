@@ -106,7 +106,7 @@ export interface RestVariablesEditorProps {
 export interface ResponseViewerProps {
   response: ResponseType<unknown> | null;
   tabGraphiql?: boolean;
-  loading: boolean;
+  resLoading: boolean;
 }
 
 export interface SdlViewerProps {

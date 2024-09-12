@@ -27,7 +27,7 @@ const RestClient = () => {
   const [body, setBody] = useState('');
   const [urlError, setUrlError] = useState(false);
   const [variables, setVariables] = useState([{ key: '', value: '' }]);
-  const [loading, setLoading] = useState(false);
+  const [resLoading, setResLoading] = useState(false);
   const t = useTranslations();
   const { loading } = useAuthRedirect();
 
@@ -132,7 +132,7 @@ const RestClient = () => {
           </CustomTabPanel>
         </Box>
       </Box>
-      <ResponseViewer response={response} loading={loading} />
+      <ResponseViewer response={response} resLoading={resLoading} />
     </Container>
   );
 };

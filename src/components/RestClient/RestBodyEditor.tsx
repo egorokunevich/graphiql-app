@@ -49,7 +49,7 @@ const RestBodyEditor: React.FC<RestBodyEditorProps> = ({
   const formatJSON = (json: string) => {
     try {
       const parsed = JSON.parse(json);
-      return JSON.stringify(parsed, null, 4); 
+      return JSON.stringify(parsed, null, 4);
     } catch (e) {
       console.error('JSON parsing error:', e);
       return json;
