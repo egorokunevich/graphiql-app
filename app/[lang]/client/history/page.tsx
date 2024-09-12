@@ -36,8 +36,8 @@ const HistoryPage = () => {
         {history.length === 0 ? (
           <Typography variant="h6">
             You haven't executed any requests. Try the
-            <Button primary >REST Client</Button> 
-            <Button primary>GraphiQL Client</Button>.
+            <Button color="primary" variant="contained" >REST Client</Button> 
+            <Button color="primary" variant="contained">GraphiQL Client</Button>.
           </Typography>
         ) : (
           history.map((entry, index) => (
