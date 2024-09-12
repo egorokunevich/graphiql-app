@@ -49,11 +49,7 @@ const GraphiQLClient = () => {
   } = useGraphiQLRequest(endpoint, body, variables, headers, sdlUrl);
 
   let parsedVariables = {};
-  try {
-    parsedVariables = variables ? JSON.parse(variables) : {};
-  } catch (error) {
-    console.error('Invalid JSON format for variables:', error);
-  }
+  parsedVariables = variables ? JSON.parse(variables) : {};
 
   const onSendRequest = async () => {
     await handleSendRequest();
@@ -66,6 +62,7 @@ const GraphiQLClient = () => {
       ),
       body,
       variables: parsedVariables,
+      sdlUrl,
     });
   };
 
