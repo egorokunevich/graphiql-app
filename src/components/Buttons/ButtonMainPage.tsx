@@ -23,4 +23,3 @@ function ButtonMainPage({ onClick }: ButtonMainPageProps) {
   );
 }
 export default ButtonMainPage;
-

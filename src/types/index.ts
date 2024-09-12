@@ -71,10 +71,6 @@ export type UrlInputProps = {
   urlError: boolean;
 };
 
-export type SdlViewerProps = {
-  sdlResponse: string | null;
-};
-
 export interface RestTabsProps {
   value: number;
   setValue: Dispatch<SetStateAction<number>>;
@@ -110,6 +106,12 @@ export interface RestVariablesEditorProps {
 export interface ResponseViewerProps {
   response: ResponseType<unknown> | null;
   tabGraphiql?: boolean;
+  resLoading: boolean;
+}
+
+export interface SdlViewerProps {
+  sdlResponse: ResponseType<unknown> | null;
+  loading: boolean;
 }
 
 export type LanguageType = 'en' | 'ru';

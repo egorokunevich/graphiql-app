@@ -30,4 +30,3 @@ function ErrorFallback({ error, resetErrorBoundary, httpError }: ErrorProps) {
 }
 
 export default ErrorFallback;
-

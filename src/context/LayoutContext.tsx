@@ -31,4 +31,3 @@ export const useLayoutContext = () => {
 };
 
 export default LayoutContext;
-

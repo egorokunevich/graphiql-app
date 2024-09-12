@@ -21,10 +21,13 @@ const RestClient = () => {
   const [url, setUrl] = useState('');
   const [fullUrl, setFullUrl] = useState('');
   const [response, setResponse] = useState<ResponseType | null>(null);
-  const [headers, setHeaders] = useState([{ key: '', value: '' }]);
+  const [headers, setHeaders] = useState([
+    { key: 'Content-Type', value: 'application/json' },
+  ]);
   const [body, setBody] = useState('');
   const [urlError, setUrlError] = useState(false);
   const [variables, setVariables] = useState([{ key: '', value: '' }]);
+  const [resLoading, setResLoading] = useState(false);
   const t = useTranslations();
   const { loading } = useAuthRedirect();
 
@@ -129,7 +132,7 @@ const RestClient = () => {
           </CustomTabPanel>
         </Box>
       </Box>
-      <ResponseViewer response={response} />
+      <ResponseViewer response={response} resLoading={resLoading} />
     </Container>
   );
 };
