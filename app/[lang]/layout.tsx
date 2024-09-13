@@ -10,6 +10,7 @@ import './globals.css';
 import ErrorFallback from '@/src/components/ErrorFallback/ErrorFallback';
 import Footer from '@/src/components/Footer/Footer';
 import Header from '@/src/components/Header/Header';
+import { HistoryProvider } from '@/src/context/HistoryContext';
 import { LayoutProvider } from '@/src/context/LayoutContext';
 
 export const metadata: Metadata = {
@@ -31,21 +32,33 @@ export default async function RootLayout({
       <body>
         <NextIntlClientProvider messages={messages}>
           <LayoutProvider>
-            <Container sx={{ maxWidth: '1440px' }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  minHeight: '100vh',
-                }}
-              >
-                <ErrorBoundary FallbackComponent={ErrorFallback}>
-                  <Header />
-                  <Box sx={{ flex: 1 }}>{children}</Box>
-                  <Footer />
-                </ErrorBoundary>
-              </Box>
-            </Container>
+            <HistoryProvider>
+              <Container sx={{ maxWidth: '1440px' }}>
+                <Box
+                  sx={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: '100vh',
+                  }}
+                >
+                  <ErrorBoundary FallbackComponent={ErrorFallback}>
+                    <Header />
+                    <Box
+                      sx={{
+                        flex: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                      }}
+                    >
+                      {children}
+                    </Box>
+                    <Footer />
+                  </ErrorBoundary>
+                </Box>
+              </Container>
+            </HistoryProvider>
           </LayoutProvider>
         </NextIntlClientProvider>
       </body>

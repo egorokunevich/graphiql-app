@@ -10,6 +10,7 @@ import UrlInput from '@/src/components/GraphiQLClient/UrlInput';
 import VariablesEditor from '@/src/components/GraphiQLClient/VariablesEditor';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import { a11yProps, RestTabs } from '@/src/components/RestClient/RestTabs';
+import { useHistoryContext } from '@/src/context/HistoryContext';
 import useAuthRedirect from '@/src/hooks/useAuthRedirect';
 import { useGraphiQLRequest } from '@/src/hooks/useGraphqlRequest';
 
@@ -25,18 +26,34 @@ const GraphiQLClient = () => {
   const [updateUrl, setUpdateUrl] = useState('');
   const [tabGraphiql, setTabGraphiql] = useState(true);
   const [tabs, setTabs] = useState(0);
-
+  const { addHistoryEntry, selectedRequest } = useHistoryContext();
   const { loading } = useAuthRedirect();
 
   useEffect(() => {
-    const url = new URL(window.location.href);
-    if (url.search || url.hash) {
-      url.search = '';
-      url.hash = '';
-      window.history.replaceState({}, '', url.toString());
+    if (selectedRequest && selectedRequest.type === 'graphiql-client') {
+      setEndpoint(selectedRequest.url || '');
+      setBody(selectedRequest.body || '');
+
+      const headersArray = selectedRequest.headers
+        ? Object.entries(selectedRequest.headers).map(([key, value]) => ({
+            key,
+            value,
+          }))
+        : [{ key: 'Content-Type', value: 'application/json' }];
+      setHeaders(headersArray);
+
+      const variablesObj = selectedRequest.variables?.reduce(
+        (acc, { key, value }) => {
+          acc[key] = value;
+          return acc;
+        },
+        {} as Record<string, string>,
+      );
+      setVariables(JSON.stringify(variablesObj || {}));
+
+      setSdlUrl(selectedRequest.sdlUrl || '');
     }
-    setTabGraphiql(true);
-  }, []);
+  }, [selectedRequest]);
 
   const {
     handleSendRequest,
@@ -46,6 +63,33 @@ const GraphiQLClient = () => {
     resLoading,
     urlError,
   } = useGraphiQLRequest(endpoint, body, variables, headers, sdlUrl);
+
+  let parsedVariables: { key: string; value: string }[] = [];
+  try {
+    const variablesObj = JSON.parse(variables);
+
+    parsedVariables = Object.entries(variablesObj).map(([key, value]) => ({
+      key,
+      value: String(value),
+    }));
+  } catch (error) {
+    console.error('Failed to parse variables', error);
+  }
+
+  const onSendRequest = async () => {
+    await handleSendRequest();
+    addHistoryEntry({
+      type: 'graphiql-client',
+      url: endpoint,
+      headers: headers.reduce(
+        (acc, { key, value }) => (key ? { ...acc, [key]: value } : acc),
+        {},
+      ),
+      body,
+      variables: parsedVariables,
+      sdlUrl,
+    });
+  };
 
   const handleValueTabs = (event: React.SyntheticEvent, newValue: number) => {
     setTabs(newValue);
@@ -96,7 +140,7 @@ const GraphiQLClient = () => {
         </CustomTabPanel>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="contained" onClick={handleSendRequest}>
+        <Button variant="contained" onClick={onSendRequest}>
           Send Request
         </Button>
       </Box>

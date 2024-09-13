@@ -14,6 +14,24 @@ export interface ResponseType<T = unknown> {
   error?: string;
 }
 
+export interface HistoryEntry {
+  type: 'rest-client' | 'graphiql-client';
+  method?: string;
+  url: string;
+  headers: Record<string, string>;
+  body: string;
+  sdlUrl?: string;
+  variables?: { key: string; value: string }[];
+}
+
+export type HistoryContextType = {
+  history: HistoryEntry[];
+  addHistoryEntry: (entry: HistoryEntry) => void;
+  clearHistory: () => void;
+  selectedRequest: HistoryEntry | null;
+  setSelectedRequest: React.Dispatch<React.SetStateAction<HistoryEntry | null>>;
+};
+
 export interface RestBodyEditorProps {
   body: string;
   setBody: Dispatch<SetStateAction<string>>;
