@@ -15,20 +15,22 @@ export interface ResponseType<T = unknown> {
 }
 
 export interface HistoryEntry {
-  type: 'REST' | 'GraphQL';
+  type: 'rest-client' | 'graphiql-client';
   method?: string;
   url: string;
   headers: Record<string, string>;
   body: string;
   sdlUrl?: string;
-  variables?: Record<string, string>;
+  variables?: { key: string; value: string }[];
 }
 
-export interface HistoryContextType {
+export type HistoryContextType = {
   history: HistoryEntry[];
   addHistoryEntry: (entry: HistoryEntry) => void;
   clearHistory: () => void;
-}
+  selectedRequest: HistoryEntry | null;
+  setSelectedRequest: React.Dispatch<React.SetStateAction<HistoryEntry | null>>;
+};
 
 export interface RestBodyEditorProps {
   body: string;

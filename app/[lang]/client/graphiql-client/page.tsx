@@ -26,18 +26,34 @@ const GraphiQLClient = () => {
   const [updateUrl, setUpdateUrl] = useState('');
   const [tabGraphiql, setTabGraphiql] = useState(true);
   const [tabs, setTabs] = useState(0);
-  const { addHistoryEntry } = useHistoryContext();
+  const { addHistoryEntry, selectedRequest } = useHistoryContext();
   const { loading } = useAuthRedirect();
 
   useEffect(() => {
-    const url = new URL(window.location.href);
-    if (url.search || url.hash) {
-      url.search = '';
-      url.hash = '';
-      window.history.replaceState({}, '', url.toString());
+    if (selectedRequest && selectedRequest.type === 'graphiql-client') {
+      setEndpoint(selectedRequest.url || '');
+      setBody(selectedRequest.body || '');
+
+      const headersArray = selectedRequest.headers
+        ? Object.entries(selectedRequest.headers).map(([key, value]) => ({
+            key,
+            value,
+          }))
+        : [{ key: 'Content-Type', value: 'application/json' }];
+      setHeaders(headersArray);
+
+      const variablesObj = selectedRequest.variables?.reduce(
+        (acc, { key, value }) => {
+          acc[key] = value;
+          return acc;
+        },
+        {} as Record<string, string>,
+      );
+      setVariables(JSON.stringify(variablesObj || {}));
+
+      setSdlUrl(selectedRequest.sdlUrl || '');
     }
-    setTabGraphiql(true);
-  }, []);
+  }, [selectedRequest]);
 
   const {
     handleSendRequest,
@@ -48,13 +64,22 @@ const GraphiQLClient = () => {
     urlError,
   } = useGraphiQLRequest(endpoint, body, variables, headers, sdlUrl);
 
-  let parsedVariables = {};
-  parsedVariables = variables ? JSON.parse(variables) : {};
+  let parsedVariables: { key: string; value: string }[] = [];
+  try {
+    const variablesObj = JSON.parse(variables);
+
+    parsedVariables = Object.entries(variablesObj).map(([key, value]) => ({
+      key,
+      value: String(value),
+    }));
+  } catch (error) {
+    console.error('Failed to parse variables', error);
+  }
 
   const onSendRequest = async () => {
     await handleSendRequest();
     addHistoryEntry({
-      type: 'GraphQL',
+      type: 'graphiql-client',
       url: endpoint,
       headers: headers.reduce(
         (acc, { key, value }) => (key ? { ...acc, [key]: value } : acc),

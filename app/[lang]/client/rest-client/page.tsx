@@ -3,7 +3,7 @@
 import { AxiosError } from '@/node_modules/axios/index';
 import { Box, Container } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import CustomTabPanel from '@/src/components/CustomTabPanel/CustomPanel';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
@@ -30,7 +30,25 @@ const RestClient = () => {
   const [resLoading, setResLoading] = useState(false);
   const t = useTranslations();
   const { loading } = useAuthRedirect();
-  const { addHistoryEntry } = useHistoryContext();
+  const { selectedRequest, addHistoryEntry } = useHistoryContext();
+
+  useEffect(() => {
+    if (selectedRequest) {
+      setMethod((selectedRequest.method as Method) || 'GET');
+      setUrl(selectedRequest.url || '');
+      setBody(selectedRequest.body || '');
+
+      const headersArray = selectedRequest.headers
+        ? Object.entries(selectedRequest.headers).map(([key, value]) => ({
+            key,
+            value,
+          }))
+        : [{ key: 'Content-Type', value: 'application/json' }];
+      setHeaders(headersArray);
+
+      setVariables(selectedRequest.variables || [{ key: '', value: '' }]);
+    }
+  }, [selectedRequest]);
 
   const handleSendRequest = async () => {
     if (!url) {
@@ -83,11 +101,12 @@ const RestClient = () => {
       );
 
       addHistoryEntry({
-        type: 'REST',
+        type: 'rest-client',
         method,
         url,
         headers: headersObject,
         body,
+        variables,
       });
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

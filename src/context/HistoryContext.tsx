@@ -1,5 +1,12 @@
 'use client';
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from 'react';
 
 import { HistoryContextType, HistoryEntry } from '@src/types/index';
 
@@ -14,19 +21,26 @@ export const useHistoryContext = () => {
 };
 
 export const HistoryProvider = ({ children }: { children: ReactNode }) => {
-  const [history, setHistory] = useState<HistoryEntry[]>(() => {
-    const storedHistory = JSON.parse(
-      localStorage.getItem('requestHistory') || '[]',
-    );
-    return storedHistory;
-  });
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [selectedRequest, setSelectedRequest] = useState<HistoryEntry | null>(
+    null,
+  );
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedHistory = JSON.parse(
+        localStorage.getItem('requestHistory') || '[]',
+      );
+      setHistory(storedHistory);
+    }
+  }, []);
 
   const addHistoryEntry = (entry: HistoryEntry) => {
-    setHistory((prevHistory) => {
-      const updatedHistory = [...prevHistory, entry];
+    const updatedHistory = [...history, entry];
+    setHistory(updatedHistory);
+    if (typeof window !== 'undefined') {
       localStorage.setItem('requestHistory', JSON.stringify(updatedHistory));
-      return updatedHistory;
-    });
+    }
   };
 
   const clearHistory = () => {
@@ -35,7 +49,15 @@ export const HistoryProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <HistoryContext.Provider value={{ history, addHistoryEntry, clearHistory }}>
+    <HistoryContext.Provider
+      value={{
+        history,
+        addHistoryEntry,
+        clearHistory,
+        selectedRequest,
+        setSelectedRequest,
+      }}
+    >
       {children}
     </HistoryContext.Provider>
   );

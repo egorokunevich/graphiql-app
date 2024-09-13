@@ -13,24 +13,14 @@ import {
 import { useRouter } from 'next/navigation';
 
 import useAuthRedirect from '@/src/hooks/useAuthRedirect';
-import { HistoryEntry, LanguageType } from '@/src/types/index';
+import { LanguageType } from '@/src/types/index';
 import { useHistoryContext } from '@src/context/HistoryContext';
-
 
 const HistoryPage = () => {
   const { loading } = useAuthRedirect();
-  const { history, clearHistory } = useHistoryContext();
+  const { history, clearHistory, setSelectedRequest } = useHistoryContext();
   const params = useParams<{ lang: LanguageType }>();
   const router = useRouter();
-  console.log(history);
-
-  const handleRestore = (entry: HistoryEntry) => {
-    if (entry.type === 'REST') {
-      router.push(`/rest-client?method=${entry.method}&url=${entry.url}`);
-    } else if (entry.type === 'GraphQL') {
-      router.push(`/graphql-client?url=${entry.url}&sdlUrl=${entry.sdlUrl}`);
-    }
-  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -48,7 +38,7 @@ const HistoryPage = () => {
         padding: '20px',
       }}
     >
-      <Typography variant="h4">History Page</Typography>
+      <Typography variant="h4">History</Typography>
       <List sx={{ height: '100%', width: '100%', flex: 1 }}>
         {history.length === 0 ? (
           <Box
@@ -93,7 +83,10 @@ const HistoryPage = () => {
               <ListItem
                 button
                 key={index}
-                onClick={() => handleRestore(entry)}
+                onClick={() => {
+                  setSelectedRequest(entry);
+                  router.push(`/${params.lang}/client/${entry.type}`);
+                }}
                 disableGutters
               >
                 <ListItemText
@@ -113,7 +106,7 @@ const HistoryPage = () => {
               </ListItem>
             ))}
             <Button
-              sx={{ float: 'right' }}
+              sx={{ float: 'right', marginTop: 2 }}
               variant="contained"
               onClick={clearHistory}
             >
