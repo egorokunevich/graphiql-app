@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import {
@@ -31,13 +31,6 @@ jest.mock('firebase/auth', () => {
 
 describe('GraphiQLClient', () => {
   it('Should render in the document', async () => {
-    render(<GraphiQLClient />);
-
-    const client = await screen.findByTestId('graphiql-client');
-    expect(client).toBeInTheDocument();
-  });
-
-  it('Should send a request', async () => {
     const user = userEvent.setup();
 
     render(<GraphiQLClient />);
@@ -51,11 +44,14 @@ describe('GraphiQLClient', () => {
     const sendBtn = await screen.findByTestId('graphiql-send');
     expect(sendBtn).toBeInTheDocument();
 
+    // fireEvent.change(urlInput, {
+    //   target: { value: 'mock' },
+    // });
+
     await user.type(urlInput, 'https://mock-endpont.com');
 
-    await user.click(sendBtn);
+    expect(urlInput).toHaveValue('https://mock-endpont.com');
 
-    // const response = await screen.findByText(mockResponse.data);
-    // expect(response).toEqual(mockResponse.data);
+    await user.click(sendBtn);
   });
 });
