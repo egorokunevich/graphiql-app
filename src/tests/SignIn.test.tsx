@@ -1,15 +1,19 @@
 import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+// import { NextIntlClientProvider } from 'next-intl';
 
 import {
+  mockCreateUserWithEmailAndPassword,
+  mockGetAuthWithNull,
+  mockOnAuthStateChangedSignedIn,
   mockSignInWithEmailAndPassword,
   mockSignOut,
-  mockUserCredential,
 } from './mocks/mockFirebase';
 
 import SignIn from '@/app/[lang]/authorization/page';
 import LangLayout from '@src/components/LangLayout/LangLayout';
+// import { LayoutProvider } from '@src/context/LayoutContext';
 import { render } from '@src/tests/test-utils';
 
 jest.mock('firebase/app', () => {
@@ -20,15 +24,10 @@ jest.mock('firebase/app', () => {
 
 jest.mock('firebase/auth', () => {
   return {
-    getAuth: jest.fn().mockResolvedValue(null), // or .mockResolvedValue(mockAuth)
+    getAuth: mockGetAuthWithNull,
     signOut: mockSignOut,
-    onAuthStateChanged: jest.fn((auth, callback) => {
-      callback({ uid: 'mock-uid', email: 'mock@example.com' });
-      return jest.fn();
-    }),
-    createUserWithEmailAndPassword: jest
-      .fn()
-      .mockResolvedValue(mockUserCredential),
+    onAuthStateChanged: mockOnAuthStateChangedSignedIn,
+    createUserWithEmailAndPassword: mockCreateUserWithEmailAndPassword,
     signInWithEmailAndPassword: mockSignInWithEmailAndPassword,
   };
 });
