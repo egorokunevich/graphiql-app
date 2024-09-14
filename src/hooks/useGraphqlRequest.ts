@@ -1,9 +1,19 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useState } from 'react';
 
 import { isValidUrl } from '@src/hooks/useCheckUrl';
 import { ResponseType } from '@src/types/index';
 import { introspectionQuery } from '@src/utils/sdlUtils';
+
+const isAxiosError = (error: unknown): error is AxiosError => {
+  return axios.isAxiosError(error);
+};
+
+interface ErrorResponse {
+  message?: string;
+  status?: number;
+  errors?: Record<string, string[]>;
+}
 
 export const useGraphiQLRequest = (
   endpoint: string,
@@ -110,8 +120,10 @@ export const useGraphiQLRequest = (
   };
 
   const handleRequestError = (error: unknown) => {
-    if (axios.isAxiosError(error)) {
-      if (!error.response) {
+    if (isAxiosError(error)) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+
+      if (!axiosError.response) {
         setResponse({
           status: 'Network Error',
           message:
@@ -119,16 +131,22 @@ export const useGraphiQLRequest = (
         });
       } else {
         setResponse({
-          status: error.response.status,
+          status: axiosError.response?.status || 500,
           message:
-            error.response.data?.message || 'An error occurred on the server.',
-          data: error.response.data,
+            axiosError.response?.data?.message ||
+            'An error occurred on the server.',
+          data: axiosError.response?.data || null,
         });
       }
-    } else if (error instanceof Error) {
+    } else if (
+      typeof error === 'object' &&
+      error !== null &&
+      'message' in error
+    ) {
+      const genericError = error as Error;
       setResponse({
         status: 0,
-        message: error.message,
+        message: genericError.message || 'An unexpected error occurred',
       });
     } else {
       setResponse({
@@ -136,6 +154,7 @@ export const useGraphiQLRequest = (
         message: 'An unexpected error occurred',
       });
     }
+
     setResLoading(false);
     setUrlError(false);
   };

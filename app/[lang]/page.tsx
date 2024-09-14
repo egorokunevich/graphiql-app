@@ -14,8 +14,8 @@ const MainPage: React.FC = () => {
     <Box sx={{ position: 'relative', height: '100%' }}>
       {mainPage ? (
         <>
-          <MainContent />
           <ClientTabs />
+          <MainContent />
         </>
       ) : (
         <Welcome />

@@ -1,5 +1,5 @@
 'use client';
-import { Box, Button, Tabs, Tab, Container } from '@mui/material';
+import { Box, Button, Tabs, Tab, Container, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import CustomTabPanel from '@/src/components/CustomTabPanel/CustomPanel';
@@ -26,7 +26,8 @@ const GraphiQLClient = () => {
   const [updateUrl, setUpdateUrl] = useState('');
   const [tabGraphiql, setTabGraphiql] = useState(true);
   const [tabs, setTabs] = useState(0);
-  const { addHistoryEntry, selectedRequest } = useHistoryContext();
+  const { addHistoryEntry, selectedRequest, setSelectedRequest } =
+    useHistoryContext();
   const { loading } = useAuthRedirect();
 
   useEffect(() => {
@@ -52,6 +53,7 @@ const GraphiQLClient = () => {
       setVariables(JSON.stringify(variablesObj || {}));
 
       setSdlUrl(selectedRequest.sdlUrl || '');
+      setSelectedRequest(null);
     }
   }, [selectedRequest]);
 
@@ -73,7 +75,7 @@ const GraphiQLClient = () => {
       value: String(value),
     }));
   } catch (error) {
-    console.error('Failed to parse variables', error);
+    parsedVariables = [];
   }
 
   const onSendRequest = async () => {
@@ -110,6 +112,9 @@ const GraphiQLClient = () => {
       }}
       disableGutters
     >
+      <Typography variant="h4" sx={{ marginBottom: 1 }}>
+        GraphQL Client
+      </Typography>
       <UrlInput
         sdlUrl={sdlUrl}
         setSdlUrl={setSdlUrl}

@@ -1,4 +1,3 @@
-import { NextResponse } from '@/node_modules/next/server';
 import { Dispatch, SetStateAction } from 'react';
 
 export interface TabPanelProps {
@@ -11,7 +10,7 @@ export interface ResponseType<T = unknown> {
   status?: number | string;
   data?: T;
   message?: string;
-  error?: string;
+  // error?: string;
 }
 
 export interface HistoryEntry {
@@ -107,9 +106,7 @@ export type Method =
 
 export interface RestUrlProps {
   urlError: boolean;
-  handleSendRequest: () => Promise<
-    NextResponse<{ status: number | undefined; data: null }> | undefined
-  >;
+  handleSendRequest: () => Promise<void>;
   url: string;
   setUrl: Dispatch<SetStateAction<string>>;
   method: Method;
@@ -121,14 +118,14 @@ export interface RestVariablesEditorProps {
   setVariables: Dispatch<SetStateAction<{ key: string; value: string }[]>>;
 }
 
-export interface ResponseViewerProps {
-  response: ResponseType<unknown> | null;
+export interface ResponseViewerProps<T> {
+  response: ResponseType<T> | null;
   tabGraphiql?: boolean;
   resLoading: boolean;
 }
 
-export interface SdlViewerProps {
-  sdlResponse: ResponseType<unknown> | null;
+export interface SdlViewerProps<T> {
+  sdlResponse: ResponseType<T> | null;
   loading: boolean;
 }
 
@@ -143,6 +140,15 @@ export interface InputFieldProps {
   placeholder: string;
   required: boolean;
   error: string | undefined;
+  onBlur?: () => void;
+}
+
+export interface RestRequestProps {
+  method: Method;
+  url: string;
+  body: string;
+  headers: { key: string; value: string }[];
+  variables: { key: string; value: string }[];
 }
 
 export interface ErrorProps {

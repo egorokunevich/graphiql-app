@@ -12,11 +12,11 @@ import { ResponseViewerProps } from '@/src/types/index';
 SyntaxHighlighter.registerLanguage('json', json);
 SyntaxHighlighter.registerLanguage('html', xml);
 
-export const ResponseViewer = ({
+export const ResponseViewer = <T,>({
   response,
   tabGraphiql,
   resLoading,
-}: ResponseViewerProps) => {
+}: ResponseViewerProps<T>) => {
   const t = useTranslations('client');
 
   const isJson = (data: string): boolean => {

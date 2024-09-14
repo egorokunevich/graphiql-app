@@ -94,11 +94,11 @@ const HistoryPage = () => {
                   primary={`${entry.type} Request - ${entry.method || 'POST'}/ ${entry.url}`}
                   secondary={
                     <>
-                      <span>{`Headers: ${JSON.stringify(entry.headers)}`}</span>
-                      <span>{`Body: ${entry.body ? JSON.stringify(entry.body) : 'No body'}`}</span>
-                      <span>{`Variables: ${entry.variables ? JSON.stringify(entry.variables) : 'No variables'}`}</span>
+                      <span className="block">{`Headers: ${JSON.stringify(entry.headers)}`}</span>
+                      <span className="block">{`Body: ${entry.body ? JSON.stringify(entry.body) : 'No body'}`}</span>
+                      <span className="block">{`Variables: ${entry.variables ? JSON.stringify(entry.variables) : 'No variables'}`}</span>
                       {entry.sdlUrl && (
-                        <span>{`SDL URL: ${entry.sdlUrl}`}</span>
+                        <span className="block">{`SDL URL: ${entry.sdlUrl}`}</span>
                       )}
                     </>
                   }

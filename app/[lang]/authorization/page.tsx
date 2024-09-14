@@ -1,5 +1,7 @@
 'use client';
+import Image from '@/node_modules/next/image';
 import { Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { signInWithEmailAndPassword, User } from 'firebase/auth';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -21,6 +23,8 @@ function SignIn() {
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [authUser, setAuthUser] = useState<User | null>(null);
+  const [touchedEmail, setTouchedEmail] = useState(false);
+  const [touchedPassword, setTouchedPassword] = useState(false);
   const t = useTranslations();
 
   useAuthEffect(setAuthUser);
@@ -33,24 +37,23 @@ function SignIn() {
     setEmailError('');
     setPasswordErrors([]);
 
-    if (!validateEmail(email)) {
-      setEmailError(t('errors.email'));
+    if (touchedEmail) {
+      setEmailError(validateEmail(email) ? '' : t('errors.email'));
     }
 
-    const passwordErrorKeys = validatePassword(password);
-    const passwordErrorsList = passwordErrorKeys.map((key) => {
-      const errorKey = key as
-        | 'passwordLength'
-        | 'passwordDigit'
-        | 'passwordLetter'
-        | 'passwordSpecial'
-        | 'email';
-      return t(`errors.${errorKey}`);
-    });
-    if (passwordErrorsList.length > 0) {
+    if (touchedPassword) {
+      const passwordErrorKeys = validatePassword(password);
+      const passwordErrorsList = passwordErrorKeys.map((key) => {
+        const errorKey = key as
+          | 'passwordLength'
+          | 'passwordDigit'
+          | 'passwordLetter'
+          | 'passwordSpecial';
+        return t(`errors.${errorKey}`);
+      });
       setPasswordErrors(passwordErrorsList);
     }
-  }, [email, password]);
+  }, [email, password, touchedEmail, touchedPassword]);
 
   function login(event: { preventDefault: () => void }) {
     event.preventDefault();
@@ -68,7 +71,7 @@ function SignIn() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-6 m-6 bg-white rounded-lg shadow-md">
+    <div className="mx-auto p-6 m-6 bg-white rounded-lg shadow-md w-[450px]">
       <h1 className="text-3xl font-semibold mb-4">{t('login.login')}</h1>
       <form>
         <InputField
@@ -76,10 +79,14 @@ function SignIn() {
           label={t('basic.email')}
           type="text"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (!touchedEmail) setTouchedEmail(true);
+          }}
+          onBlur={() => setTouchedEmail(true)}
           placeholder={t('login.emailPlaceholder')}
           required
-          error={emailError}
+          error={touchedEmail ? emailError : ''}
         />
 
         <InputField
@@ -87,10 +94,18 @@ function SignIn() {
           label={t('basic.password')}
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            if (!touchedPassword) setTouchedPassword(true);
+          }}
+          onBlur={() => setTouchedPassword(true)}
           placeholder={t('login.passwordPlaceholder')}
           required
-          error={passwordErrors.length > 0 ? passwordErrors.join(' ') : ''}
+          error={
+            touchedPassword && passwordErrors.length > 0
+              ? passwordErrors.join(' ')
+              : ''
+          }
         />
 
         {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -108,6 +123,21 @@ function SignIn() {
           </Button>
         )}
       </form>
+      <Box
+        sx={{
+          width: '100%',
+          height: 250,
+          position: 'relative',
+          margin: '30px 0',
+        }}
+      >
+        <Image
+          src="/static/signin.svg"
+          alt="sign in"
+          fill
+          style={{ objectFit: 'contain' }}
+        />
+      </Box>
     </div>
   );
 }

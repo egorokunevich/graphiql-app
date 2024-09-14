@@ -1,7 +1,6 @@
 'use client';
 
-import { AxiosError } from '@/node_modules/axios/index';
-import { Box, Container } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
@@ -13,27 +12,27 @@ import { RestTabs } from '@/src/components/RestClient/RestTabs';
 import { RestUrl } from '@/src/components/RestClient/RestUrl';
 import { useHistoryContext } from '@/src/context/HistoryContext';
 import useAuthRedirect from '@/src/hooks/useAuthRedirect';
-import { sendHttpRequest } from '@/src/hooks/useHttpRequest';
-import { Method, ResponseType } from '@/src/types/index';
+import { useRestRequest } from '@/src/hooks/useRestRequest';
+import { Method } from '@/src/types/index';
 
 const RestClient = () => {
   const [tabValue, setTabValue] = useState(0);
   const [method, setMethod] = useState<Method>('GET');
   const [url, setUrl] = useState('');
-  const [response, setResponse] = useState<ResponseType | null>(null);
   const [headers, setHeaders] = useState([
     { key: 'Content-Type', value: 'application/json' },
   ]);
   const [body, setBody] = useState('');
-  const [urlError, setUrlError] = useState(false);
   const [variables, setVariables] = useState([{ key: '', value: '' }]);
-  const [resLoading, setResLoading] = useState(false);
   const t = useTranslations();
   const { loading } = useAuthRedirect();
-  const { selectedRequest, addHistoryEntry } = useHistoryContext();
+  const { handleSendRequest, response, urlError, resLoading } =
+    useRestRequest();
+
+  const { selectedRequest, setSelectedRequest } = useHistoryContext();
 
   useEffect(() => {
-    if (selectedRequest) {
+    if (selectedRequest && selectedRequest.type === 'rest-client') {
       setMethod((selectedRequest.method as Method) || 'GET');
       setUrl(selectedRequest.url || '');
       setBody(selectedRequest.body || '');
@@ -47,90 +46,18 @@ const RestClient = () => {
       setHeaders(headersArray);
 
       setVariables(selectedRequest.variables || [{ key: '', value: '' }]);
+      setSelectedRequest(null);
     }
   }, [selectedRequest]);
 
-  const handleSendRequest = async () => {
-    if (!url) {
-      setUrlError(true);
-      setResponse(null);
-      setResLoading(false);
-      return undefined;
-    }
-
-    try {
-      const urlBase64 = Buffer.from(url).toString('base64');
-
-      let combinedBody = body ? JSON.parse(body) : {};
-      variables.forEach((variable) => {
-        combinedBody[variable.key] = variable.value;
-      });
-
-      const bodyBase64 = Buffer.from(JSON.stringify(combinedBody)).toString(
-        'base64',
-      );
-
-      const queryParams = headers
-        .filter((header) => header.key && header.value)
-        .map(
-          (header) =>
-            `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`,
-        )
-        .join('&');
-
-      let restUrl = `/api/rest-client?method=${method}&urlBase64=${urlBase64}`;
-      if (['POST', 'PUT', 'PATCH'].includes(method) && bodyBase64) {
-        restUrl = `&bodyBase64=${bodyBase64}`;
-      }
-      if (queryParams) {
-        restUrl += `&${queryParams}`;
-      }
-
-      let respond = await sendHttpRequest(method, restUrl);
-
-      setResponse({ status: respond?.data.status, data: respond?.data.data });
-      setUrlError(false);
-      setResLoading(false);
-
-      const headersObject = headers.reduce(
-        (acc, { key, value }) => {
-          acc[key] = value;
-          return acc;
-        },
-        {} as Record<string, string>,
-      );
-
-      addHistoryEntry({
-        type: 'rest-client',
-        method,
-        url,
-        headers: headersObject,
-        body,
-        variables,
-      });
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        setResponse({
-          status: error.response?.data?.status || error.response?.status,
-          data: error.response?.data?.data || '',
-          message: error.message,
-        });
-        setUrlError(false);
-        setResLoading(false);
-      } else if (error instanceof Error) {
-        setResponse({
-          message: error.message,
-        });
-        setUrlError(false);
-        setResLoading(false);
-      } else {
-        setResponse({
-          message: 'An unexpected error occurred',
-        });
-        setUrlError(false);
-        setResLoading(false);
-      }
-    }
+  const handleSend = async () => {
+    await handleSendRequest({
+      method,
+      url,
+      body,
+      headers,
+      variables,
+    });
   };
 
   if (loading) {
@@ -148,12 +75,15 @@ const RestClient = () => {
       }}
       disableGutters
     >
+      <Typography variant="h4" sx={{ marginBottom: 1 }}>
+        RESTfull Client
+      </Typography>
       <RestUrl
         method={method}
         setMethod={setMethod}
         setUrl={setUrl}
         url={url}
-        handleSendRequest={handleSendRequest}
+        handleSendRequest={handleSend}
         urlError={urlError}
       />
 
