@@ -1,3 +1,5 @@
+'use client';
+
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,6 +12,7 @@ const Footer = () => {
       className="bg-gradient-to-b from-slate-100 to-teal-100"
       component="footer"
       sx={{ p: 2, px: 4, textAlign: 'center' }}
+      data-testid="footer"
     >
       <Box
         width={'100%'}

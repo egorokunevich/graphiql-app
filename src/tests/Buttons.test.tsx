@@ -1,94 +1,99 @@
-import { render, fireEvent } from '@testing-library/react';
-import { signOut } from 'firebase/auth';
-import { useRouter } from 'next/navigation';
-import React from 'react';
+import '@testing-library/jest-dom';
+import { fireEvent, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-import { auth } from '@/src/utils/firebase';
+import {
+  mockGetAuthWithNull,
+  mockSignOut,
+  mockOnAuthStateChangedSignedIn,
+  mockCreateUserWithEmailAndPassword,
+  mockSignInWithEmailAndPassword,
+} from './mocks/mockFirebase';
 
-const ButtonSignIn = React.lazy(
-  () => import('../components/Buttons/ButtonSignIn'),
-);
-const ButtonSignUp = React.lazy(
-  () => import('../components/Buttons/ButtonSignUp'),
-);
-const ButtonSignOut = React.lazy(
-  () => import('../components/Buttons/ButtonSignOut'),
-);
-const ButtonMainPage = React.lazy(
-  () => import('../components/Buttons/ButtonMainPage'),
-);
-
-jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) =>
-    key === 'basic.mainPage' ? 'Main Page' : key,
-}));
+import { mockPush } from '@/setupJest';
+import ButtonMainPage from '@src/components/Buttons/ButtonMainPage';
+import ButtonSignIn from '@src/components/Buttons/ButtonSignIn';
+import ButtonSignOut from '@src/components/Buttons/ButtonSignOut';
+import ButtonSignUp from '@src/components/Buttons/ButtonSignUp';
+import { render } from '@src/tests/test-utils';
 
 describe('ButtonMainPage', () => {
-  it('renders the button with correct text', () => {
-    const { getByText } = render(<ButtonMainPage onClick={() => {}} />);
-    expect(getByText('Main Page')).toBeInTheDocument();
+  it('renders the button with correct text', async () => {
+    render(<ButtonMainPage onClick={() => {}} />);
+    expect(await screen.findByText('Main Page')).toBeInTheDocument();
   });
 
-  it('calls onClick when the button is clicked', () => {
+  it('calls onClick when the button is clicked', async () => {
     const handleClick = jest.fn();
-    const { getByText } = render(<ButtonMainPage onClick={handleClick} />);
-    fireEvent.click(getByText('Main Page'));
+    render(<ButtonMainPage onClick={handleClick} />);
+    fireEvent.click(await screen.findByText('Main Page'));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 });
 
-jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) =>
-    key === 'basic.signIn' ? 'Sign In' : key,
-}));
+jest.mock('firebase/app', () => {
+  return {
+    initializeApp: jest.fn(),
+  };
+});
 
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn().mockReturnValue({
-    push: jest.fn(),
-  }),
-  useParams: jest.fn(() => ({ lang: 'en' })),
-}));
+jest.mock('firebase/auth', () => {
+  return {
+    getAuth: mockGetAuthWithNull,
+    signOut: mockSignOut,
+    onAuthStateChanged: mockOnAuthStateChangedSignedIn,
+    createUserWithEmailAndPassword: mockCreateUserWithEmailAndPassword,
+    signInWithEmailAndPassword: mockSignInWithEmailAndPassword,
+  };
+});
 
 describe('ButtonSignIn', () => {
-  it('renders the button with correct text', () => {
-    const { getByText } = render(<ButtonSignIn />);
-    expect(getByText('Sign In')).toBeInTheDocument();
+  it('renders the button with correct text', async () => {
+    render(<ButtonSignIn />);
+    expect(await screen.findByText('Sign In')).toBeInTheDocument();
   });
 
-  it('calls router.push with correct URL when the button is clicked', () => {
-    const { push } = useRouter();
-    const { getByTestId } = render(<ButtonSignIn />);
-    fireEvent.click(getByTestId('btn-signIn'));
+  it('calls router.push with correct URL when the button is clicked', async () => {
+    render(<ButtonSignIn />);
 
-    expect(push).toHaveBeenCalledWith('/en/authorization');
+    fireEvent.click(await screen.findByTestId('btn-signIn'));
+
+    expect(mockPush).toHaveBeenCalledWith('/en/authorization');
   });
 });
 
 describe('ButtonSignUp', () => {
-  it('renders the button with correct text', () => {
-    const { getByText } = render(<ButtonSignUp />);
-    expect(getByText('Sign Up')).toBeInTheDocument();
+  it('renders the button with correct text', async () => {
+    render(<ButtonSignUp />);
+
+    expect(await screen.findByText('Sign Up')).toBeInTheDocument();
   });
 
-  it('calls router.push with correct URL when the button is clicked', () => {
-    const { push } = useRouter();
-    const { getByTestId } = render(<ButtonSignUp />);
-    fireEvent.click(getByTestId('btn-signUp'));
+  it('calls router.push with correct URL when the button is clicked', async () => {
+    const user = userEvent.setup();
 
-    expect(push).toHaveBeenCalledWith('/en/authorization');
+    render(<ButtonSignUp />);
+
+    const btnSignUp = await screen.findByTestId('btn-signUp');
+
+    await user.click(btnSignUp);
+
+    expect(mockPush).toHaveBeenCalledWith('/en/registration');
   });
 });
 
 describe('ButtonSignOut', () => {
-  it('renders the button with correct text', () => {
-    const { getByText } = render(<ButtonSignOut />);
-    expect(getByText('Sign Out')).toBeInTheDocument();
+  it('renders the button with correct text', async () => {
+    render(<ButtonSignOut />);
+
+    const signOutBtn = await screen.findByText('Sign Out');
+
+    expect(signOutBtn).toBeInTheDocument();
   });
 
   // it('calls signOut when the button is clicked', () => {
-  //   const { getByTestId } = render(<ButtonSignOut />);
-  //   fireEvent.click(getByTestId('btn-signOut'));
+  //   render(<ButtonSignOut />);
+  //   fireEvent.click(await screen.findByTestId('btn-signOut'));
   //   expect(signOut).toHaveBeenCalledWith(auth);
   // });
 });
-

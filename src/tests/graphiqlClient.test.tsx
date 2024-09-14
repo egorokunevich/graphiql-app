@@ -44,9 +44,9 @@ describe('GraphiQLClient', () => {
     const sendBtn = await screen.findByTestId('graphiql-send');
     expect(sendBtn).toBeInTheDocument();
 
-    await user.type(urlInput, 'https://mock-endpont.com');
+    await user.type(urlInput, 'mock-endpoint.com');
 
-    expect(urlInput).toHaveValue('https://mock-endpont.com');
+    expect(urlInput).toHaveValue('mock-endpoint.com');
 
     await user.click(sendBtn);
   });

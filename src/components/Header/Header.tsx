@@ -58,6 +58,7 @@ const Header = () => {
           justifyContent: 'space-between',
           width: '100%',
         }}
+        data-testid="sticky-box"
       >
         <Link href={`/${params.lang}`}>
           <Image
