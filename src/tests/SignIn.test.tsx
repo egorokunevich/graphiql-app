@@ -60,6 +60,9 @@ describe('SignIn', () => {
 
     await user.type(emailInput, 'email@email.com');
     await user.type(passwordInput, 'qweRTY123!');
+
+    expect(emailInput).toHaveValue('email@email.com');
+
     await user.click(loginBtn);
 
     expect(mockSignInWithEmailAndPassword).toHaveBeenCalled();
