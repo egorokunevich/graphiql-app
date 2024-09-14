@@ -16,7 +16,6 @@ export default function RequestEditor({ body, setBody }: RequestEditorProps) {
       const parsed = parse(query);
       return print(parsed);
     } catch (e) {
-      console.error('GraphQL parsing error:', e);
       return query;
     }
   };
@@ -50,7 +49,7 @@ export default function RequestEditor({ body, setBody }: RequestEditorProps) {
         editorRef.current.setValue(formattedCode);
       }
     } catch (error) {
-      console.error('Prettify error:', error);
+      return;
     }
   };
 

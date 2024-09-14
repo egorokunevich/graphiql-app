@@ -41,7 +41,6 @@ const RestBodyEditor = ({
       const parsed = parse(query);
       return print(parsed);
     } catch (e) {
-      console.error('GraphQL parsing error:', e);
       return query;
     }
   };
@@ -51,7 +50,6 @@ const RestBodyEditor = ({
       const parsed = JSON.parse(json);
       return JSON.stringify(parsed, null, 4);
     } catch (e) {
-      console.error('JSON parsing error:', e);
       return json;
     }
   };
@@ -108,14 +106,10 @@ const RestBodyEditor = ({
           typeof editorRef.current.setValue === 'function'
         ) {
           editorRef.current.setValue(formattedCode);
-        } else {
-          console.error(
-            'Editor not properly initialized or setValue is not a function',
-          );
         }
       }
     } catch (error) {
-      console.error('Prettify error:', error);
+      return;
     }
   };
 

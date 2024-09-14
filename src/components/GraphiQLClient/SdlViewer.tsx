@@ -1,5 +1,4 @@
 import { Box, Typography, Paper } from '@mui/material';
-import { useTranslations } from 'next-intl';
 import React from 'react';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json';
@@ -11,9 +10,10 @@ import { SdlViewerProps } from '@/src/types/index';
 SyntaxHighlighter.registerLanguage('json', json);
 SyntaxHighlighter.registerLanguage('html', xml);
 
-export const SdlResponseViewer = ({ sdlResponse, loading }: SdlViewerProps) => {
-  const t = useTranslations('client');
-
+export const SdlResponseViewer = <T,>({
+  sdlResponse,
+  loading,
+}: SdlViewerProps<T>) => {
   const isJson = (data: string): boolean => {
     try {
       JSON.parse(data);

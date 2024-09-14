@@ -1,5 +1,6 @@
 'use client';
 
+import Image from '@/node_modules/next/image';
 import { Box, Typography } from '@mui/material';
 import { User } from 'firebase/auth';
 import { useTranslations } from 'next-intl';
@@ -8,9 +9,10 @@ import { useState } from 'react';
 
 import './MainContent.css';
 
+import { useAuthEffect } from '@/src/hooks/useAuthEffect';
+
 const ButtonSignIn = React.lazy(() => import('../Buttons/ButtonSignIn'));
 const ButtonSignUp = React.lazy(() => import('../Buttons/ButtonSignUp'));
-import { useAuthEffect } from '@/src/hooks/useAuthEffect';
 
 const MainContent = () => {
   const [authUser, setAuthUser] = useState<User | null>(null);
@@ -67,6 +69,21 @@ const MainContent = () => {
             </Box>
           </>
         )}
+        <Box
+          sx={{
+            width: 500,
+            height: 400,
+            position: 'relative',
+            margin: '30px 0',
+          }}
+        >
+          <Image
+            src="/static/homepage.svg"
+            alt="illustration"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        </Box>
       </Box>
     </main>
   );
