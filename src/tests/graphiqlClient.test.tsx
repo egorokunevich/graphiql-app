@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { fireEvent, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import {
@@ -43,10 +43,6 @@ describe('GraphiQLClient', () => {
 
     const sendBtn = await screen.findByTestId('graphiql-send');
     expect(sendBtn).toBeInTheDocument();
-
-    // fireEvent.change(urlInput, {
-    //   target: { value: 'mock' },
-    // });
 
     await user.type(urlInput, 'https://mock-endpont.com');
 

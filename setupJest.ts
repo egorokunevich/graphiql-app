@@ -13,3 +13,6 @@ jest.mock('next/navigation', () => {
     useRouter: jest.fn().mockReturnValue(router),
   };
 });
+
+// Solves the "TextEncoder is not defined error"
+global.TextEncoder = require('util').TextEncoder;

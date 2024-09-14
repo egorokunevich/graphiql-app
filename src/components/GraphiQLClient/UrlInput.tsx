@@ -16,7 +16,6 @@ export default function UrlInput({
   const [localEndpoint, setLocalEndpoint] = useState(endpoint);
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('onchange');
     const newUrl = e.target.value;
     const url = new URL(window.location.href);
 

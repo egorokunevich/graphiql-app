@@ -3,7 +3,7 @@ import React from 'react';
 
 const Header = React.lazy(() => import('../components/Header/Header'));
 
-import { useLayoutContext } from '@/src/context/LayoutContext';
+// import { useLayoutContext } from '@/src/context/LayoutContext';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
 
 jest.mock('@/src/context/LayoutContext', () => ({
@@ -16,13 +16,13 @@ jest.mock('next/navigation', () => ({
 
 describe('Header', () => {
   const setMainPage = jest.fn();
-  const setAuthUser = jest.fn();
+  // const setAuthUser = jest.fn();
 
   beforeEach(() => {
-    (useLayoutContext as jest.Mock).mockReturnValue({
-      mainPage: false,
-      setMainPage,
-    });
+    // (useLayoutContext as jest.Mock).mockReturnValue({
+    //   mainPage: false,
+    //   setMainPage,
+    // });
     (useAuthEffect as jest.Mock).mockImplementation((callback) => {
       callback(null);
     });
@@ -49,10 +49,10 @@ describe('Header', () => {
   });
 
   test('renders sign out button when authenticated and on main page', () => {
-    (useLayoutContext as jest.Mock).mockReturnValue({
-      mainPage: true,
-      setMainPage,
-    });
+    // (useLayoutContext as jest.Mock).mockReturnValue({
+    //   mainPage: true,
+    //   setMainPage,
+    // });
     (useAuthEffect as jest.Mock).mockImplementation((callback) => {
       callback({ uid: '123' });
     });
@@ -88,4 +88,3 @@ describe('Header', () => {
     expect(headerElement.classList.contains('sticky')).toBe(true);
   });
 });
-

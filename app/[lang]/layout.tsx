@@ -6,6 +6,7 @@ import './globals.css';
 
 // import { LayoutProvider } from '@/src/context/LayoutContext';
 import LangLayout from '@src/components/LangLayout/LangLayout';
+import { HistoryProvider } from '@src/context/HistoryContext';
 
 export const metadata: Metadata = {
   title: 'Graphiql App',
@@ -24,11 +25,11 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body>
-        <NextIntlClientProvider messages={messages}>
-          {/* <LayoutProvider> */}
-          <LangLayout>{children}</LangLayout>
-          {/* </LayoutProvider> */}
-        </NextIntlClientProvider>
+        <HistoryProvider>
+          <NextIntlClientProvider messages={messages}>
+            <LangLayout>{children}</LangLayout>
+          </NextIntlClientProvider>
+        </HistoryProvider>
       </body>
     </html>
   );
