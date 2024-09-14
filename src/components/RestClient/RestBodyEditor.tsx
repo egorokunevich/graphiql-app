@@ -8,12 +8,16 @@ import {
   RadioGroup,
   IconButton,
   Typography,
+  Button,
 } from '@mui/material';
+import { parse, print } from 'graphql';
+import * as monaco from 'monaco-editor';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { RestVariablesEditor } from '@/src/components/RestClient/RestVariablesEditor';
 import { RestBodyEditorProps } from '@/src/types/index';
+import { encodeBase64 } from '@/src/utils/base64';
 
 const RestBodyEditor = ({
   body,
@@ -23,121 +27,97 @@ const RestBodyEditor = ({
 }: RestBodyEditorProps) => {
   const t = useTranslations('client');
   const [language, setLanguage] = useState<string>('json');
-  const previousBodyRef = useRef<string>(body);
   const [showVariables, setShowVariables] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const bodyRef = useRef(body);
+
+  useEffect(() => {
+    bodyRef.current = body;
+  }, [body]);
+
+  const formatGraphQL = (query: string) => {
+    try {
+      const parsed = parse(query);
+      return print(parsed);
+    } catch (e) {
+      console.error('GraphQL parsing error:', e);
+      return query;
+    }
+  };
+
+  const formatJSON = (json: string) => {
+    try {
+      const parsed = JSON.parse(json);
+      return JSON.stringify(parsed, null, 4);
+    } catch (e) {
+      console.error('JSON parsing error:', e);
+      return json;
+    }
+  };
+
+  const formatPlainText = (text: string) => {
+    return text.trim().replace(/\s+/g, ' ');
+  };
 
   const toggleVariablesVisibility = () => {
     setShowVariables((prev) => !prev);
   };
 
   const handleChange = (value: string | undefined) => {
-    if (value !== undefined) {
-      setBody(value);
-    }
+    setBody(value ?? '');
   };
 
   const handleLanguageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLanguage(event.target.value);
   };
 
-  const appendVariablesToBody = (defaultBody: string): string => {
-    if (variables?.length === 0) return defaultBody;
+  const handleEditorBlur = () => {
+    const currentBody = bodyRef.current;
+    const currentUrl = new URL(window.location.href);
 
-    let updatedBody = defaultBody;
-
-    if (language === 'json') {
-      try {
-        const parsedBody = JSON.parse(defaultBody || '{}');
-        const variablesObject = variables?.reduce(
-          (acc, variable) => {
-            acc[variable.key] = variable.value;
-            return acc;
-          },
-          {} as Record<string, string>,
-        );
-
-        updatedBody = JSON.stringify(
-          { ...parsedBody, ...variablesObject },
-          null,
-          2,
-        );
-      } catch (error) {
-        console.error('Failed to parse JSON:', error);
-      }
+    if (currentBody && currentBody.trim() !== '') {
+      const encodedBody = encodeBase64(currentBody);
+      currentUrl.searchParams.set('body', encodedBody);
     } else {
-      const variablesString =
-        variables && variables.length > 0
-          ? variables
-              .map((variable) => `${variable.key}: ${variable.value}`)
-              .join('\n')
-          : '';
-
-      updatedBody = `${body}\n\n${variablesString}`;
+      currentUrl.searchParams.delete('body');
     }
-
-    return updatedBody;
+    window.history.replaceState({}, '', currentUrl.toString());
   };
 
-  const updateUrlWithEncodedBody = () => {
+  const handlePrettify = () => {
     try {
-      let updatedBody = appendVariablesToBody(body);
+      if (editorRef.current) {
+        const unformattedCode = editorRef.current.getValue();
+        let formattedCode: string;
 
-      if (updatedBody !== previousBodyRef.current) {
-        const base64Body = btoa(updatedBody);
+        switch (language) {
+          case 'json':
+            formattedCode = formatJSON(unformattedCode);
+            break;
+          case 'plaintext':
+            formattedCode = formatPlainText(unformattedCode);
+            break;
+          default:
+            formattedCode = formatGraphQL(unformattedCode);
+            break;
+        }
 
-        const url = new URL(window.location.href);
-        url.searchParams.set('encodedBody', base64Body);
-        window.history.pushState({}, '', url.toString());
-
-        previousBodyRef.current = updatedBody;
+        if (
+          editorRef.current &&
+          typeof editorRef.current.setValue === 'function'
+        ) {
+          editorRef.current.setValue(formattedCode);
+        } else {
+          console.error(
+            'Editor not properly initialized or setValue is not a function',
+          );
+        }
       }
     } catch (error) {
-      console.error('Failed to parse JSON or update URL:', error);
+      console.error('Prettify error:', error);
     }
   };
-
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    const pathSegments = url.pathname.split('/');
-    if (pathSegments.length > 1) {
-      try {
-        const lastSegment = pathSegments[pathSegments.length - 1];
-        const isBase64 = /^[A-Za-z0-9+/=]+$/.test(lastSegment);
-        if (isBase64) {
-          const decodedBody = atob(lastSegment);
-          try {
-            setBody(decodedBody);
-          } catch (error) {
-            console.error('Failed to set body from decoded string:', error);
-          }
-          url.searchParams.delete('body');
-          window.history.replaceState({}, '', url.toString());
-        }
-      } catch (error) {
-        console.error('Failed to decode base64 string:', error);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleFocusOut = (event: FocusEvent) => {
-      if (
-        event.relatedTarget === null ||
-        !(
-          event.relatedTarget instanceof Node &&
-          document.contains(event.relatedTarget)
-        )
-      ) {
-        updateUrlWithEncodedBody();
-      }
-    };
-
-    window.addEventListener('focusout', handleFocusOut);
-    return () => {
-      window.removeEventListener('focusout', handleFocusOut);
-    };
-  }, [body, language, variables]);
 
   return (
     <>
@@ -155,8 +135,9 @@ const RestBodyEditor = ({
             variant="h6"
             sx={{
               position: 'absolute',
-              fontSize: '12px',
+              fontSize: '14px',
               background: '#e8e8e8',
+              top: '-12px',
             }}
           >
             Variables
@@ -190,6 +171,13 @@ const RestBodyEditor = ({
               control={<Radio size="small" />}
               label={t('plainText')}
             />
+            <Button
+              onClick={handlePrettify}
+              variant="outlined"
+              sx={{ display: 'inline-block' }}
+            >
+              Prettify
+            </Button>
           </RadioGroup>
         </FormControl>
 
@@ -198,8 +186,15 @@ const RestBodyEditor = ({
           language={language === 'json' ? 'json' : 'plaintext'}
           value={body}
           onChange={handleChange}
+          onMount={(editor: monaco.editor.IStandaloneCodeEditor) => {
+            editorRef.current = editor;
+            editor.onDidBlurEditorText(handleEditorBlur);
+          }}
           theme="vs-grey"
           options={{
+            minimap: { enabled: false },
+            formatOnPaste: true,
+            automaticLayout: true,
             fontSize: 14,
           }}
         />

@@ -15,6 +15,7 @@ SyntaxHighlighter.registerLanguage('html', xml);
 export const ResponseViewer = ({
   response,
   tabGraphiql,
+  resLoading,
 }: ResponseViewerProps) => {
   const t = useTranslations('client');
 
@@ -30,6 +31,7 @@ export const ResponseViewer = ({
   return (
     <Paper
       sx={{
+        flex: 1,
         boxShadow: 'none',
         borderTop: 1,
         borderColor: 'divider',
@@ -77,7 +79,11 @@ export const ResponseViewer = ({
           alignItems: 'center',
         }}
       >
-        {response ? (
+        {resLoading ? (
+          <Typography variant="subtitle1" sx={{ marginTop: 10 }}>
+            Loading...
+          </Typography>
+        ) : response ? (
           response.message ? (
             <Box
               sx={{
@@ -114,8 +120,8 @@ export const ResponseViewer = ({
               sx={{
                 whiteSpace: 'pre-wrap',
                 wordBreak: 'break-all',
-                maxHeight: '370px',
-                minHeight: '370px',
+                maxHeight: '400px',
+                minHeight: '400px',
                 overflowY: 'auto',
                 height: '100%',
                 borderRadius: 1,
@@ -163,6 +169,7 @@ export const ResponseViewer = ({
                     height: '100%',
                     backgroundColor: '#F0F7F4',
                     padding: '0',
+                    minHeight: '400px',
                   }}
                   showLineNumbers={true}
                   lineNumberStyle={{ color: '#888888' }}
