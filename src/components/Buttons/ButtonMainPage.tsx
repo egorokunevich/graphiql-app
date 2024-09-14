@@ -11,15 +11,9 @@ function ButtonMainPage({ onClick }: ButtonMainPageProps) {
   const t = useTranslations('basic');
 
   return (
-    <>
-      <Button
-        onClick={onClick}
-        variant="outlined"
-        style={{ fontWeight: 'bold' }}
-      >
-        {t('mainPage')}
-      </Button>
-    </>
+    <Button onClick={onClick} variant="outlined" style={{ fontWeight: 'bold' }}>
+      {t('mainPage')}
+    </Button>
   );
 }
 export default ButtonMainPage;

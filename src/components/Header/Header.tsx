@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { User } from 'firebase/auth';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 const ButtonSignIn = React.lazy(() => import('../Buttons/ButtonSignIn'));
@@ -15,15 +15,16 @@ const ButtonMainPage = React.lazy(() => import('../Buttons/ButtonMainPage'));
 import './Header.css';
 
 import LanguageToggle from '@/src/components/LanguageToggle/LanguageToggle';
-import { useLayoutContext } from '@/src/context/LayoutContext';
+// import { useLayoutContext } from '@/src/context/LayoutContext';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
 import { LanguageType } from '@/src/types/index';
 
 const Header = () => {
-  const { mainPage, setMainPage } = useLayoutContext();
+  // const { mainPage, setMainPage } = useLayoutContext();
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [isSticky, setIsSticky] = useState(false);
   const params = useParams<{ lang: LanguageType }>();
+  const router = useRouter();
 
   useAuthEffect(setAuthUser);
 
@@ -43,11 +44,12 @@ const Header = () => {
   }, []);
 
   const handleMainPageClick = () => {
-    setMainPage(true);
+    // setMainPage(true);
+    router.push(`/${params.lang}`);
   };
 
   return (
-    <header>
+    <header data-testid="header">
       <Box
         className={isSticky ? 'header sticky' : 'header'}
         sx={{
@@ -67,13 +69,15 @@ const Header = () => {
         </Link>
         <LanguageToggle />
         {authUser ? (
-          <>
-            {mainPage ? (
-              <ButtonSignOut />
-            ) : (
-              <ButtonMainPage onClick={handleMainPageClick} />
-            )}
-          </>
+          <Box
+            sx={{
+              display: 'flex',
+              gap: '1rem',
+            }}
+          >
+            <ButtonSignOut />
+            <ButtonMainPage onClick={handleMainPageClick} />
+          </Box>
         ) : (
           <Box
             sx={{

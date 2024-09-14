@@ -3,7 +3,7 @@ import React from 'react';
 
 import { TabPanelProps } from '@/src/types/index';
 
-const CustomTabPanel: React.FC<TabPanelProps> = (props) => {
+const CustomTabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
 
   return (

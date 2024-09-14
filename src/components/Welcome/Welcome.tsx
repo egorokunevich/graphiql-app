@@ -1,10 +1,19 @@
 'use client';
 
-import { Box, Card, CardContent, Container, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  Typography,
+} from '@mui/material';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
+// import ProfileCard from '../ProfileCard/ProfieCard';
 
+const ProfileCard = React.lazy(() => import('../ProfileCard/ProfieCard'));
 const ButtonSignIn = React.lazy(() => import('../Buttons/ButtonSignIn'));
 const ButtonSignUp = React.lazy(() => import('../Buttons/ButtonSignUp'));
 
@@ -49,16 +58,44 @@ const Welcome = () => {
         {t('basic.welcome')}
       </Typography>
 
-      <Card variant="outlined" sx={{ mb: 2 }}>
+      <Card sx={{ mb: 4, px: 2 }}>
         <CardContent>
           <Typography variant="h6" align="center" gutterBottom>
             {t('welcome.ourDevs')}
           </Typography>
+
+          <Grid
+            container
+            spacing={2}
+            justifyContent="space-around"
+            sx={{ mb: 4, mt: 2 }}
+          >
+            <ProfileCard
+              username={'Yahor Akunevich'}
+              avatarUrl={'https://avatars.githubusercontent.com/u/84414222?v=4'}
+              profileUrl={'https://github.com/egorokunevich'}
+              profession={'Frontend Developer'}
+            />
+            <ProfileCard
+              username={'Manzura Jabbarova'}
+              avatarUrl={
+                'https://avatars.githubusercontent.com/u/100751526?v=4'
+              }
+              profileUrl={'https://github.com/manzura94'}
+              profession={'Frontend Developer'}
+            />
+            <ProfileCard
+              username={'Khilman Mikhail'}
+              avatarUrl={'https://avatars.githubusercontent.com/u/43726927?v=4'}
+              profileUrl={'https://github.com/grimpatron'}
+              profession={'Frontend Developer'}
+            />
+          </Grid>
           <Typography>{t('welcome.teamDescription')}</Typography>
         </CardContent>
       </Card>
 
-      <Card variant="outlined" sx={{ mb: 2 }}>
+      <Card sx={{ mb: 4, px: 2 }}>
         <CardContent>
           <Typography variant="h6" align="center" gutterBottom>
             {t('welcome.project')}
@@ -67,7 +104,7 @@ const Welcome = () => {
         </CardContent>
       </Card>
 
-      <Card variant="outlined" sx={{ mb: 2 }}>
+      <Card sx={{ mb: 4, px: 2 }}>
         <CardContent>
           <Typography variant="h6" align="center" gutterBottom>
             {t('welcome.rollingScopes')}

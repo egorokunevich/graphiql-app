@@ -19,12 +19,12 @@ import { RestVariablesEditor } from '@/src/components/RestClient/RestVariablesEd
 import { RestBodyEditorProps } from '@/src/types/index';
 import { encodeBase64 } from '@/src/utils/base64';
 
-const RestBodyEditor: React.FC<RestBodyEditorProps> = ({
+const RestBodyEditor = ({
   body,
   setBody,
   variables,
   setVariables,
-}) => {
+}: RestBodyEditorProps) => {
   const t = useTranslations('client');
   const [language, setLanguage] = useState<string>('json');
   const [showVariables, setShowVariables] = useState(false);

@@ -4,7 +4,7 @@ import { User } from 'firebase/auth';
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { useLayoutContext } from '@/src/context/LayoutContext';
+// import { useLayoutContext } from '@/src/context/LayoutContext';
 import { useAuthEffect } from '@/src/hooks/useAuthEffect';
 import { LanguageType } from '@/src/types/index';
 
@@ -13,7 +13,7 @@ const useAuthRedirect = () => {
   const params = useParams<{ lang: LanguageType }>();
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const { setMainPage } = useLayoutContext();
+  // const { setMainPage } = useLayoutContext();
 
   useAuthEffect((user) => {
     setAuthUser(user);
@@ -22,7 +22,7 @@ const useAuthRedirect = () => {
 
   useEffect(() => {
     if (!loading && !authUser) {
-      setMainPage(false);
+      // setMainPage(false);
       router.push(`/${params.lang}`);
     }
   }, [authUser, loading, router, params.lang]);
