@@ -111,6 +111,7 @@ const GraphiQLClient = () => {
         paddingTop: 2,
       }}
       disableGutters
+      data-testid="graphiql-client"
     >
       <Typography variant="h4" sx={{ marginBottom: 1 }}>
         GraphQL Client
@@ -145,7 +146,11 @@ const GraphiQLClient = () => {
         </CustomTabPanel>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="contained" onClick={onSendRequest}>
+        <Button
+          variant="contained"
+          onClick={handleSendRequest}
+          data-testid="graphiql-send"
+        >
           Send Request
         </Button>
       </Box>

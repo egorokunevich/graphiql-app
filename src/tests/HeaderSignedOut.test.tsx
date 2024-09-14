@@ -2,15 +2,15 @@ import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 
 import {
+  mockGetAuthWithNull,
   mockSignOut,
+  mockCreateUserWithEmailAndPassword,
   mockSignInWithEmailAndPassword,
   mockOnAuthStateChangedSignedOut,
-  mockGetAuthWithNull,
-  mockCreateUserWithEmailAndPassword,
 } from './mocks/mockFirebase';
 
-import { render } from '@/src/tests/test-utils';
-import MainPage from '@app/[lang]/page';
+import Header from '@src/components/Header/Header';
+import { render } from '@src/tests/test-utils';
 
 jest.mock('firebase/app', () => {
   return {
@@ -28,11 +28,13 @@ jest.mock('firebase/auth', () => {
   };
 });
 
-describe('MainPage', () => {
-  it('Should render in the document', async () => {
-    render(<MainPage />);
+describe('Header signed out', () => {
+  test('renders sign in and sign up buttons when not authenticated', async () => {
+    render(<Header />);
+    const signInButton = await screen.findByText(/Sign In/i);
+    const signUpButton = await screen.findByText(/Sign Up/i);
 
-    const mainPage = await screen.findByTestId('main-page');
-    expect(mainPage).toBeInTheDocument();
+    expect(signInButton).toBeInTheDocument();
+    expect(signUpButton).toBeInTheDocument();
   });
 });

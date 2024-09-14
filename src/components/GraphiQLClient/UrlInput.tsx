@@ -1,6 +1,8 @@
+'use client';
+
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { Box, TextField, IconButton, Tooltip } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { UrlInputProps } from '@/src/types/index';
 
@@ -11,11 +13,14 @@ export default function UrlInput({
   setEndpoint,
   urlError,
 }: UrlInputProps) {
+  const [localEndpoint, setLocalEndpoint] = useState(endpoint);
+
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newUrl = e.target.value;
     const url = new URL(window.location.href);
 
     setEndpoint(newUrl);
+    setLocalEndpoint(newUrl);
     setSdlUrl(`${newUrl}?sdl`);
 
     const encodedUrl = Buffer.from(newUrl).toString('base64');
@@ -45,9 +50,12 @@ export default function UrlInput({
           label="GraphQL Endpoint URL"
           variant="outlined"
           sx={{ borderRadius: 'unset', width: '100%' }}
-          value={endpoint}
-          onChange={handleUrlChange}
+          value={localEndpoint}
+          onChange={(e) =>
+            handleUrlChange(e as React.ChangeEvent<HTMLInputElement>)
+          }
           error={urlError}
+          inputProps={{ 'data-testid': 'graphiql-url' }}
         />
         {urlError && (
           <Tooltip

@@ -71,7 +71,10 @@ function SignIn() {
   }
 
   return (
-    <div className="mx-auto p-6 m-6 bg-white rounded-lg shadow-md w-[450px]" data-testid="login-page">
+    <div
+      className="mx-auto p-6 m-6 bg-white rounded-lg shadow-md w-[450px]"
+      data-testid="login-page"
+    >
       <h1 className="text-3xl font-semibold mb-4">{t('login.login')}</h1>
       <form>
         <InputField
