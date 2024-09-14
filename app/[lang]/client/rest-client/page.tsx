@@ -1,9 +1,8 @@
 'use client';
 
-import { AxiosError } from '@/node_modules/axios/index';
-import { Box, Container } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import CustomTabPanel from '@/src/components/CustomTabPanel/CustomPanel';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
@@ -11,83 +10,54 @@ import RestBodyEditor from '@/src/components/RestClient/RestBodyEditor';
 import { RestHeaderEditor } from '@/src/components/RestClient/RestHeaderEditor';
 import { RestTabs } from '@/src/components/RestClient/RestTabs';
 import { RestUrl } from '@/src/components/RestClient/RestUrl';
+import { useHistoryContext } from '@/src/context/HistoryContext';
 import useAuthRedirect from '@/src/hooks/useAuthRedirect';
-import { sendHttpRequest } from '@/src/hooks/useHttpRequest';
-import { Method, ResponseType } from '@/src/types/index';
+import { useRestRequest } from '@/src/hooks/useRestRequest';
+import { Method } from '@/src/types/index';
 
 const RestClient = () => {
-  const [value, setValue] = useState(0);
+  const [tabValue, setTabValue] = useState(0);
   const [method, setMethod] = useState<Method>('GET');
   const [url, setUrl] = useState('');
-  const [fullUrl, setFullUrl] = useState('');
-  const [response, setResponse] = useState<ResponseType | null>(null);
-  const [headers, setHeaders] = useState([{ key: '', value: '' }]);
+  const [headers, setHeaders] = useState([
+    { key: 'Content-Type', value: 'application/json' },
+  ]);
   const [body, setBody] = useState('');
-  const [urlError, setUrlError] = useState(false);
   const [variables, setVariables] = useState([{ key: '', value: '' }]);
   const t = useTranslations();
   const { loading } = useAuthRedirect();
+  const { handleSendRequest, response, urlError, resLoading } =
+    useRestRequest();
 
-  const handleSendRequest = async () => {
-    if (!url) {
-      setUrlError(true);
-      setResponse(null);
-      return undefined;
+  const { selectedRequest, setSelectedRequest } = useHistoryContext();
+
+  useEffect(() => {
+    if (selectedRequest && selectedRequest.type === 'rest-client') {
+      setMethod((selectedRequest.method as Method) || 'GET');
+      setUrl(selectedRequest.url || '');
+      setBody(selectedRequest.body || '');
+
+      const headersArray = selectedRequest.headers
+        ? Object.entries(selectedRequest.headers).map(([key, value]) => ({
+            key,
+            value,
+          }))
+        : [{ key: 'Content-Type', value: 'application/json' }];
+      setHeaders(headersArray);
+
+      setVariables(selectedRequest.variables || [{ key: '', value: '' }]);
+      setSelectedRequest(null);
     }
+  }, [selectedRequest]);
 
-    try {
-      const urlBase64 = Buffer.from(url).toString('base64');
-
-      let combinedBody = body ? JSON.parse(body) : {};
-      variables.forEach((variable) => {
-        combinedBody[variable.key] = variable.value;
-      });
-
-      const bodyBase64 = Buffer.from(JSON.stringify(combinedBody)).toString(
-        'base64',
-      );
-
-      const queryParams = headers
-        .filter((header) => header.key && header.value)
-        .map(
-          (header) =>
-            `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`,
-        )
-        .join('&');
-
-      let restUrl = `/api/rest-client?method=${method}&urlBase64=${urlBase64}`;
-      if (['POST', 'PUT', 'PATCH'].includes(method) && bodyBase64) {
-        restUrl = `&bodyBase64=${bodyBase64}`;
-      }
-      if (queryParams) {
-        restUrl += `&${queryParams}`;
-      }
-
-      let respond = await sendHttpRequest(method, restUrl);
-
-      setFullUrl(restUrl);
-      setResponse({ status: respond?.data.status, data: respond?.data.data });
-      setUrlError(false);
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        setResponse({
-          status: error.response?.data?.status || error.response?.status,
-          data: error.response?.data?.data || '',
-          message: error.message,
-        });
-        setUrlError(false);
-      } else if (error instanceof Error) {
-        setResponse({
-          message: error.message,
-        });
-        setUrlError(false);
-      } else {
-        setResponse({
-          message: 'An unexpected error occurred',
-        });
-        setUrlError(false);
-      }
-    }
+  const handleSend = async () => {
+    await handleSendRequest({
+      method,
+      url,
+      body,
+      headers,
+      variables,
+    });
   };
 
   if (loading) {
@@ -97,29 +67,33 @@ const RestClient = () => {
   return (
     <Container
       sx={{
+        flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        gap: 0,
         paddingTop: 2,
+        width: '100%',
       }}
       disableGutters
     >
+      <Typography variant="h4" sx={{ marginBottom: 1 }}>
+        RESTfull Client
+      </Typography>
       <RestUrl
         method={method}
         setMethod={setMethod}
         setUrl={setUrl}
         url={url}
-        handleSendRequest={handleSendRequest}
+        handleSendRequest={handleSend}
         urlError={urlError}
       />
 
       <Box sx={{ paddingBottom: 1, minHeight: '250px' }}>
-        <RestTabs value={value} setValue={setValue} />
+        <RestTabs value={tabValue} setValue={setTabValue} />
         <Box sx={{ maxHeight: '180px', overflow: 'hidden', overflowY: 'auto' }}>
-          <CustomTabPanel value={value} index={0}>
+          <CustomTabPanel value={tabValue} index={0}>
             <RestHeaderEditor headers={headers} setHeaders={setHeaders} />
           </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
+          <CustomTabPanel value={tabValue} index={1}>
             <RestBodyEditor
               variables={variables}
               setVariables={setVariables}
@@ -129,7 +103,7 @@ const RestClient = () => {
           </CustomTabPanel>
         </Box>
       </Box>
-      <ResponseViewer response={response} />
+      <ResponseViewer response={response} resLoading={resLoading} />
     </Container>
   );
 };

@@ -30,11 +30,11 @@
     "addHeader": "Add Header"
   },
   "welcome": {
-    "ourDevs": "Our Developers",
+    "ourDevs": "Our Team",
     "project": "Project",
     "rollingScopes": "Rolling Scopes School",
-    "teamDescription": "We are a team of 3 developers working on creating lightweight version of Postman and GraphQL, combined into a single application.",
-    "projectDescription": "The application is developed in React and Next.js. Firebase is responsible for user registration. The application supports 2 languages: Russian and English.",
+    "teamDescription": "We are a team of developers who have created an application that combines the power of Postman and GraphQL in a lightweight and convenient form. Our goal is to make working with APIs even more efficient!",
+    "projectDescription": "Our application, developed on React and Next.js, provides a convenient interface for working with RESTful and GraphQL queries. It includes a query editor with formatting and base64 encoding of the query body, a response section with HTTP status information, method selection, a URL input field, variable and header sections. The GraphiQL client also has documentation displayed upon a successful SDL query. The query history allows you to restore previously executed queries and displays an information message when there are no queries. Registration is carried out using Firebase. There is support for two languages: Russian and English.",
     "RSSchoolDescription": "The project was created as part of the Rolling Scopes training course. RS School offers a unique learning experience as a free, community-based online education initiative. The RS School has been run by the Rolling Scopes community since 2013."
   },
   "login": {
@@ -52,4 +52,3 @@
     "accountNotFound": "Your account is not found =("
   }
 }
-
