@@ -1,0 +1,13 @@
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 1rem 2rem;
+  transition: all 0.3s ease-in-out;
+  background: linear-gradient(180deg, #ccfbf1, #f1f5f9);
+}
+
+header:has(.sticky) {
+  padding: 0.6rem 2rem;
+  background: linear-gradient(180deg, #bcfdef, #f1f5f9);
+}
