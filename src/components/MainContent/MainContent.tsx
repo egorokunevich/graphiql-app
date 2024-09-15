@@ -71,10 +71,13 @@ const MainContent = () => {
         )}
         <Box
           sx={{
-            width: 500,
+            width: '100%',
             height: 400,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
             position: 'relative',
-            margin: '30px 0',
+            margin: '50px 0',
           }}
         >
           <Image
@@ -82,6 +85,7 @@ const MainContent = () => {
             alt="illustration"
             fill
             style={{ objectFit: 'contain' }}
+            priority
           />
         </Box>
       </Box>

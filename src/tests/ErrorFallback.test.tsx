@@ -2,49 +2,9 @@ import '@testing-library/jest-dom';
 import { fireEvent, screen } from '@testing-library/react';
 import React from 'react';
 
-// const ErrorFallback = React.lazy(
-//   () => import('../components/ErrorFallback/ErrorFallback'),
-// );
-
 import ErrorFallback from '@src/components/ErrorFallback/ErrorFallback';
 import { render } from '@src/tests/test-utils';
 
-// // Mock ErrorProps
-// const error = new Error('Test error');
-// const resetErrorBoundary = jest.fn();
-// const httpError = '404 Not Found';
-
-// describe('ErrorFallback', () => {
-//   it('renders the correct message for HTTP error', () => {
-//     render(
-//       <ErrorFallback
-//         error={error}
-//         resetErrorBoundary={resetErrorBoundary}
-//         httpError={httpError}
-//       />,
-//     );
-//     expect(await screen.findByText('HTTP Error')).toBeInTheDocument();
-//     expect(await screen.findByText('404 Not Found')).toBeInTheDocument();
-//   });
-
-//   it('renders the correct message for general error', () => {
-//     render(
-//       <ErrorFallback error={error} resetErrorBoundary={resetErrorBoundary} />,
-//     );
-//     expect(await screen.findByText('Something went wrong')).toBeInTheDocument();
-//     expect(await screen.findByText('Test error')).toBeInTheDocument();
-//   });
-
-//   it('calls resetErrorBoundary when the button is clicked', () => {
-//     render(
-//       <ErrorFallback error={error} resetErrorBoundary={resetErrorBoundary} />,
-//     );
-//     fireEvent.click(await screen.findByText('Come back'));
-//     expect(resetErrorBoundary).toHaveBeenCalledTimes(1);
-//   });
-// });
-
-// Mock ErrorProps
 const error = new Error('Test error');
 const resetErrorBoundary = jest.fn();
 const httpError = '404 Not Found';

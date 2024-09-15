@@ -38,7 +38,6 @@ const HistoryPage = () => {
         padding: '20px',
       }}
     >
-      <Typography variant="h4">History</Typography>
       <List sx={{ height: '100%', width: '100%', flex: 1 }}>
         {history.length === 0 ? (
           <Box

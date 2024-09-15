@@ -48,7 +48,7 @@ const RestBodyEditor = ({
   const formatJSON = (json: string) => {
     try {
       const parsed = JSON.parse(json);
-      return JSON.stringify(parsed, null, 4);
+      return JSON.stringify(parsed, null, 2);
     } catch (e) {
       return json;
     }
@@ -106,6 +106,7 @@ const RestBodyEditor = ({
           typeof editorRef.current.setValue === 'function'
         ) {
           editorRef.current.setValue(formattedCode);
+          setBody(formattedCode);
         }
       }
     } catch (error) {
@@ -118,6 +119,7 @@ const RestBodyEditor = ({
       <Box sx={{ position: 'relative' }}>
         <IconButton
           onClick={toggleVariablesVisibility}
+          data-testid='toggle-variables-button'
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           sx={{ fontSize: '14px' }}
@@ -176,6 +178,7 @@ const RestBodyEditor = ({
         </FormControl>
 
         <MonacoEditor
+          data-testid="monaco-editor"
           height="200px"
           language={language === 'json' ? 'json' : 'plaintext'}
           value={body}

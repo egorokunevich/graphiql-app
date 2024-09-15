@@ -1,5 +1,5 @@
 'use client';
-import { Box, Button, Tabs, Tab, Container, Typography } from '@mui/material';
+import { Box, Button, Tabs, Tab, Container } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import CustomTabPanel from '@/src/components/CustomTabPanel/CustomPanel';
@@ -113,9 +113,6 @@ const GraphiQLClient = () => {
       disableGutters
       data-testid="graphiql-client"
     >
-      <Typography variant="h4" sx={{ marginBottom: 1 }}>
-        GraphQL Client
-      </Typography>
       <UrlInput
         sdlUrl={sdlUrl}
         setSdlUrl={setSdlUrl}
@@ -148,7 +145,7 @@ const GraphiQLClient = () => {
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Button
           variant="contained"
-          onClick={handleSendRequest}
+          onClick={onSendRequest}
           data-testid="graphiql-send"
         >
           Send Request
