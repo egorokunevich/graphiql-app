@@ -1,10 +1,17 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import RestBodyEditor from '@/src/components/RestClient/RestBodyEditor';
+import { render } from '@/src/tests/test-utils';
 
 jest.mock('@monaco-editor/react', () => ({
   __esModule: true,
-  default: ({ onMount, value }) => {
+  default: ({
+    onMount,
+    value,
+  }: {
+    onMount: (props: unknown) => {};
+    value: unknown;
+  }) => {
     const editor = {
       getValue: () => value,
       setValue: jest.fn(),
@@ -19,9 +26,9 @@ jest.mock('@monaco-editor/react', () => ({
   },
 }));
 
-jest.mock('next-intl', () => ({
-  useTranslations: () => (key) => key,
-}));
+// jest.mock('next-intl', () => ({
+//   useTranslations: () => (key) => key,
+// }));
 
 describe('RestBodyEditor', () => {
   const setBodyMock = jest.fn();
@@ -46,7 +53,9 @@ describe('RestBodyEditor', () => {
       const monacoEditor = editor.__monacoEditor;
       if (monacoEditor) {
         monacoEditor.setValue('{ "key": "value" }');
-        monacoEditor.onDidBlurEditorText.mock.calls.forEach(([callback]) => callback());
+        monacoEditor.onDidBlurEditorText.mock.calls.forEach(
+          ([callback]: (() => {})[]) => callback(),
+        );
         expect(setBodyMock).toHaveBeenCalledWith('{ "key": "value" }');
       }
     }
