@@ -13,7 +13,7 @@ export const ResponseViewer = <T,>({
   tabGraphiql,
   resLoading,
 }: ResponseViewerProps<T>) => {
-  const t = useTranslations('client');
+  const t = useTranslations();
 
   const isJson = (data: string): boolean => {
     try {
@@ -47,12 +47,12 @@ export const ResponseViewer = <T,>({
       >
         {!tabGraphiql && (
           <Typography variant="h6" fontWeight="400" color="#707070">
-            {t('response')}:
+            {t('client.response')}:
           </Typography>
         )}
         <Box sx={{ display: 'flex' }}>
           <Typography variant="h6" fontWeight="400" color="#707070">
-            {t('status')}:
+            {t('client.status')}:
           </Typography>
           {response && (
             <Typography
@@ -79,7 +79,7 @@ export const ResponseViewer = <T,>({
       >
         {resLoading ? (
           <Typography variant="subtitle1" sx={{ marginTop: 10 }}>
-            Loading...
+            {t('basic.loading')}...
           </Typography>
         ) : response ? (
           response.message ? (
@@ -109,7 +109,7 @@ export const ResponseViewer = <T,>({
                 />
               </Box>
               <Typography color="#454545" variant="subtitle2">
-                Could not send request
+                {t('responses.couldNotSendRequest')}
               </Typography>
             </Box>
           ) : (
@@ -206,7 +206,7 @@ export const ResponseViewer = <T,>({
               />
             </Box>
             <Typography color="#454545" variant="subtitle2" gutterBottom>
-              {t('welcome')}
+              {t('client.welcome')}
             </Typography>
           </Box>
         )}

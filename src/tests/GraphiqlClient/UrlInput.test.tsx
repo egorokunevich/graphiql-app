@@ -1,6 +1,7 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 
 import UrlInput from '@/src/components/GraphiQLClient/UrlInput';
+import { render } from '@src/tests/test-utils';
 
 const mockSetSdlUrl = jest.fn();
 const mockSetEndpoint = jest.fn();

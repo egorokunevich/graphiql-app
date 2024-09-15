@@ -23,10 +23,16 @@
     "key": "Key",
     "value": "Value",
     "send": "Send",
+    "request": "Request",
     "welcome": "Enter the URL and click Send to get a response",
     "headers": "Headers",
+    "query": "Query",
     "body": "Body",
     "variables": "Variables",
+    "prettify": "Prettify",
+    "docs": "Docs",
+    "clearHistory": "Clear History",
+    "noHistory": "You haven't executed any requests yet, It's empty here. Try those options:",
     "addHeader": "Add Header"
   },
   "welcome": {
@@ -49,6 +55,10 @@
     "passwordLetter": "Password must contain at least one letter.",
     "passwordDigit": "Password must contain at least one digit.",
     "passwordSpecial": "Password must contain at least one special character.",
-    "accountNotFound": "Your account is not found =("
+    "accountNotFound": "Your account is not found =(",
+    "urlCannotBeEmpty": "URL cannot be empty"
+  },
+  "responses": {
+    "couldNotSendRequest": "Could not send request"
   }
 }

@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 
 import HeadersEditor from '@/src/components/GraphiQLClient/HeadersEditor';
+import { render } from '@src/tests/test-utils';
 
 const mockSetHeaders = jest.fn();
 const mockSetUpdateUrl = jest.fn();

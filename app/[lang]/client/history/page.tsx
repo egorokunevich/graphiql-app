@@ -11,12 +11,14 @@ import {
   Box,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import useAuthRedirect from '@/src/hooks/useAuthRedirect';
 import { LanguageType } from '@/src/types/index';
 import { useHistoryContext } from '@src/context/HistoryContext';
 
 const HistoryPage = () => {
+  const t = useTranslations();
   const { loading } = useAuthRedirect();
   const { history, clearHistory, setSelectedRequest } = useHistoryContext();
   const params = useParams<{ lang: LanguageType }>();
@@ -51,10 +53,7 @@ const HistoryPage = () => {
               justifyContent: 'center',
             }}
           >
-            <Typography variant="h6">
-              You haven't executed any requests yet, It's empty here. Try those
-              options:
-            </Typography>
+            <Typography variant="h6">{t('client.noHistory')}</Typography>
             <Box sx={{ display: 'flex', gap: 3 }}>
               <Button
                 color="primary"
@@ -113,7 +112,7 @@ const HistoryPage = () => {
               variant="contained"
               onClick={clearHistory}
             >
-              Clear History
+              {t('client.clearHistory')}
             </Button>
           </Box>
         )}

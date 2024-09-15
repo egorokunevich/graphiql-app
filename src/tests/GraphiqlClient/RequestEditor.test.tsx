@@ -1,7 +1,8 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import RequestEditor from '@/src/components/GraphiQLClient/RequestEditor';
 import { encodeBase64 } from '@/src/utils/base64';
+import { render } from '@src/tests/test-utils';
 
 jest.mock('@monaco-editor/react', () => ({
   __esModule: true,
