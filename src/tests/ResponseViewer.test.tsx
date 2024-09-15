@@ -1,22 +1,22 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 
 import { ResponseViewer } from '@src/components/ResponseViewer/ResponseViewer';
+import { render } from '@src/tests/test-utils';
 
-
-jest.mock('next-intl', () => ({
-  useTranslations: () => (key) =>
-    key === 'client' ? 'Mocked Translation' : key,
-}));
+// jest.mock('next-intl', () => ({
+//   useTranslations: () => (key) =>
+//     key === 'client' ? 'Mocked Translation' : key,
+// }));
 
 jest.mock('react-syntax-highlighter', () => ({
   Light: ({ children }) => <div>{children}</div>,
   Prism: ({ children }) => <div>{children}</div>,
 }));
 
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (props) => <img {...props} alt={props.alt} />,
-}));
+// jest.mock('next/image', () => ({
+//   __esModule: true,
+//   default: (props) => <img {...props} alt={props.alt} />,
+// }));
 
 const mockJsonResponse = {
   status: 200,
@@ -37,11 +37,11 @@ const mockErrorResponse = {
 };
 
 describe('ResponseViewer', () => {
-  test('renders loading state', () => {
+  test('renders loading state', async () => {
     render(
       <ResponseViewer response={null} tabGraphiql={false} resLoading={true} />,
     );
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(await screen.findByText('Loading...')).toBeInTheDocument();
   });
 
   test('renders error state with message', () => {
@@ -77,10 +77,12 @@ describe('ResponseViewer', () => {
     expect(screen.getByText(/Test/)).toBeInTheDocument();
   });
 
-  test('renders initial state with welcome message', () => {
+  test('renders initial state with welcome message', async () => {
     render(
       <ResponseViewer response={null} tabGraphiql={false} resLoading={false} />,
     );
-    expect(screen.getByText('welcome')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Enter the URL and click Send to get a response'),
+    ).toBeInTheDocument();
   });
 });
