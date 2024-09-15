@@ -53,6 +53,7 @@ describe('RestBodyEditor', () => {
       const monacoEditor = editor.__monacoEditor;
       if (monacoEditor) {
         monacoEditor.setValue('{ "key": "value" }');
+
         monacoEditor.onDidBlurEditorText.mock.calls.forEach(
           ([callback]: (() => {})[]) => callback(),
         );

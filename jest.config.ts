@@ -16,7 +16,17 @@ const config: Config = {
     '^@src/(.*)$': '<rootDir>/src/$1',
     '^@app/(.*)$': '<rootDir>/app/$1',
   },
-  collectCoverageFrom: ['**/*.{ts,tsx}', '!**/node_modules/**', '!**/.next/**'],
+  collectCoverageFrom: [
+    '**/*.{ts,tsx}',
+    '!**/node_modules/**',
+    '!**/.next/**',
+    '!**/global.d.ts',
+    '!**/i18n-config.ts',
+    '!**/jest.config.ts',
+    '!**/middleware.ts',
+    '!**/next-env.d.ts',
+    '!**/tailwind.config.ts',
+  ],
   setupFilesAfterEnv: ['<rootDir>/setupJest.ts'],
   clearMocks: true,
   transformIgnorePatterns: [
