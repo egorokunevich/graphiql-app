@@ -32,15 +32,18 @@ const Footer = () => {
         <Box component="span" m={1}>
           2024
         </Box>
-        <a href="https://rs.school/">
-          <Image
-            className="footer__img"
-            src="/static/logo-rsschool.png"
-            alt="RS School Logo"
-            width={100}
-            height={40}
-          />
-        </a>
+        <Link href="https://rs.school/">
+          <Box sx={{ width: '100px', height: '40px', position: 'relative' }}>
+            <Image
+              className="footer__img"
+              src="/static/logo-rsschool.png"
+              alt="RS School Logo"
+              width={100}
+              height={40}
+              style={{ objectFit: 'contain' }}
+            />
+          </Box>
+        </Link>
       </Box>
     </Box>
   );

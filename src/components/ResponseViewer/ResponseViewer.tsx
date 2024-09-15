@@ -46,6 +46,7 @@ export const ResponseViewer = <T,>({
           display: 'flex',
           justifyContent: 'space-between',
           width: '100%',
+          paddingBottom: 0,
         }}
       >
         {!tabGraphiql && (

@@ -2,7 +2,6 @@ import type { Config } from 'jest';
 import nextJest from 'next/jest';
 
 const createJestConfig = nextJest({
-  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
   dir: './',
 });
 
@@ -17,11 +16,11 @@ const config: Config = {
   collectCoverageFrom: ['**/*.{ts,tsx}', '!**/node_modules/**', '!**/.next/**'],
   setupFilesAfterEnv: ['<rootDir>/setupJest.ts'],
   clearMocks: true,
-  transformIgnorePatterns: ['node_modules/(?!react-syntax-highlighter)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!react-syntax-highlighter)',
+    // '@testing-library/jest-dom/extend-expect',
+  ],
 };
-
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-// export default createJestConfig(config);
 
 async function transformedJestConfig() {
   const nextJestConfig = await createJestConfig(config)();

@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 
 import { RestHeaderEditorProps } from '@/src/types/index';
 
-export const RestHeaderEditor = ({
+const RestHeaderEditor = ({
   headers,
   setHeaders,
 }: RestHeaderEditorProps) => {
@@ -89,7 +89,7 @@ export const RestHeaderEditor = ({
               }
               fullWidth
             />
-            <IconButton onClick={() => handleRemoveHeader(index)}>
+            <IconButton onClick={() => handleRemoveHeader(index)} data-testid="delete-button">
               <DeleteIcon />
             </IconButton>
           </Box>
@@ -101,3 +101,5 @@ export const RestHeaderEditor = ({
     </Box>
   );
 };
+
+export default RestHeaderEditor;

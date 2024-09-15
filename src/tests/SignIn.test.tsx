@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-// import { NextIntlClientProvider } from 'next-intl';
 
 import {
   mockCreateUserWithEmailAndPassword,
@@ -13,7 +12,6 @@ import {
 
 import SignIn from '@/app/[lang]/authorization/page';
 import LangLayout from '@src/components/LangLayout/LangLayout';
-// import { LayoutProvider } from '@src/context/LayoutContext';
 import { render } from '@src/tests/test-utils';
 
 jest.mock('firebase/app', () => {

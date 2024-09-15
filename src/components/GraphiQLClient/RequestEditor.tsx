@@ -58,7 +58,7 @@ export default function RequestEditor({ body, setBody }: RequestEditorProps) {
       <Button
         onClick={handlePrettify}
         variant="outlined"
-        sx={{ marginTop: 2, marginBottom: 1 }}
+        sx={{ margin: '0 0 5px 0' }}
       >
         Prettify
       </Button>

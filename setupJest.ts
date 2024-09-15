@@ -1,4 +1,4 @@
-// This mocks will run before all tests
+import '@testing-library/jest-dom';
 export const mockPush = jest.fn();
 
 jest.mock('next/navigation', () => {
@@ -14,5 +14,6 @@ jest.mock('next/navigation', () => {
   };
 });
 
-// Solves the "TextEncoder is not defined error"
 global.TextEncoder = require('util').TextEncoder;
+
+

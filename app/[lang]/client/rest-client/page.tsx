@@ -1,13 +1,13 @@
 'use client';
 
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import CustomTabPanel from '@/src/components/CustomTabPanel/CustomPanel';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import RestBodyEditor from '@/src/components/RestClient/RestBodyEditor';
-import { RestHeaderEditor } from '@/src/components/RestClient/RestHeaderEditor';
+import RestHeaderEditor  from '@/src/components/RestClient/RestHeaderEditor';
 import { RestTabs } from '@/src/components/RestClient/RestTabs';
 import { RestUrl } from '@/src/components/RestClient/RestUrl';
 import { useHistoryContext } from '@/src/context/HistoryContext';
@@ -75,9 +75,6 @@ const RestClient = () => {
       }}
       disableGutters
     >
-      <Typography variant="h4" sx={{ marginBottom: 1 }}>
-        RESTfull Client
-      </Typography>
       <RestUrl
         method={method}
         setMethod={setMethod}

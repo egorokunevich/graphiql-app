@@ -71,17 +71,4 @@ describe('Header signed in', () => {
 
     expect(mockPush).toHaveBeenCalledWith('/en');
   });
-
-  // test('toggles sticky class on scroll', async () => {
-  //   render(<Header />);
-
-  //   // const headerElement = await screen.findByTestId('header');
-  //   const header = await screen.findByTestId('sticky-box');
-
-  //   expect(header.classList.contains('sticky')).toBe(false);
-
-  //   await fireEvent.scroll(window, { target: { scrollY: 100 } });
-
-  //   expect(header.classList.contains('sticky')).toBe(true);
-  // });
 });
