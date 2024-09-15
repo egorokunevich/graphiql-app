@@ -4,9 +4,9 @@ import { screen } from '@testing-library/react';
 import {
   mockSignOut,
   mockSignInWithEmailAndPassword,
-  mockOnAuthStateChangedSignedOut,
-  mockGetAuthWithNull,
   mockCreateUserWithEmailAndPassword,
+  mockGetAuthWithAuth,
+  mockOnAuthStateChangedSignedIn,
 } from './mocks/mockFirebase';
 
 import { render } from '@/src/tests/test-utils';
@@ -20,9 +20,9 @@ jest.mock('firebase/app', () => {
 
 jest.mock('firebase/auth', () => {
   return {
-    getAuth: mockGetAuthWithNull,
+    getAuth: mockGetAuthWithAuth,
     signOut: mockSignOut,
-    onAuthStateChanged: mockOnAuthStateChangedSignedOut,
+    onAuthStateChanged: mockOnAuthStateChangedSignedIn,
     createUserWithEmailAndPassword: mockCreateUserWithEmailAndPassword,
     signInWithEmailAndPassword: mockSignInWithEmailAndPassword,
   };

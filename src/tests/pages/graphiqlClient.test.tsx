@@ -14,6 +14,7 @@ import {
 import { mockHistoryRecord } from '../mocks/mockResponse';
 
 import GraphiQLClient from '@app/[lang]/client/graphiql-client/page';
+import { server } from '@src/tests/mocks/server';
 import { render } from '@src/tests/test-utils';
 
 jest.mock('firebase/app', () => {
@@ -44,6 +45,10 @@ jest.mock('@src/context/HistoryContext', () => ({
 }));
 
 describe('GraphiQLClient', () => {
+  beforeAll(() => server.listen());
+  afterEach(() => server.resetHandlers());
+  afterAll(() => server.close());
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
