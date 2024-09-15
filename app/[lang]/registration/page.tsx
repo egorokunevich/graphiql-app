@@ -77,7 +77,10 @@ function SignUp() {
   }
 
   return (
-    <div className="mx-auto p-6 m-6 bg-white rounded-lg shadow-md w-[450px]">
+    <div
+      className="mx-auto p-6 m-6 bg-white rounded-lg shadow-md w-[450px]"
+      data-testid="signUp-page"
+    >
       <h1 className="text-3xl font-semibold mb-4">{t('basic.signUp')}</h1>
       <form onSubmit={register}>
         <InputField
@@ -122,6 +125,7 @@ function SignUp() {
           <Button
             type="submit"
             className="w-full m-auto bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+            data-testid="signUp-submitBtn"
           >
             {t('login.createAccount')}
           </Button>
