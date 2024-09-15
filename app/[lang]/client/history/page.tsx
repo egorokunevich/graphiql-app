@@ -53,10 +53,7 @@ const HistoryPage = () => {
               justifyContent: 'center',
             }}
           >
-            <Typography variant="h6">
-              You haven't executed any requests yet, It's empty here. Try those
-              options:
-            </Typography>
+            <Typography variant="h6">{t('client.noHistory')}</Typography>
             <Box sx={{ display: 'flex', gap: 3 }}>
               <Button
                 color="primary"
