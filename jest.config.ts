@@ -26,7 +26,10 @@ const config: Config = {
   ],
   setupFilesAfterEnv: ['<rootDir>/setupJest.ts'],
   clearMocks: true,
-  transformIgnorePatterns: ['node_modules/(?!react-syntax-highlighter)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!react-syntax-highlighter)',
+    // '@testing-library/jest-dom/extend-expect',
+  ],
 };
 
 async function transformedJestConfig() {
