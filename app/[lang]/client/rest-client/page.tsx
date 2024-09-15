@@ -61,7 +61,7 @@ const RestClient = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>{t('basic.loading')}...</div>;
   }
 
   return (
@@ -74,6 +74,7 @@ const RestClient = () => {
         width: '100%',
       }}
       disableGutters
+      data-testid="rest-client"
     >
       <RestUrl
         method={method}

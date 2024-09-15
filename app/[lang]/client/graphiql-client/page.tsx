@@ -167,7 +167,13 @@ const GraphiQLClient = () => {
           sx={{ padding: 0 }}
         >
           <Tab label={'Response'} {...a11yProps(0)} />
-          {isSdlFetched && <Tab label={'Docs'} {...a11yProps(1)} />}
+          {isSdlFetched && (
+            <Tab
+              label={'Docs'}
+              {...a11yProps(1)}
+              data-testid="graphiql-docsTab"
+            />
+          )}
         </Tabs>
       </Box>
       <CustomTabPanel value={tabs} index={0}>

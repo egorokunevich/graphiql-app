@@ -96,6 +96,7 @@ export const RestUrl = ({
           boxSizing: 'border-box',
         }}
         onClick={handleSendRequest}
+        data-testid="rest-sendBtn"
       >
         {t('send')}
       </Button>

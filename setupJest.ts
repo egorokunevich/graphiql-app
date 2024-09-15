@@ -1,4 +1,6 @@
 import '@testing-library/jest-dom';
+import 'whatwg-fetch';
+
 export const mockPush = jest.fn();
 
 jest.mock('next/navigation', () => {
@@ -15,4 +17,3 @@ jest.mock('next/navigation', () => {
 });
 
 global.TextEncoder = require('util').TextEncoder;
-

@@ -8,7 +8,7 @@ import { useHistoryContext } from '@/src/context/HistoryContext';
 import { sendHttpRequest } from '@/src/hooks/useHttpRequest';
 import { ResponseType, RestRequestProps } from '@/src/types/index';
 
-interface ErrorResponseData {
+export interface ErrorResponseData {
   status?: number;
   data?: unknown;
   message?: string;

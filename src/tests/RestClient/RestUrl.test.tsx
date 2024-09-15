@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { RestUrl } from '@/src/components/RestClient/RestUrl';
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key) => key,
+  useTranslations: () => (key: unknown) => key,
 }));
 
 describe('RestUrl', () => {
