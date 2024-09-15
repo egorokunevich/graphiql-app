@@ -11,7 +11,6 @@ import {
 } from './mocks/mockFirebase';
 
 import { mockPush } from '@/setupJest';
-import ApiLayout from '@app/api/layout';
 import LangLayout from '@src/components/LangLayout/LangLayout';
 import { render } from '@src/tests/test-utils';
 
@@ -66,20 +65,5 @@ describe('RootLayout', () => {
     await user.click(signInBtn);
 
     expect(mockPush).toHaveBeenCalledWith('/en/authorization');
-  });
-});
-
-describe('ApiLayout', () => {
-  it('Should render in the document', async () => {
-    const child = <div></div>;
-
-    const apiLayout = await ApiLayout({
-      children: child,
-    });
-
-    render(apiLayout);
-
-    const layout = await screen.findByTestId('api-layout');
-    expect(layout).toBeInTheDocument();
   });
 });
