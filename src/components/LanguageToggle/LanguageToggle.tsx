@@ -43,6 +43,7 @@ export default function LanguageToggle() {
           id="language-toggle"
           value={language}
           label="Language"
+          inputProps={{ 'data-testid': 'lang-select' }}
           onChange={(e) => {
             handleLanguageChange(e as Event);
           }}

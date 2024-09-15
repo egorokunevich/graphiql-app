@@ -35,6 +35,7 @@ jest.mock('firebase/auth', () => {
 describe('RootLayout', () => {
   it('Should render in the document', async () => {
     const child = <div></div>;
+
     const langLayout = await LangLayout({
       children: child,
     });
@@ -54,6 +55,9 @@ describe('RootLayout', () => {
     });
 
     render(langLayout);
+
+    const layout = await screen.findByTestId('lang-layout');
+    expect(layout).toBeInTheDocument();
 
     const signInBtn = await screen.findByTestId('btn-signIn');
     expect(signInBtn).toBeInTheDocument();

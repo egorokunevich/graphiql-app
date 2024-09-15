@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import {
@@ -70,5 +70,18 @@ describe('Header signed in', () => {
     await user.click(mainPageButton);
 
     expect(mockPush).toHaveBeenCalledWith('/en');
+  });
+
+  test('handles language selection', async () => {
+    render(<Header />);
+
+    const langSelect = await screen.findByTestId('lang-select');
+    expect(langSelect).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(langSelect, { target: { value: 'ru' } });
+    });
+
+    expect(mockPush).toHaveBeenCalledWith('/');
   });
 });
