@@ -90,5 +90,4 @@ describe('ButtonSignOut', () => {
 
     expect(signOutBtn).toBeInTheDocument();
   });
-
 });

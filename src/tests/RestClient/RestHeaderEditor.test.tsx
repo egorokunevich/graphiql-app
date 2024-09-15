@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import RestHeaderEditor from '@/src/components/RestClient/RestHeaderEditor';
 
-
 type TranslationKeys =
   | 'client.key'
   | 'client.value'
@@ -29,7 +28,7 @@ describe('RestHeaderEditor', () => {
       <RestHeaderEditor
         headers={[{ key: 'Authorization', value: 'Bearer token' }]}
         setHeaders={setHeadersMock}
-      />
+      />,
     );
 
     const keyField = screen.getByLabelText(/key/i) as HTMLInputElement;
@@ -49,7 +48,7 @@ describe('RestHeaderEditor', () => {
       <RestHeaderEditor
         headers={[{ key: 'Authorization', value: 'Bearer token' }]}
         setHeaders={setHeadersMock}
-      />
+      />,
     );
 
     const deleteButton = screen.getByTestId('delete-button');
