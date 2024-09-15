@@ -2,6 +2,7 @@
 
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { Box, TextField, IconButton, Tooltip } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 
 import { UrlInputProps } from '@/src/types/index';
@@ -13,6 +14,7 @@ export default function UrlInput({
   setEndpoint,
   urlError,
 }: UrlInputProps) {
+  const t = useTranslations();
   const [localEndpoint, setLocalEndpoint] = useState(endpoint);
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +49,7 @@ export default function UrlInput({
     >
       <Box sx={{ position: 'relative', width: '100%' }}>
         <TextField
-          label="GraphQL Endpoint URL"
+          label={`GraphQL ${t('client.endpointURL')}`}
           variant="outlined"
           sx={{ borderRadius: 'unset', width: '100%' }}
           value={localEndpoint}
@@ -59,7 +61,7 @@ export default function UrlInput({
         />
         {urlError && (
           <Tooltip
-            title="URL cannot be empty"
+            title={t('errors.urlCannotBeEmpty')}
             placement="right"
             sx={{ position: 'absolute', right: 0, top: 8 }}
           >
@@ -72,7 +74,7 @@ export default function UrlInput({
 
       <Box sx={{ position: 'relative', width: '100%' }}>
         <TextField
-          label="SDL Endpoint URL"
+          label={`SDL ${t('client.endpointURL')}`}
           value={sdlUrl}
           onChange={handleSdlUrlChange}
           variant="outlined"

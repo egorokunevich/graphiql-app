@@ -36,11 +36,11 @@ export const RestTabs = ({ value, setValue, tabGraphiql }: RestTabsProps) => {
       >
         <Tab label={t('headers')} {...a11yProps(0)} />
         {tabGraphiql ? (
-          <Tab label={'Query'} {...a11yProps(1)} />
+          <Tab label={t('query')} {...a11yProps(1)} />
         ) : (
           <Tab label={t('body')} {...a11yProps(1)} />
         )}
-        {tabGraphiql && <Tab label={'Variables'} {...a11yProps(2)} />}
+        {tabGraphiql && <Tab label={t('variables')} {...a11yProps(2)} />}
       </Tabs>
     </Box>
   );

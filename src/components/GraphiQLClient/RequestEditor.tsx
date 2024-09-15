@@ -1,13 +1,17 @@
+'use client';
+
 import MonacoEditor from '@monaco-editor/react';
 import { Box, Button } from '@mui/material';
 import { parse, print } from 'graphql';
 import * as monaco from 'monaco-editor';
+import { useTranslations } from 'next-intl';
 import React, { useEffect, useRef } from 'react';
 
 import { RequestEditorProps } from '@/src/types/index';
 import { encodeBase64 } from '@/src/utils/base64';
 
 export default function RequestEditor({ body, setBody }: RequestEditorProps) {
+  const t = useTranslations();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const bodyRef = useRef(body);
 
@@ -60,7 +64,7 @@ export default function RequestEditor({ body, setBody }: RequestEditorProps) {
         variant="outlined"
         sx={{ margin: '0 0 5px 0' }}
       >
-        Prettify
+        {t('client.prettify')}
       </Button>
       <MonacoEditor
         height="300px"

@@ -1,5 +1,6 @@
 'use client';
 import { Box, Button, Tabs, Tab, Container } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 
 import CustomTabPanel from '@/src/components/CustomTabPanel/CustomPanel';
@@ -29,6 +30,7 @@ const GraphiQLClient = () => {
   const { addHistoryEntry, selectedRequest, setSelectedRequest } =
     useHistoryContext();
   const { loading } = useAuthRedirect();
+  const t = useTranslations();
 
   useEffect(() => {
     if (selectedRequest && selectedRequest.type === 'graphiql-client') {
@@ -98,7 +100,7 @@ const GraphiQLClient = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>{t('basic.loading')}...</div>;
   }
 
   return (
@@ -148,7 +150,7 @@ const GraphiQLClient = () => {
           onClick={onSendRequest}
           data-testid="graphiql-send"
         >
-          Send Request
+          {t('client.send') + ' ' + t('client.request')}
         </Button>
       </Box>
       <Box
@@ -166,10 +168,10 @@ const GraphiQLClient = () => {
           aria-label="basic tabs example"
           sx={{ padding: 0 }}
         >
-          <Tab label={'Response'} {...a11yProps(0)} />
+          <Tab label={t('client.response')} {...a11yProps(0)} />
           {isSdlFetched && (
             <Tab
-              label={'Docs'}
+              label={t('client.docs')}
               {...a11yProps(1)}
               data-testid="graphiql-docsTab"
             />

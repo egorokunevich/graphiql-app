@@ -11,12 +11,14 @@ import {
   Box,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import useAuthRedirect from '@/src/hooks/useAuthRedirect';
 import { LanguageType } from '@/src/types/index';
 import { useHistoryContext } from '@src/context/HistoryContext';
 
 const HistoryPage = () => {
+  const t = useTranslations();
   const { loading } = useAuthRedirect();
   const { history, clearHistory, setSelectedRequest } = useHistoryContext();
   const params = useParams<{ lang: LanguageType }>();
@@ -113,7 +115,7 @@ const HistoryPage = () => {
               variant="contained"
               onClick={clearHistory}
             >
-              Clear History
+              {t('client.clearHistory')}
             </Button>
           </Box>
         )}

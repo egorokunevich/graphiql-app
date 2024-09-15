@@ -23,10 +23,15 @@
     "key": "Key",
     "value": "Value",
     "send": "Send",
+    "request": "Request",
     "welcome": "Enter the URL and click Send to get a response",
     "headers": "Headers",
+    "query": "Query",
     "body": "Body",
     "variables": "Variables",
+    "prettify": "Prettify",
+    "docs": "Docs",
+    "clearHistory": "Clear History",
     "addHeader": "Add Header"
   },
   "welcome": {
@@ -49,6 +54,16 @@
     "passwordLetter": "Password must contain at least one letter.",
     "passwordDigit": "Password must contain at least one digit.",
     "passwordSpecial": "Password must contain at least one special character.",
-    "accountNotFound": "Your account is not found =("
+    "accountNotFound": "Your account is not found =(",
+    "urlCannotBeEmpty": "URL cannot be empty"
+  },
+  "responses": {
+    "endpointIsNotValid": "The provided endpoint URL is not valid.",
+    "invalidJSONFormatInVariables": "Invalid JSON format in variables.",
+    "emptyResponseReceived": "Empty response received.",
+    "networkError": "There was a problem with the network request. Please check your connection or the endpoint URL.",
+    "errorOccuredOnTheServer": "An error occurred on the server.",
+    "unexpectedError": "An unexpected error occurred.",
+    "couldNotSendRequest": "Could not send request"
   }
 }

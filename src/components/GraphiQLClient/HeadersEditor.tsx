@@ -1,5 +1,8 @@
+'use client';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, TextField, Button, IconButton } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
 import { HeadersEditorProps } from '@/src/types/index';
@@ -10,6 +13,8 @@ export default function HeadersEditor({
   updateUrl,
   setUpdateUrl,
 }: HeadersEditorProps) {
+  const t = useTranslations();
+
   const handleAddHeader = () => {
     setHeaders([...headers, { key: '', value: '' }]);
   };
@@ -75,7 +80,7 @@ export default function HeadersEditor({
       {headers.map((header, index) => (
         <Box key={index} sx={{ display: 'flex', gap: 2, marginBottom: 1 }}>
           <TextField
-            label={'Key'}
+            label={t('client.key')}
             value={header.key}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleHeaderChange(index, 'key', e.target.value)
@@ -83,7 +88,7 @@ export default function HeadersEditor({
             fullWidth
           />
           <TextField
-            label={'Value'}
+            label={t('client.value')}
             value={header.value}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleHeaderChange(index, 'value', e.target.value)
@@ -99,7 +104,7 @@ export default function HeadersEditor({
         </Box>
       ))}
       <Button variant="outlined" onClick={handleAddHeader}>
-        Add Header
+        {t('client.addHeader')}
       </Button>
     </Box>
   );

@@ -136,7 +136,7 @@ const RestBodyEditor = ({
               top: '-12px',
             }}
           >
-            Variables
+            {t('variables')}
           </Typography>
         )}
       </Box>
@@ -172,7 +172,7 @@ const RestBodyEditor = ({
               variant="outlined"
               sx={{ display: 'inline-block' }}
             >
-              Prettify
+              {t('prettify')}
             </Button>
           </RadioGroup>
         </FormControl>
