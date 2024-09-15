@@ -58,12 +58,6 @@
     "urlCannotBeEmpty": "URL не может быть пустым"
   },
   "responses": {
-    "endpointIsNotValid": "Предосталенный URL не валиден.",
-    "invalidJSONFormatInVariables": "Некорректный JSON в переменной.",
-    "emptyResponseReceived": "Поулчен пустой ответ.",
-    "networkError": "Возникла проблема с сетью. Пожалуйста, проверьте соединение и правильность введенного URL.",
-    "errorOccuredOnTheServer": "Возникла ошибка на сервере.",
-    "unexpectedError": "Возникла непредвиденная ошибка.",
     "couldNotSendRequest": "Не получилось отправить запрос"
   }
 }

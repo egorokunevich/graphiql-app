@@ -58,12 +58,6 @@
     "urlCannotBeEmpty": "URL cannot be empty"
   },
   "responses": {
-    "endpointIsNotValid": "The provided endpoint URL is not valid.",
-    "invalidJSONFormatInVariables": "Invalid JSON format in variables.",
-    "emptyResponseReceived": "Empty response received.",
-    "networkError": "There was a problem with the network request. Please check your connection or the endpoint URL.",
-    "errorOccuredOnTheServer": "An error occurred on the server.",
-    "unexpectedError": "An unexpected error occurred.",
     "couldNotSendRequest": "Could not send request"
   }
 }

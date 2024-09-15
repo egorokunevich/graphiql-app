@@ -1,5 +1,4 @@
 import axios, { AxiosError } from 'axios';
-import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { isValidUrl } from '@src/hooks/useCheckUrl';
@@ -23,7 +22,6 @@ export const useGraphiQLRequest = (
   headers: { key: string; value: string }[],
   sdlUrl: string,
 ) => {
-  const t = useTranslations('responses');
   const [resLoading, setResLoading] = useState(false);
   const [response, setResponse] = useState<ResponseType | null>(null);
   const [sdlResponse, setSdlResponse] = useState<ResponseType | null>(null);
@@ -43,7 +41,7 @@ export const useGraphiQLRequest = (
     } catch (_) {
       setResponse({
         status: 400,
-        message: t('endpointIsNotValid'),
+        message: 'The provided endpoint URL is not valid.',
       });
       setResLoading(false);
       return;
@@ -55,7 +53,7 @@ export const useGraphiQLRequest = (
     } catch (error) {
       setResponse({
         status: 400,
-        message: t('invalidJSONFormatInVariables'),
+        message: 'Invalid JSON format in variables.',
       });
       setResLoading(false);
       return;
@@ -81,7 +79,7 @@ export const useGraphiQLRequest = (
       } else {
         setResponse({
           status: responseUrl.status,
-          message: t('emptyResponseReceived'),
+          message: 'Empty response received.',
         });
         setResLoading(false);
       }
@@ -128,13 +126,15 @@ export const useGraphiQLRequest = (
       if (!axiosError.response) {
         setResponse({
           status: 'Network Error',
-          message: t('networkError'),
+          message:
+            'There was a problem with the network request. Please check your connection or the endpoint URL.',
         });
       } else {
         setResponse({
           status: axiosError.response?.status || 500,
           message:
-            axiosError.response?.data?.message || t('errorOccuredOnTheServer'),
+            axiosError.response?.data?.message ||
+            'An error occurred on the server.',
           data: axiosError.response?.data || null,
         });
       }
@@ -146,12 +146,12 @@ export const useGraphiQLRequest = (
       const genericError = error as Error;
       setResponse({
         status: 0,
-        message: genericError.message || t('unexpectedError'),
+        message: genericError.message || 'An unexpected error occurred',
       });
     } else {
       setResponse({
         status: 0,
-        message: t('unexpectedError'),
+        message: 'An unexpected error occurred',
       });
     }
 
