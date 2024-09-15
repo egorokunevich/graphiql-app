@@ -32,7 +32,6 @@ export const useRestRequest = () => {
   }: RestRequestProps): Promise<
     NextResponse<{ status: number | undefined; data: null }> | undefined
   > => {
-    console.log('111111111111111111');
     if (!url) {
       setUrlError(true);
       setResponse(null);

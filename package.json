@@ -68,7 +68,8 @@
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "whatwg-fetch": "^3.6.20"
   },
   "description": "The application is developed in React and Next.js. Firebase is responsible for user registration. The application supports 2 languages: Russian and English.",
   "main": "index.js",

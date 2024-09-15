@@ -2,20 +2,18 @@ import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-// We use relative path because hoisted jest.mock() can't find modules imported via path aliases.
 // eslint-disable-next-line no-restricted-imports
 import {
-  mockSignOut,
-  mockSignInWithEmailAndPassword,
   mockCreateUserWithEmailAndPassword,
-  mockGetAuthWithAuth,
+  mockGetAuthWithNull,
   mockOnAuthStateChangedSignedIn,
+  mockSignInWithEmailAndPassword,
+  mockSignOut,
 } from '../mocks/mockFirebase';
 // eslint-disable-next-line no-restricted-imports
 import { mockHistoryRecord } from '../mocks/mockResponse';
 
-import { mockPush } from '@/setupJest';
-import HistoryPage from '@app/[lang]/client/history/page';
+import GraphiQLClient from '@app/[lang]/client/graphiql-client/page';
 import { render } from '@src/tests/test-utils';
 
 jest.mock('firebase/app', () => {
@@ -26,7 +24,7 @@ jest.mock('firebase/app', () => {
 
 jest.mock('firebase/auth', () => {
   return {
-    getAuth: mockGetAuthWithAuth,
+    getAuth: mockGetAuthWithNull,
     signOut: mockSignOut,
     onAuthStateChanged: mockOnAuthStateChangedSignedIn,
     createUserWithEmailAndPassword: mockCreateUserWithEmailAndPassword,
@@ -37,37 +35,37 @@ jest.mock('firebase/auth', () => {
 jest.mock('@src/context/HistoryContext', () => ({
   ...jest.requireActual('@src/context/HistoryContext'),
   useHistoryContext: jest.fn().mockReturnValue({
-    history: [mockHistoryRecord],
+    history: [{ mockHistoryRecord, type: 'graphiql-client' }],
     addHistoryEntry: jest.fn(),
     clearHistory: jest.fn(),
-    selectedRequest: mockHistoryRecord,
+    selectedRequest: { mockHistoryRecord, type: 'graphiql-client' },
     setSelectedRequest: jest.fn(),
   }),
 }));
 
-describe('HistoryPage', () => {
+describe('GraphiQLClient', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('Should render a list of requests', async () => {
+  it('Should render in the document', async () => {
     const user = userEvent.setup();
 
-    render(<HistoryPage />);
+    render(<GraphiQLClient />);
 
-    const historyPage = await screen.findByTestId('history-page');
-    expect(historyPage).toBeInTheDocument();
+    const client = await screen.findByTestId('graphiql-client');
+    expect(client).toBeInTheDocument();
 
-    const requestList = await screen.findByTestId('history-requestList');
+    const urlInput = await screen.findByTestId('graphiql-url');
+    expect(urlInput).toBeInTheDocument();
 
-    expect(requestList).toBeInTheDocument();
+    const sendBtn = await screen.findByTestId('graphiql-send');
+    expect(sendBtn).toBeInTheDocument();
 
-    const savedRequests = await screen.findAllByTestId('history-savedRequest');
+    await user.type(urlInput, 'mock-endpoint.com');
 
-    await user.click(savedRequests[0]);
+    expect(urlInput).toHaveValue('mock-endpoint.com');
 
-    expect(mockPush).toHaveBeenCalledWith(
-      `/en/client/${mockHistoryRecord.type}`,
-    );
+    await user.click(sendBtn);
   });
 });

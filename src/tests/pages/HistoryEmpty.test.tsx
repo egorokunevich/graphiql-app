@@ -32,6 +32,10 @@ jest.mock('firebase/auth', () => {
 });
 
 describe('HistoryPage', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('Should render in the document', async () => {
     render(<HistoryPage />);
 
