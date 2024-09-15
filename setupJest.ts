@@ -15,5 +15,3 @@ jest.mock('next/navigation', () => {
 });
 
 global.TextEncoder = require('util').TextEncoder;
-
-

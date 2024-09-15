@@ -119,7 +119,7 @@ const RestBodyEditor = ({
       <Box sx={{ position: 'relative' }}>
         <IconButton
           onClick={toggleVariablesVisibility}
-          data-testid='toggle-variables-button'
+          data-testid="toggle-variables-button"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           sx={{ fontSize: '14px' }}

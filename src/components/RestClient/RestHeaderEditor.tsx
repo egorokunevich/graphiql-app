@@ -5,10 +5,7 @@ import React, { useEffect } from 'react';
 
 import { RestHeaderEditorProps } from '@/src/types/index';
 
-const RestHeaderEditor = ({
-  headers,
-  setHeaders,
-}: RestHeaderEditorProps) => {
+const RestHeaderEditor = ({ headers, setHeaders }: RestHeaderEditorProps) => {
   const t = useTranslations('client');
 
   useEffect(() => {
@@ -89,7 +86,10 @@ const RestHeaderEditor = ({
               }
               fullWidth
             />
-            <IconButton onClick={() => handleRemoveHeader(index)} data-testid="delete-button">
+            <IconButton
+              onClick={() => handleRemoveHeader(index)}
+              data-testid="delete-button"
+            >
               <DeleteIcon />
             </IconButton>
           </Box>

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import CustomTabPanel from '@/src/components/CustomTabPanel/CustomPanel';
 import { ResponseViewer } from '@/src/components/ResponseViewer/ResponseViewer';
 import RestBodyEditor from '@/src/components/RestClient/RestBodyEditor';
-import RestHeaderEditor  from '@/src/components/RestClient/RestHeaderEditor';
+import RestHeaderEditor from '@/src/components/RestClient/RestHeaderEditor';
 import { RestTabs } from '@/src/components/RestClient/RestTabs';
 import { RestUrl } from '@/src/components/RestClient/RestUrl';
 import { useHistoryContext } from '@/src/context/HistoryContext';

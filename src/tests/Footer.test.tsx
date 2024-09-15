@@ -34,7 +34,7 @@ describe('Footer', () => {
     const logoImage = screen.getByAltText('RS School Logo');
 
     expect(logoImage).not.toBeNull();
-    // expect(logoImage.getAttribute('src')).toBe('/static/logo-rsschool.png');
+
     expect(logoImage.getAttribute('width')).toBe('100');
     expect(logoImage.getAttribute('height')).toBe('40');
   });

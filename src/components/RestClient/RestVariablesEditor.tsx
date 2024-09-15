@@ -53,7 +53,10 @@ export const RestVariablesEditor = ({
             }
             sx={{ marginRight: 1, width: '100%' }}
           />
-          <IconButton onClick={() => handleRemoveVariable(index)} data-testid="delete-button">
+          <IconButton
+            onClick={() => handleRemoveVariable(index)}
+            data-testid="delete-button"
+          >
             <Delete />
           </IconButton>
         </Box>

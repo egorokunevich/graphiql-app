@@ -28,7 +28,7 @@ describe('RestVariablesEditor', () => {
     );
 
     fireEvent.click(screen.getByTestId('delete-button'));
-  expect(setVariablesMock).toHaveBeenCalled();
+    expect(setVariablesMock).toHaveBeenCalled();
   });
 
   test('handles variable addition', () => {
