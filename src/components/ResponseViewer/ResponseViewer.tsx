@@ -3,14 +3,10 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
-import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json';
-import xml from 'react-syntax-highlighter/dist/esm/languages/hljs/xml';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 import { ResponseViewerProps } from '@/src/types/index';
 
-SyntaxHighlighter.registerLanguage('json', json);
-SyntaxHighlighter.registerLanguage('html', xml);
 
 export const ResponseViewer = <T,>({
   response,

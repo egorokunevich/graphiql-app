@@ -69,4 +69,49 @@ describe('HeadersEditor', () => {
 
     expect(mockSetUpdateUrl).toHaveBeenCalled();
   });
+
+  it('handles empty headers correctly', () => {
+    render(
+      <HeadersEditor
+        headers={[]}
+        setHeaders={mockSetHeaders}
+        updateUrl="http://localhost"
+        setUpdateUrl={mockSetUpdateUrl}
+      />,
+    );
+
+    const addButton = screen.getByText('Add Header');
+    fireEvent.click(addButton);
+
+    expect(mockSetHeaders).toHaveBeenCalledWith([{ key: '', value: '' }]);
+  });
+
+  it('handles updating the value of a header', () => {
+    setup();
+    const valueInput = screen.getAllByLabelText('Value')[0];
+    fireEvent.change(valueInput, { target: { value: 'NewToken' } });
+
+    expect(mockSetHeaders).toHaveBeenCalledWith([
+      { key: 'Authorization', value: 'NewToken' },
+      { key: 'Content-Type', value: 'application/json' },
+    ]);
+    expect(mockSetUpdateUrl).toHaveBeenCalled();
+  });
+
+  it('handles removing a header when only one exists', () => {
+    render(
+      <HeadersEditor
+        headers={[{ key: 'Authorization', value: 'Bearer token' }]}
+        setHeaders={mockSetHeaders}
+        updateUrl="http://localhost"
+        setUpdateUrl={mockSetUpdateUrl}
+      />,
+    );
+
+    const deleteButton = screen.getAllByTestId('DeleteIcon')[0];
+    fireEvent.click(deleteButton);
+
+    expect(mockSetHeaders).toHaveBeenCalledWith([]);
+    expect(mockSetUpdateUrl).toHaveBeenCalled();
+  });
 });
