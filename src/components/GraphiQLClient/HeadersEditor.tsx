@@ -90,7 +90,10 @@ export default function HeadersEditor({
             }
             fullWidth
           />
-          <IconButton onClick={() => handleDeleteHeader(index)}>
+          <IconButton
+            onClick={() => handleDeleteHeader(index)}
+            data-testid="DeleteIcon"
+          >
             <DeleteIcon />
           </IconButton>
         </Box>

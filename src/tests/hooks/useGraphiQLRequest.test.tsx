@@ -3,8 +3,6 @@ import axios from 'axios';
 
 import { useGraphiQLRequest } from '@/src/hooks/useGraphqlRequest';
 
-
-
 jest.mock('axios');
 
 describe('useGraphiQLRequest', () => {

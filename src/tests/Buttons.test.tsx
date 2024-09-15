@@ -91,9 +91,4 @@ describe('ButtonSignOut', () => {
     expect(signOutBtn).toBeInTheDocument();
   });
 
-  // it('calls signOut when the button is clicked', () => {
-  //   render(<ButtonSignOut />);
-  //   fireEvent.click(await screen.findByTestId('btn-signOut'));
-  //   expect(signOut).toHaveBeenCalledWith(auth);
-  // });
 });

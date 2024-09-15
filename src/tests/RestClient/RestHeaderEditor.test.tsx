@@ -2,7 +2,12 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import RestHeaderEditor from '@/src/components/RestClient/RestHeaderEditor';
 
-type TranslationKeys = 'client.key' | 'client.value' | 'client.addHeader' | 'client.delete';
+
+type TranslationKeys =
+  | 'client.key'
+  | 'client.value'
+  | 'client.addHeader'
+  | 'client.delete';
 
 const mockTranslations: Record<TranslationKeys, string> = {
   'client.key': 'Key',
@@ -12,7 +17,8 @@ const mockTranslations: Record<TranslationKeys, string> = {
 };
 
 jest.mock('next-intl', () => ({
-  useTranslations: () => (key: string) => mockTranslations[key as TranslationKeys] || key,
+  useTranslations: () => (key: string) =>
+    mockTranslations[key as TranslationKeys] || key,
 }));
 
 describe('RestHeaderEditor', () => {
