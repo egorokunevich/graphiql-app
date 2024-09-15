@@ -37,6 +37,7 @@ const HistoryPage = () => {
         justifyContent: 'space-between',
         padding: '20px',
       }}
+      data-testid="history-page"
     >
       <List sx={{ height: '100%', width: '100%', flex: 1 }}>
         {history.length === 0 ? (
@@ -61,6 +62,7 @@ const HistoryPage = () => {
                 onClick={() =>
                   router.push(`/${params.lang}/client/rest-client`)
                 }
+                data-testid="history-restBtn"
               >
                 REST Client
               </Button>
@@ -70,6 +72,7 @@ const HistoryPage = () => {
                 onClick={() =>
                   router.push(`/${params.lang}/client/graphiql-client`)
                 }
+                data-testid="history-graphiqlBtn"
               >
                 GraphiQL Client
               </Button>
@@ -77,7 +80,7 @@ const HistoryPage = () => {
             .
           </Box>
         ) : (
-          <Box>
+          <Box data-testid="history-requestList">
             {history.map((entry, index) => (
               <ListItem
                 button
@@ -87,6 +90,7 @@ const HistoryPage = () => {
                   router.push(`/${params.lang}/client/${entry.type}`);
                 }}
                 disableGutters
+                data-testid="history-savedRequest"
               >
                 <ListItemText
                   key={index}

@@ -8,7 +8,7 @@ import { useHistoryContext } from '@/src/context/HistoryContext';
 import { sendHttpRequest } from '@/src/hooks/useHttpRequest';
 import { ResponseType, RestRequestProps } from '@/src/types/index';
 
-interface ErrorResponseData {
+export interface ErrorResponseData {
   status?: number;
   data?: unknown;
   message?: string;
@@ -32,6 +32,7 @@ export const useRestRequest = () => {
   }: RestRequestProps): Promise<
     NextResponse<{ status: number | undefined; data: null }> | undefined
   > => {
+    console.log('111111111111111111');
     if (!url) {
       setUrlError(true);
       setResponse(null);
